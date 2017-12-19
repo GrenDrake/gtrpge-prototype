@@ -1,0 +1,114 @@
+
+
+NODE start {
+    say "Welcome to the game!";
+    add-option-xtra "Begin Game (male)" do-chargen "male";
+    add-option-xtra "Begin Game (female)" do-chargen "female";
+}
+
+NODE do-chargen {
+    do-node forest-path;
+}
+
+NODE forest-path {
+    set-location "On Forest Path";
+    say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail.";
+    add-option "Follow the path north" forest-fork;
+    add-option "Follow the path south" town-gate;
+    add-option "Take the overgrown trail" gnoll-cage;
+}
+
+NODE town-gate {
+    set-location "Outside the Town Gates";
+    say "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed.";
+    add-option "Return to the forest" forest-path;
+
+    jump-true "took-key" no-key;
+    say "\n\nA key can be seen glinting in the sun not far from the gate.";
+    add-option "Take key" take-key;
+    label no-key;
+}
+
+NODE take-key {
+    store "took-key" true;
+    say "You pick up the key and stick it in your pocket.";
+    add-return;
+}
+
+NODE gnoll-cage {
+    set-location "By a Cage in the Forest";
+    say "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage.";
+    add-option "Return to the forest path" forest-path;
+
+    jump-true "rescued-gnoll" no-gnoll;
+    say " Inside the cage you can see a rather emaciated gnoll.";
+    add-option "Open the cage" open-cage;
+    add-option "Try to talk to the gnoll" talk-to-gnoll;
+    end;
+
+    label no-gnoll;
+    say " The cage stands empty and open.";
+}
+
+NODE talk-to-gnoll {
+    add-return;
+    jump-true "talked-to-caged-gnoll" second-talk;
+    store "talked-to-caged-gnoll" true;
+    say "You can barely make out the gnoll's words; \"Help me, please!\"";
+    end;
+    label second-talk;
+    say "The gnoll continues to plead for help in a barely audible voice.";
+}
+
+NODE open-cage {
+    add-return;
+    jump-false "took-key" no-key;
+    say "Using the key you found you are able to open the cage. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\"";
+    store "rescued-gnoll" true;
+    end;
+
+    label no-key;
+    say "You rattle the door of the cage, but it is firmly locked.";
+}
+
+NODE forest-fork {
+    set-location "A Fork in the Path";
+    say "The path through the forest branches here, one fork leading north, towards what appears to be a small cabin while another leads deeper into the forest. It is also possible to return to the south, towards the town.";
+    add-option "Take the north path" outside-cabin;
+    add-option "Go deeper into the forest" deep-forest;
+    add-option "Return to the south" forest-path;
+}
+
+NODE outside-cabin {
+    set-location "A Cabin in the Forest";
+    say "A small cabin has been built here, nestled between the trees.";
+    jump-false "rescued-gnoll" no-gnoll;
+    say " A trail of smoke can be seen curling up from the chimney; it appears someone is home!";
+    label no-gnoll;
+    add-option "Re-eneter the forest" forest-fork;
+    add-option "Try to enter the cabin." entering-cabin;
+}
+
+NODE entering-cabin {
+    jump-true "rescued-gnoll" gnoll-home;
+    say "Try as you might, the door is quite secure.";
+    add-return;
+    end;
+
+    label gnoll-home;
+    store "visited-gnoll" true;
+    say "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n";
+    do-node inside-cabin;
+}
+
+NODE inside-cabin {
+    set-location "Inside the Gnoll's Cabin";
+    say "The interior of the cabin is crampt, but cozy. You can see the gnoll slotched back on a wooden chair, a mug of some dark liquid in his hand.\n\n\"Good to see you again, my rescuer!\" he says as you enter.";
+    add-option "Talk to the gnoll" gnoll-cabin-talk;
+    add-option "Leave" outside-cabin;
+}
+
+NODE gnoll-cabin-talk {
+    say "You have a nice chat with the gnoll.";
+    add-return;
+}
