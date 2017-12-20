@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <unordered_map>
 
@@ -57,7 +58,7 @@ std::string mangleLabel(const std::string &nodeName, const std::string &original
     return labelName;
 }
 
-void make_bin(GameData &gameData) {
+void make_bin(GameData &gameData, std::ostream &dbgout) {
     if (gameData.nodes.count("start") == 0) {
         throw BuildError("Game lacks \"start\" node.");
     }
@@ -122,11 +123,11 @@ void make_bin(GameData &gameData) {
         }
     }
 
-    std::cout << "LABELS (" << labels.size() << "):\n" << std::hex;
+    dbgout << "\n\nLABELS (" << labels.size() << "):\n" << std::hex << std::setfill('0');
     for (auto &label : labels) {
-        std::cout << label.first << "  0x" << label.second << "\n";
+        dbgout << "0x" << std::setw(8) << label.second << ": " << label.first << '\n';
     }
-    std::cout << std::dec;
+    dbgout << std::dec;
 
 
     idByte = idNode;

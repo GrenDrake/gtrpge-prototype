@@ -1,4 +1,5 @@
 #include <cstring>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -45,6 +46,21 @@ std::string readFile(const std::string &file) {
     return content;
 }
 
+std::string formatForDump(std::string text, size_t maxlen) {
+    size_t pos = text.find_first_of('\n');
+    while (pos != std::string::npos) {
+        text[pos] = '^';
+        pos = text.find_first_of('\n');
+    }
+    if (text.size() >= maxlen) {
+        text = text.substr(0, maxlen - 3);
+        text += "...";
+        return text;
+    } else {
+        return text;
+    }
+}
+
 int main() {
 
     GameData gameData;
@@ -60,32 +76,29 @@ int main() {
         std::cerr << e.what() << "\n";
     }
 
+    std::ofstream out("dbg_dump.txt");
 
-    std::cout << "FOUND " << gameData.strings.size() << " STRINGS:\n";
+    out << "FOUND " << gameData.strings.size() << " STRINGS:\n";
     for (auto &str : gameData.strings) {
-        std::cout << std::setw(8) << str.second << "  ~";
-        if (str.first.size() > 50) {
-            std::cout << str.first.substr(0,47) << "...";
-        } else {
-            std::cout << str.first;
-        }
-        std::cout << "~\n";
+        out << std::setw(8) << str.second << "  ~";
+        out << formatForDump(str.first, 50);
+        out << "~\n";
     }
 
-    std::cout << "\nFOUND " << gameData.nodes.size() << " NODES\n";
+    out << "\nFOUND " << gameData.nodes.size() << " NODES\n";
     for (auto &node : gameData.nodes) {
-        std::cout << "    " << node.first << '\n';
+        out << "    " << node.first << '\n';
         for (auto &stmt : node.second->block->statements) {
-            std::cout << "       ";
+            out << "       ";
             for (auto &text : stmt->parts) {
-                std::cout << ' ' << text;
+                out << ' ' << text;
             }
-            std::cout << ";\n";
+            out << ";\n";
         }
     }
 
     try {
-        make_bin(gameData);
+        make_bin(gameData, out);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
     }
