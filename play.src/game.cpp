@@ -235,17 +235,21 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opRemoveItems:
-                a1 = nextOperand(ip);
-                a2 = nextOperand(ip);
+                a1 = nextOperand(ip); // qty
+                a2 = nextOperand(ip); // itemIdent
                 for (auto ci = inventory.begin(); ci != inventory.end(); ++ci) {
                     if (ci->itemIdent == a2) {
-                        ci->qty -= a1;
-                        if (ci->qty <= 0) {
-                            inventory.erase(ci);
-                            break;
+                        if (ci->qty >= a1) {
+                            ci->qty -= a1;
+                            if (ci->qty <= 0) {
+                                inventory.erase(ci);
+                                break;
+                            }
+                            a1 = 0;
                         }
                     }
                 }
+                push(a1 == 0);
                 break;
 
             case opIncrement:
