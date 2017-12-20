@@ -35,9 +35,9 @@ static void update(Game &game, GameIO &io) {
 static void drawInventory(Game &game, GameIO &io) {
     io.setWindow(GameIO::Sidebar);
     io.clear();
-    io.say("You are carrying:\n");
+    io.say("You are carrying:\n\n");
     if (game.inventory.empty()) {
-        io.say("\nNothing");
+        io.say("Nothing");
     } else {
         int i = 1;
         for (CarriedItem &ci : game.inventory) {
