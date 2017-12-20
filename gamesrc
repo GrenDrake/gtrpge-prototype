@@ -4,6 +4,8 @@ NODE start {
     say "Welcome to the game!";
     add-option-xtra "Begin Game (male)" do-chargen "male";
     add-option-xtra "Begin Game (female)" do-chargen "female";
+    push "\n\nHEllo World!";
+    say stack;
 }
 
 NODE do-chargen {

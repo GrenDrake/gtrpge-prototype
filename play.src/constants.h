@@ -17,8 +17,6 @@ const int opAddContinue     = 0x12;
 const int opAddReturn       = 0x13;
 const int opSay             = 0x20;
 const int opSayNumber       = 0x21;
-const int opSayTop          = 0x22;
-const int opSayTopNumber    = 0x23;
 const int opJump            = 0x30;
 const int opJumpTrue        = 0x31;
 const int opJumpFalse       = 0x32;
@@ -36,4 +34,5 @@ const int opForget          = 0x43;
 const int opAddItems        = 0x50;
 const int opRemoveItems     = 0x51;
 
+const int stackOperand      = 0xFFFFFFFF;
 #endif

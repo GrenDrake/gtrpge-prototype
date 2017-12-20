@@ -70,6 +70,16 @@ void Game::newNode(std::uint32_t address) {
     io.say("\n");
 }
 
+int Game::nextOperand(std::uint32_t &ip) {
+    std::uint32_t v = readWord(ip);
+    ip += 4;
+
+    if (v == stackOperand) {
+        return pop();
+    } else {
+        return v;
+    }
+}
 void Game::doNode(std::uint32_t address) {
     std::uint32_t ip = address;
     if (readByte(ip++) != idNode) {
@@ -100,17 +110,17 @@ const int opForget          = 0x43;
             case opEnd:
                 return;
             case opDoNode:
-                doNode(nextWord(ip));
+                doNode(nextOperand(ip));
                 break;
             case opPush:
-                a1 = nextWord(ip);
+                a1 = nextOperand(ip);
                 push(a1);
                 break;
             case opPop:
                 pop();
                 break;
             case opSetLocation:
-                a1 = nextWord(ip);
+                a1 = nextOperand(ip);
                 inLocation = true;
                 if (locationName != a1) {
                     newLocation = true;
@@ -119,60 +129,54 @@ const int opForget          = 0x43;
                 }
                 break;
             case opAddOption:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
                 options.push_back(Option(a1, a2));
                 break;
             case opAddOptionXtra:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
-                a3 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
+                a3 = nextOperand(ip);
                 options.push_back(Option(a1, a2, a3));
                 break;
             case opAddContinue:
-                a1 = nextWord(ip);
+                a1 = nextOperand(ip);
                 options.push_back(Option(1, a1));
                 break;
             case opAddReturn:
                 options.push_back(Option(1, location));
                 break;
             case opSay:
-                io.say(getString(nextWord(ip)));
+                io.say(getString(nextOperand(ip)));
                 break;
             case opSayNumber:
-                io.say(nextWord(ip));
-                break;
-            case opSayTop:
-                io.say(getString(pop()));
-                break;
-            case opSayTopNumber:
-                io.say(pop());
+                io.say(nextOperand(ip));
                 break;
             case opJump:
-                ip = nextWord(ip);
+                ip = nextOperand(ip);
                 break;
             case opJumpTrue:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
                 if (storage.count(a1) != 0 && storage[a1]) {
                     ip = a2;
                 }
                 break;
             case opJumpFalse:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
                 if (storage.count(a1) == 0 || !storage[a1]) {
                     ip = a2;
                 }
                 break;
             case opStore:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
                 storage[a1] = a2;
                 break;
             case opAddItems:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
                 for (int i = 0; i < inventory.size(); ++i) {
                     if (inventory[i].itemIdent == a2) {
                         inventory[i].qty += a1;
@@ -185,8 +189,8 @@ const int opForget          = 0x43;
                 }
                 break;
             case opRemoveItems:
-                a1 = nextWord(ip);
-                a2 = nextWord(ip);
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
                 for (auto ci = inventory.begin(); ci != inventory.end(); ++ci) {
                     if (ci->itemIdent == a2) {
                         ci->qty -= a1;

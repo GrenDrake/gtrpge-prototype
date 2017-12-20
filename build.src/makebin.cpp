@@ -26,8 +26,6 @@ Command commands[] = {
     { "add-return",      opAddReturn,       0 },
     { "say",             opSay,             1 },
     { "say-number",      opSayNumber,       1 },
-    { "say-top",         opSayTop,          0 },
-    { "say-top-number",  opSayTopNumber,    0 },
     { "jump",            opJump,            1 },
     { "jump-true",       opJumpTrue,        2 },
     { "jump-false",      opJumpFalse,       2 },
@@ -81,6 +79,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     std::uint32_t pos = 32;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
+    labels.insert(std::make_pair("stack", stackOperand));
 
     std::uint8_t idByte = idString;
     for (auto &str : gameData.strings) {

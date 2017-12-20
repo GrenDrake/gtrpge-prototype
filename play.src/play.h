@@ -76,11 +76,7 @@ public:
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
 private:
-    int nextWord(std::uint32_t &ip) {
-        std::uint32_t v = readWord(ip);
-        ip += 4;
-        return v;
-    }
+    int nextOperand(std::uint32_t &ip);
 
     GameIO &io;
 
