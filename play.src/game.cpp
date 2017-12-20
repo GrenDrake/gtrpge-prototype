@@ -16,10 +16,6 @@ void Game::loadDataFromFile(const std::string &filename) {
     if (!inf.read((char*)data, size)) {
         throw PlayError("Could not read game data.");
     }
-
-    std::stringstream ss;
-    ss << "Read " << size << " bytes of game data from " << filename << ".\n\n";
-    io.say(ss.str());
 }
 
 std::uint8_t Game::readByte(std::uint32_t pos) const {
