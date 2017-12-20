@@ -66,6 +66,7 @@ void Game::newNode(std::uint32_t address) {
     newLocation = false;
     options.clear();
     doNode(address);
+    stack.clear();
     io.say("\n");
 }
 
