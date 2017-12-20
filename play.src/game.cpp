@@ -156,16 +156,16 @@ const int opForget          = 0x43;
                 ip = nextOperand(ip);
                 break;
             case opJumpTrue:
-                a1 = nextOperand(ip);
+                a1 = pop();
                 a2 = nextOperand(ip);
-                if (storage.count(a1) != 0 && storage[a1]) {
+                if (a1) {
                     ip = a2;
                 }
                 break;
             case opJumpFalse:
-                a1 = nextOperand(ip);
+                a1 = pop();
                 a2 = nextOperand(ip);
-                if (storage.count(a1) == 0 || !storage[a1]) {
+                if (!a1) {
                     ip = a2;
                 }
                 break;
