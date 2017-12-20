@@ -31,6 +31,7 @@ const int opStore           = 0x40;
 const int opIncrement       = 0x41;
 const int opDecrement       = 0x42;
 const int opForget          = 0x43;
+const int opFetch           = 0x44;
 const int opAddItems        = 0x50;
 const int opRemoveItems     = 0x51;
 

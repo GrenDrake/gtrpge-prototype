@@ -174,6 +174,10 @@ const int opForget          = 0x43;
                 a2 = nextOperand(ip);
                 storage[a1] = a2;
                 break;
+            case opFetch:
+                a1 = nextOperand(ip);
+                push(fetch(a1));
+                break;
             case opAddItems:
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
@@ -238,6 +242,14 @@ void Game::doOption(int optionNumber) {
 
 bool Game::actionAllowed() const {
     return inLocation && isRunning;
+}
+
+uint32_t Game::fetch(uint32_t key) const {
+    if (storage.count(key) == 0) {
+        return 0;
+    }
+    auto i = storage.find(key);
+    return i->second;
 }
 
 void Game::push(uint32_t value) {
