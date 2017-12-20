@@ -42,6 +42,7 @@ public:
 
     std::unordered_map<std::string, std::string> strings;
     std::unordered_map<std::string, std::shared_ptr<Node> > nodes;
+    std::string title, byline, version;
 private:
     int nextString;
 };
@@ -134,6 +135,9 @@ public:
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);
 private:
+    void doTitle();
+    void doByline();
+    void doVersion();
     void doNode();
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();

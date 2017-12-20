@@ -2,6 +2,10 @@
 #define CONSTANTS_H
 
 const int headerStartNode   = 0x08;
+const int headerTitle       = 0x0C;
+const int headerByline      = 0x10;
+const int headerVersion     = 0x14;
+const int headerBuildNumber = 0x18;
 
 const int idString          = 0xFF;
 const int idNode            = 0xFE;

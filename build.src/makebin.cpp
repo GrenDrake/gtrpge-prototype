@@ -1,3 +1,4 @@
+#include <ctime>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -170,8 +171,21 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         }
     }
 
+    std::uint32_t v;
     out.seekp(headerStartNode);
-    std::uint32_t v = labels["start"];
+    v = labels["start"];
+    out.write((const char *)&v, 4);
+    v = labels[gameData.title];
+    out.write((const char *)&v, 4);
+    v = labels[gameData.byline];
+    out.write((const char *)&v, 4);
+    v = labels[gameData.version];
     out.write((const char *)&v, 4);
 
+    time_t theTime = time(nullptr);
+    struct tm *aTime = localtime(&theTime);
+    v = (aTime->tm_year + 1900) * 10000;
+    v += (aTime->tm_mon + 1) * 100;
+    v += (aTime->tm_mday);
+    out.write((const char *)&v, 4);
 }

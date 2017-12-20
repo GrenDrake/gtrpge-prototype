@@ -58,6 +58,12 @@ const char *Game::getString(std::uint32_t address) const {
 void Game::startGame() {
     location = 0;
     isRunning = true;
+    io.say(getString(readWord(headerTitle)));
+    io.say(" (");
+    io.say(getString(readWord(headerVersion)));
+    io.say(")\n");
+    io.say(getString(readWord(headerByline)));
+    io.say("\n\n");
     newNode(readWord(headerStartNode));
 }
 

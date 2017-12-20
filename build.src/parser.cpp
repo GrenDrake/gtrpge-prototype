@@ -11,12 +11,42 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
 
         if (matches("NODE")) {
             doNode();
+        } else if (matches("TITLE")) {
+            doTitle();
+        } else if (matches("BYLINE")) {
+            doByline();
+        } else if (matches("VERSION")) {
+            doVersion();
         } else {
             std::stringstream ss;
             throw BuildError(cur->origin, "Expected top level construct");
         }
     }
 
+}
+
+void Parser::doTitle() {
+    require("TITLE");
+    require(Token::String);
+    gameData.title = gameData.addString(cur->text);
+    ++cur;
+    require(Token::Semicolon, true);
+}
+
+void Parser::doByline() {
+    require("BYLINE");
+    require(Token::String);
+    gameData.byline = gameData.addString(cur->text);
+    ++cur;
+    require(Token::Semicolon, true);
+}
+
+void Parser::doVersion() {
+    require("VERSION");
+    require(Token::String);
+    gameData.version = gameData.addString(cur->text);
+    ++cur;
+    require(Token::Semicolon, true);
 }
 
 void Parser::doNode() {
