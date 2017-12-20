@@ -36,7 +36,7 @@ public:
 class Game {
 public:
     Game(GameIO &io)
-    : locationName(0), io(io), data(nullptr)
+    : isRunning(false), locationName(0), io(io), data(nullptr)
     { }
     ~Game() {
         delete[] data;
@@ -54,6 +54,9 @@ public:
     void newNode(std::uint32_t address);
     void doNode(std::uint32_t address);
 
+    bool actionAllowed() const;
+
+    bool isRunning;
     std::vector<Option> options;
     std::uint32_t locationName;
 private:

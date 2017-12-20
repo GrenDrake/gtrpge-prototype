@@ -57,6 +57,7 @@ const char *Game::getString(std::uint32_t address) const {
 
 void Game::startGame() {
     location = 0;
+    isRunning = true;
     newNode(readWord(headerStartNode));
 }
 
@@ -185,4 +186,8 @@ void Game::doOption(int optionNumber) {
     io.style(GameIO::Normal);
 
     newNode(dest);
+}
+
+bool Game::actionAllowed() const {
+    return inLocation && isRunning;
 }
