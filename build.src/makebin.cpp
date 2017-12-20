@@ -41,6 +41,7 @@ Command commands[] = {
     { "fetch",           opFetch,           1 },
     { "add-items",       opAddItems,        2 },
     { "remove-items",    opRemoveItems,     2 },
+    { "item-qty",        opItemQty,         1 },
 };
 static const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {

@@ -251,6 +251,17 @@ void Game::doNode(std::uint32_t address) {
                 }
                 push(a1 == 0);
                 break;
+            case opItemQty:
+                a1 = nextOperand(ip); // itemIdent
+                a2 = 0;
+                for (CarriedItem &ci : inventory) {
+                    if (ci.itemIdent == a1) {
+                        a2 = ci.qty;
+                        break;
+                    }
+                }
+                push(a2);
+                break;
 
             case opIncrement:
                 a1 = pop();
