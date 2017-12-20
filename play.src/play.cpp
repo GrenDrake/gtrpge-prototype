@@ -48,6 +48,10 @@ void glk_main() {
             int key = io.getKey();
             if (key >= '1' && key <= '9') {
                 game.doOption(key - '1');
+            } else if (key == 'Y') {
+                io.setWindow(GameIO::Sidebar);
+                io.say("Hello there! Test text.\n");
+                io.setWindow(GameIO::Main);
             } else if (key == 'Q') {
                 io.style(GameIO::Emphasis);
                 io.say("\nGoodbye!\n");

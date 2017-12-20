@@ -6,7 +6,7 @@
 class GameIO {
 public:
     enum Window {
-        Status, Main, Options
+        Status, Main, Options, Sidebar
     };
     enum Style {
         Normal, Emphasis, Bold

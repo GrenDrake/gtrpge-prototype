@@ -8,6 +8,7 @@ extern "C" {
 static winid_t mainWindow = nullptr;
 static winid_t optionsWindow = nullptr;
 static winid_t statusWindow = nullptr;
+static winid_t sidebarWindow = nullptr;
 static winid_t currentWindow = nullptr;
 
 void GameIO::setup() {
@@ -22,6 +23,9 @@ void GameIO::setup() {
     optionsWindow = glk_window_open(mainWindow,
         winmethod_Below | winmethod_Fixed,
         5, wintype_TextBuffer, 0);
+    sidebarWindow = glk_window_open(mainWindow,
+        winmethod_Right | winmethod_Proportional,
+        33, wintype_TextBuffer, 0);
     glk_set_window(mainWindow);
     currentWindow = mainWindow;
 }
@@ -72,6 +76,9 @@ void GameIO::setWindow(Window window) {
             break;
         case Options:
             currentWindow = (optionsWindow);
+            break;
+        case Sidebar:
+            currentWindow = (sidebarWindow);
             break;
     }
     glk_set_window(currentWindow);
