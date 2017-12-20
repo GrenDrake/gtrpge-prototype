@@ -38,7 +38,6 @@ Command commands[] = {
     { "store",           opStore,           2 },
     { "increment",       opIncrement,       0 },
     { "decrement",       opDecrement,       0 },
-    { "forget",          opForget,          1 },
     { "fetch",           opFetch,           1 },
     { "add-items",       opAddItems,        2 },
     { "remove-items",    opRemoveItems,     2 },

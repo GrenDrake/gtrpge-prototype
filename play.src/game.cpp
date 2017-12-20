@@ -171,7 +171,11 @@ const int opForget          = 0x43;
             case opStore:
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
-                storage[a1] = a2;
+                if (a2) {
+                    storage[a1] = a2;
+                } else {
+                    storage.erase(a1);
+                }
                 break;
             case opIncrement:
                 a1 = pop();
