@@ -28,11 +28,11 @@ const int opJumpGt          = 0x37;
 const int opJumpGte         = 0x38;
 const int opJumpItemQty     = 0x39;
 const int opStore           = 0x40;
-const int opIncrement       = 0x41;
-const int opDecrement       = 0x42;
-const int opFetch           = 0x43;
+const int opFetch           = 0x41;
 const int opAddItems        = 0x50;
 const int opRemoveItems     = 0x51;
+const int opIncrement       = 0x60;
+const int opDecrement       = 0x61;
 
 const int stackOperand      = 0xFFFFFFFF;
 #endif

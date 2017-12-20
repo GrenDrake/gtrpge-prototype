@@ -215,14 +215,6 @@ void Game::doNode(std::uint32_t address) {
                     storage.erase(a1);
                 }
                 break;
-            case opIncrement:
-                a1 = pop();
-                push(a1+1);
-                break;
-            case opDecrement:
-                a1 = pop();
-                push(a1-1);
-                break;
             case opFetch:
                 a1 = nextOperand(ip);
                 push(fetch(a1));
@@ -255,6 +247,16 @@ void Game::doNode(std::uint32_t address) {
                     }
                 }
                 break;
+
+            case opIncrement:
+                a1 = pop();
+                push(a1+1);
+                break;
+            case opDecrement:
+                a1 = pop();
+                push(a1-1);
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;
