@@ -32,6 +32,18 @@ public:
     std::uint32_t extra;
 };
 
+class CarriedItem {
+public:
+    CarriedItem()
+    : qty(0), itemIdent(0)
+    { }
+    CarriedItem(int qty, int itemIdent)
+    : qty(qty), itemIdent(itemIdent)
+    { }
+
+    int qty;
+    int itemIdent;
+};
 
 class Game {
 public:
@@ -58,6 +70,7 @@ public:
 
     bool isRunning;
     std::vector<Option> options;
+    std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
 private:
     int nextWord(std::uint32_t &ip) {

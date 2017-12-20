@@ -48,9 +48,23 @@ void glk_main() {
             int key = io.getKey();
             if (key >= '1' && key <= '9') {
                 game.doOption(key - '1');
-            } else if (key == 'Y' && game.actionAllowed()) {
+            } else if (key == 'I' && game.actionAllowed()) {
                 io.setWindow(GameIO::Sidebar);
-                io.say("Hello there! Test text.\n");
+                io.clear();
+                io.say("You are carrying:\n");
+                if (game.inventory.empty()) {
+                    io.say("\nNothing");
+                } else {
+                    int i = 1;
+                    for (CarriedItem &ci : game.inventory) {
+                        io.say(i++);
+                        io.say(") ");
+                        io.say(game.getString(ci.itemIdent));
+                        io.say(" (x");
+                        io.say(ci.qty);
+                        io.say(")\n");
+                    }
+                }
                 io.setWindow(GameIO::Main);
             } else if (key == 'Q') {
                 io.style(GameIO::Emphasis);

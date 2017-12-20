@@ -11,6 +11,8 @@ NODE do-chargen {
 }
 
 NODE forest-path {
+    add-items 3 "sword";
+    remove-items 1 "turnip";
     set-location "On Forest Path";
     say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail.";
     add-option "Follow the path north" forest-fork;
@@ -19,6 +21,7 @@ NODE forest-path {
 }
 
 NODE town-gate {
+    add-items 2 "turnip";
     set-location "Outside the Town Gates";
     say "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed.";
     add-option "Return to the forest" forest-path;
@@ -36,6 +39,7 @@ NODE take-key {
 }
 
 NODE gnoll-cage {
+    add-items 1 "turnip";
     set-location "By a Cage in the Forest";
     say "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage.";
     add-option "Return to the forest path" forest-path;

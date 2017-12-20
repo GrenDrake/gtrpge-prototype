@@ -35,7 +35,9 @@ Command commands[] = {
     { "increment",       opIncrement,       1 },
     { "decrement",       opDecrement,       1 },
     { "forget",          opForget,          1 },
-    };
+    { "add-items",       opAddItems,        2 },
+    { "remove-items",    opRemoveItems,     2 },
+};
 static const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {
         if (name == cmd.text) {

@@ -153,6 +153,33 @@ const int opForget          = 0x43;
                 a2 = nextWord(ip);
                 storage[a1] = a2;
                 break;
+            case opAddItems:
+                a1 = nextWord(ip);
+                a2 = nextWord(ip);
+                for (int i = 0; i < inventory.size(); ++i) {
+                    if (inventory[i].itemIdent == a2) {
+                        inventory[i].qty += a1;
+                        a1 = 0;
+                        break;
+                    }
+                }
+                if (a1 > 0) {
+                    inventory.push_back(CarriedItem(a1, a2));
+                }
+                break;
+            case opRemoveItems:
+                a1 = nextWord(ip);
+                a2 = nextWord(ip);
+                for (auto ci = inventory.begin(); ci != inventory.end(); ++ci) {
+                    if (ci->itemIdent == a2) {
+                        ci->qty -= a1;
+                        if (ci->qty <= 0) {
+                            inventory.erase(ci);
+                            break;
+                        }
+                    }
+                }
+                break;
             default: {
                 std::stringstream ss;
                 ss << std::hex;
