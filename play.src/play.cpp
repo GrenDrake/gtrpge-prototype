@@ -32,10 +32,34 @@ static void update(Game &game, GameIO &io) {
     io.setWindow(GameIO::Main);
 }
 
+static void drawInventory(Game &game, GameIO &io) {
+    io.setWindow(GameIO::Sidebar);
+    io.clear();
+    io.say("You are carrying:\n");
+    if (game.inventory.empty()) {
+        io.say("\nNothing");
+    } else {
+        int i = 1;
+        for (CarriedItem &ci : game.inventory) {
+            io.say(i++);
+            io.say(") ");
+            io.say(game.getString(ci.itemIdent));
+            io.say(" (x");
+            io.say(ci.qty);
+            io.say(")\n");
+        }
+    }
+    io.setWindow(GameIO::Main);
+}
+
 void glk_main() {
+    enum SidebarMode {
+        Blank, Inventory
+    };
     GameIO io;
     Game game(io);
     io.setup();
+    enum SidebarMode mode = Blank;
 
     try {
         game.loadDataFromFile("game.bin");
@@ -43,28 +67,20 @@ void glk_main() {
 
         while (true) {
             update(game, io);
+            switch(mode) {
+                case Blank:
+                    break;
+                case Inventory:
+                    drawInventory(game, io);
+                    break;
+            }
 
             int key = io.getKey();
             if (key >= '1' && key <= '9') {
                 game.doOption(key - '1');
             } else if (key == 'I' && game.actionAllowed()) {
-                io.setWindow(GameIO::Sidebar);
-                io.clear();
-                io.say("You are carrying:\n");
-                if (game.inventory.empty()) {
-                    io.say("\nNothing");
-                } else {
-                    int i = 1;
-                    for (CarriedItem &ci : game.inventory) {
-                        io.say(i++);
-                        io.say(") ");
-                        io.say(game.getString(ci.itemIdent));
-                        io.say(" (x");
-                        io.say(ci.qty);
-                        io.say(")\n");
-                    }
-                }
-                io.setWindow(GameIO::Main);
+                drawInventory(game, io);
+                mode = Inventory;
             } else if (key == 'Q') {
                 io.style(GameIO::Emphasis);
                 io.say("\nGoodbye!\n");
