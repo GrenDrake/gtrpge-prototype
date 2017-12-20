@@ -21,6 +21,6 @@ game.bin: gamesrc
 	./build
 
 clean:
-	$(RM) build.src/*.o play.src/*.o $(BUILD_TARGET) $(PLAY_TARGET)
+	$(RM) build.src/*.o play.src/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)
 
 .PHONY: all clean
