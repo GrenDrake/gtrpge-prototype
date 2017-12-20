@@ -11,8 +11,6 @@ NODE do-chargen {
 }
 
 NODE forest-path {
-    add-items 3 "sword";
-    remove-items 1 "turnip";
     set-location "On Forest Path";
     say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail.";
     add-option "Follow the path north" forest-fork;
@@ -21,7 +19,6 @@ NODE forest-path {
 }
 
 NODE town-gate {
-    add-items 2 "turnip";
     set-location "Outside the Town Gates";
     say "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed.";
     add-option "Return to the forest" forest-path;
@@ -34,13 +31,13 @@ NODE town-gate {
 }
 
 NODE take-key {
+    add-items 1 "shiny key";
     store "took-key" true;
     say "You pick up the key and stick it in your pocket.";
     add-return;
 }
 
 NODE gnoll-cage {
-    add-items 1 "turnip";
     set-location "By a Cage in the Forest";
     say "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage.";
     add-option "Return to the forest path" forest-path;
@@ -69,9 +66,10 @@ NODE talk-to-gnoll {
 
 NODE open-cage {
     add-return;
-    fetch "took-key";
+    item-qty "shiny key";
     jump-false no-key;
-    say "Using the key you found you are able to open the cage. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\"";
+    say "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\"";
+    remove-items 1 "shiny key";
     store "rescued-gnoll" true;
     end;
 
