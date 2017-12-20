@@ -88,21 +88,6 @@ void Game::doNode(std::uint32_t address) {
         throw PlayError(ss.str());
     }
 
-/*
-const int opJump            = 0x30;
-const int opJumpTrue        = 0x31;
-const int opJumpFalse       = 0x32;
-const int opJumpEq          = 0x33;
-const int opJumpNeq         = 0x34;
-const int opJumpLt          = 0x35;
-const int opJumpLte         = 0x36;
-const int opJumpGt          = 0x37;
-const int opJumpGte         = 0x38;
-const int opStore           = 0x40;
-const int opIncrement       = 0x41;
-const int opDecrement       = 0x42;
-const int opForget          = 0x43;
-*/
     std::uint32_t a1, a2, a3;
     while (true) {
         std::uint8_t cmdCode = readByte(ip++);
@@ -111,13 +96,6 @@ const int opForget          = 0x43;
                 return;
             case opDoNode:
                 doNode(nextOperand(ip));
-                break;
-            case opPush:
-                a1 = nextOperand(ip);
-                push(a1);
-                break;
-            case opPop:
-                pop();
                 break;
             case opSetLocation:
                 a1 = nextOperand(ip);
@@ -128,6 +106,14 @@ const int opForget          = 0x43;
                     location = address;
                 }
                 break;
+            case opPush:
+                a1 = nextOperand(ip);
+                push(a1);
+                break;
+            case opPop:
+                pop();
+                break;
+
             case opAddOption:
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
@@ -146,12 +132,14 @@ const int opForget          = 0x43;
             case opAddReturn:
                 options.push_back(Option(1, location));
                 break;
+
             case opSay:
                 io.say(getString(nextOperand(ip)));
                 break;
             case opSayNumber:
                 io.say(nextOperand(ip));
                 break;
+
             case opJump:
                 ip = nextOperand(ip);
                 break;
@@ -169,6 +157,19 @@ const int opForget          = 0x43;
                     ip = a2;
                 }
                 break;
+
+/* - needs implemented
+const int opJumpEq          = 0x33;
+const int opJumpNeq         = 0x34;
+const int opJumpLt          = 0x35;
+const int opJumpLte         = 0x36;
+const int opJumpGt          = 0x37;
+const int opJumpGte         = 0x38;
+const int opIncrement       = 0x41;
+const int opDecrement       = 0x42;
+const int opForget          = 0x43;
+*/
+
             case opStore:
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
@@ -178,6 +179,7 @@ const int opForget          = 0x43;
                 a1 = nextOperand(ip);
                 push(fetch(a1));
                 break;
+
             case opAddItems:
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
