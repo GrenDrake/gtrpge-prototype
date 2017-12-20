@@ -68,6 +68,9 @@ public:
 
     bool actionAllowed() const;
 
+    void push(uint32_t value);
+    uint32_t pop();
+
     bool isRunning;
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
@@ -86,5 +89,6 @@ private:
     bool inLocation;
     bool newLocation;
     uint8_t *data;
+    std::vector<uint32_t> stack;
 };
 #endif

@@ -101,6 +101,13 @@ const int opForget          = 0x43;
             case opDoNode:
                 doNode(nextWord(ip));
                 break;
+            case opPush:
+                a1 = nextWord(ip);
+                push(a1);
+                break;
+            case opPop:
+                pop();
+                break;
             case opSetLocation:
                 a1 = nextWord(ip);
                 inLocation = true;
@@ -130,6 +137,15 @@ const int opForget          = 0x43;
                 break;
             case opSay:
                 io.say(getString(nextWord(ip)));
+                break;
+            case opSayNumber:
+                io.say(nextWord(ip));
+                break;
+            case opSayTop:
+                io.say(getString(pop()));
+                break;
+            case opSayTopNumber:
+                io.say(pop());
                 break;
             case opJump:
                 ip = nextWord(ip);
@@ -217,4 +233,15 @@ void Game::doOption(int optionNumber) {
 
 bool Game::actionAllowed() const {
     return inLocation && isRunning;
+}
+
+void Game::push(uint32_t value) {
+    stack.push_back(value);
+}
+
+uint32_t Game::pop() {
+    if (stack.empty()) return 0;
+    uint32_t value = stack.back();
+    stack.pop_back();
+    return value;
 }
