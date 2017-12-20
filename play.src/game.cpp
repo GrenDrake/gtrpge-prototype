@@ -165,8 +165,6 @@ const int opJumpLt          = 0x35;
 const int opJumpLte         = 0x36;
 const int opJumpGt          = 0x37;
 const int opJumpGte         = 0x38;
-const int opIncrement       = 0x41;
-const int opDecrement       = 0x42;
 const int opForget          = 0x43;
 */
 
@@ -174,6 +172,14 @@ const int opForget          = 0x43;
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
                 storage[a1] = a2;
+                break;
+            case opIncrement:
+                a1 = pop();
+                push(a1+1);
+                break;
+            case opDecrement:
+                a1 = pop();
+                push(a1-1);
                 break;
             case opFetch:
                 a1 = nextOperand(ip);
