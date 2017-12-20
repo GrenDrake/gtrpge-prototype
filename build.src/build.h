@@ -93,7 +93,7 @@ private:
         return 0;
     }
     int prev() const {
-        if (pos - 1 >= 0) {
+        if (pos > 0) {
             return text[pos - 1];
         }
         return 0;
