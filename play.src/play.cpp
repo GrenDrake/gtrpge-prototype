@@ -28,8 +28,7 @@ static void update(Game &game, GameIO &io) {
     io.clear();
     if (game.locationName) {
         io.say(game.getString(game.locationName));
-}
-
+    }
     io.setWindow(GameIO::Main);
 }
 
