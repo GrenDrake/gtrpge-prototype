@@ -36,12 +36,12 @@ Command commands[] = {
     { "jump-gt",         opJumpGt,          2 },
     { "jump-gte",        opJumpGte,         2 },
     { "store",           opStore,           2 },
-    { "increment",       opIncrement,       0 },
-    { "decrement",       opDecrement,       0 },
     { "fetch",           opFetch,           1 },
     { "add-items",       opAddItems,        2 },
     { "remove-items",    opRemoveItems,     2 },
     { "item-qty",        opItemQty,         1 },
+    { "increment",       opIncrement,       0 },
+    { "decrement",       opDecrement,       0 },
 };
 static const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {
