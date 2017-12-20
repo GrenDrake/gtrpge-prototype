@@ -64,8 +64,8 @@ std::string formatForDump(std::string text, size_t maxlen) {
 int main() {
 
     GameData gameData;
+    Lexer lexer;
     try {
-        Lexer lexer;
 
         lexer.doFile("gamesrc");
 
@@ -78,7 +78,14 @@ int main() {
 
     std::ofstream out("dbg_dump.txt");
 
-    out << "FOUND " << gameData.strings.size() << " STRINGS:\n";
+    out << "FOUND " << lexer.constants.size() << " CONSTANTS:\n";
+    for (auto &constant : lexer.constants) {
+        out << std::setw(8) << constant.first << ": ";
+        out << constant.second;
+        out << "\n";
+    }
+
+    out << "\nFOUND " << gameData.strings.size() << " STRINGS:\n";
     for (auto &str : gameData.strings) {
         out << std::setw(8) << str.second << "  ~";
         out << formatForDump(str.first, 50);

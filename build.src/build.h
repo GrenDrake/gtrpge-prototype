@@ -81,10 +81,14 @@ public:
 
 class Lexer {
 public:
+    Lexer()
+    : nextConstant(32)
+    { }
 
     void doFile(const std::string &file);
 
     std::list<Token> tokens;
+    std::unordered_map<std::string,uint32_t> constants;
 private:
     void unescape(const Origin &origin, std::string &text);
     int here() const {
@@ -120,11 +124,13 @@ private:
         }
         return false;
     }
+    uint32_t getConstant(const std::string &name);
 
     std::string text;
     std::string file;
     std::uint32_t pos;
     int line, column;
+    std::uint32_t nextConstant;
 };
 
 class Parser {
