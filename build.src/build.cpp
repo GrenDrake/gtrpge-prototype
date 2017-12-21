@@ -74,6 +74,7 @@ int main() {
         parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
+        return 1;
     }
 
     std::ofstream out("dbg_dump.txt");
