@@ -111,6 +111,12 @@ private:
         }
         return here();
     }
+    int peek() {
+        if (pos + 1 >= text.size()) {
+            return 0;
+        }
+        return text[pos + 1];
+    }
     bool isIdentifier(int c, bool initial = false) {
         if (!initial && isdigit(c)) {
             return true;

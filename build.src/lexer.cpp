@@ -97,6 +97,19 @@ void Lexer::doFile(const std::string &file) {
             while (isspace(here())) {
                 next();
             }
+        } else if (here() == '/' && peek() == '/') {
+            while (here() != '\n') {
+                next();
+            }
+        } else if (here() == '/' && peek() == '*') {
+            next(); next();
+            while (here() != '*' || peek() != '/') {
+                if (here() == 0) {
+                    throw BuildError(origin, "Unexpected end of file during block comment.");
+                }
+                next();
+            }
+            next(); next();
         } else if (here() == ';') {
             next();
             tokens.push_back(Token(origin, Token::Semicolon));
