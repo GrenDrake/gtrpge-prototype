@@ -16,8 +16,13 @@ ITEM common-sword {
     "a " "common sword" "common swords"
 }
 
-ITEM odd-drink {
-    "an " "odd drink" "odd drinks"
+ITEM teleport-crystal {
+    "a " "teleport crystal" "teleport crystals"
+    onUse {
+        remove-items 1 teleport-crystal;
+        say "Light flashes and you vision goes blank. Moments later, the world returns.";
+        add-continue town-gate;
+    }
 }
 
 ITEM gnoll-potion {
@@ -43,6 +48,7 @@ NODE start {
 }
 
 NODE do-chargen {
+    add-items 20 teleport-crystal;
     do-node forest-path;
 }
 
