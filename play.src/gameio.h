@@ -12,7 +12,9 @@ public:
         Normal, Emphasis, Bold
     };
 
-    void setup();
+    GameIO();
+    ~GameIO();
+
     void say(const std::string &text);
     void say(int value);
     int getKey();

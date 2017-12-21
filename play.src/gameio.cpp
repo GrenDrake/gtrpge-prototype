@@ -11,7 +11,7 @@ static winid_t statusWindow = nullptr;
 static winid_t sidebarWindow = nullptr;
 static winid_t currentWindow = nullptr;
 
-void GameIO::setup() {
+GameIO::GameIO() {
     mainWindow = glk_window_open(0, 0, 0, wintype_TextBuffer, 1);
     if (!mainWindow) {
         return;
@@ -28,6 +28,8 @@ void GameIO::setup() {
         33, wintype_TextBuffer, 0);
     glk_set_window(mainWindow);
     currentWindow = mainWindow;
+}
+GameIO::~GameIO() {
 }
 
 void GameIO::say(const std::string &text) {

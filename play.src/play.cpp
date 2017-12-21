@@ -58,7 +58,6 @@ void glk_main() {
     };
     GameIO io;
     Game game(io);
-    io.setup();
     enum SidebarMode mode = Blank;
 
     try {
