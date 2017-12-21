@@ -6,9 +6,16 @@ extern "C" {
 #include "glk.h"
 }
 
+static void drawStatus(Game &game, GameIO &io) {
+    io.setWindow(GameIO::Status);
+    io.clear();
+    if (game.locationName) {
+        io.say(game.getString(game.locationName));
+    }
+    io.setWindow(GameIO::Main);
+}
 
-
-static void update(Game &game, GameIO &io) {
+static void drawOptions(Game &game, GameIO &io) {
     io.setWindow(GameIO::Options);
     io.clear();
     int num = 1;
@@ -23,11 +30,6 @@ static void update(Game &game, GameIO &io) {
         io.say("\n");
     }
 
-    io.setWindow(GameIO::Status);
-    io.clear();
-    if (game.locationName) {
-        io.say(game.getString(game.locationName));
-    }
     io.setWindow(GameIO::Main);
 }
 
@@ -68,7 +70,7 @@ void gameloop() {
     game.startGame();
 
     while (true) {
-        update(game, io);
+        drawOptions(game, io);
         switch(mode) {
             case Blank:
                 break;
@@ -80,6 +82,7 @@ void gameloop() {
         int key = io.getKey();
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
+            drawStatus(game, io);
         } else if (key == 'I' && game.actionAllowed()) {
             drawInventory(game, io);
             mode = Inventory;
