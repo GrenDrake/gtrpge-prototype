@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 
@@ -48,7 +48,7 @@ std::uint32_t Game::readWord(std::uint32_t pos) const {
 const char *Game::getString(std::uint32_t address) const {
     if (!isType(address, idString)) {
         std::stringstream ss;
-        ss << "Tried to read non-string at address 0x" << std::hex << address;
+        ss << "Tried to read non-string at address 0x" << std::hex << std::uppercase << address;
         ss << " as a string.";
         throw PlayError(ss.str());
     }
@@ -71,7 +71,11 @@ void Game::newNode(std::uint32_t address) {
     inLocation = false;
     newLocation = false;
     options.clear();
-    doNode(address);
+    try {
+        doNode(address);
+    } catch (PlayError &e) {
+        sayError(e.what());
+    }
     stack.clear();
     io.say("\n");
 }
@@ -90,7 +94,7 @@ void Game::doNode(std::uint32_t address) {
     std::uint32_t ip = address;
     if (!isType(ip++, idNode)) {
         std::stringstream ss;
-        ss << "Tried to run non-node at " << std::hex << (int)readByte(ip-1) << ".";
+        ss << "Tried to run non-node at " << std::hex << std::uppercase << (int)readByte(ip-1) << ".";
         throw PlayError(ss.str());
     }
 
@@ -315,6 +319,14 @@ void Game::doOption(int optionNumber) {
 
 bool Game::actionAllowed() const {
     return inLocation && isRunning;
+}
+
+void Game::sayError(const std::string &errorMessage) {
+    io.style(GameIO::Bold);
+    io.say("INTERNAL ERROR: ");
+    io.say(errorMessage);
+    io.say("\nYour game may be in an invalid state; restoring or restarting is recommended.");
+    io.style(GameIO::Normal);
 }
 
 uint32_t Game::fetch(uint32_t key) const {

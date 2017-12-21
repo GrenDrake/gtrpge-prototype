@@ -68,6 +68,7 @@ public:
     void doNode(std::uint32_t address);
 
     bool actionAllowed() const;
+    void sayError(const std::string &errorMessage);
 
     uint32_t fetch(uint32_t key) const;
     void push(uint32_t value);
