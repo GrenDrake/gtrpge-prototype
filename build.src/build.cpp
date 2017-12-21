@@ -93,6 +93,12 @@ int main() {
         out << "~\n";
     }
 
+    out << "\nFOUND " << gameData.items.size() << " ITEMS\n";
+    for (auto &item : gameData.items) {
+        out << "    " << item.first << ": ";
+        out << item.second->article << ' ' << item.second->singular << ' ' << item.second->plural << "\n";
+    }
+
     out << "\nFOUND " << gameData.nodes.size() << " NODES\n";
     for (auto &node : gameData.nodes) {
         out << "    " << node.first << '\n';

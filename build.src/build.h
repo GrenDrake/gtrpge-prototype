@@ -44,6 +44,7 @@ public:
     std::unordered_map<std::string, std::uint32_t> constants;
     std::unordered_map<std::string, std::string> strings;
     std::unordered_map<std::string, std::shared_ptr<Node> > nodes;
+    std::unordered_map<std::string, std::shared_ptr<ItemDef> > items;
     std::string title, byline, version;
 private:
     int nextString;
@@ -137,7 +138,7 @@ private:
 class SymbolDef {
 public:
     enum Type {
-        Node, Constant
+        Node, Constant, Item
     };
 
     SymbolDef(const Origin &origin, const std::string &name, Type type)
@@ -161,6 +162,7 @@ private:
     void doVersion();
     void doConstant();
     void doNode();
+    void doItemDef();
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();
 

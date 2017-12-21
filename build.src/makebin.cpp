@@ -96,6 +96,11 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         out.put(0);
     }
 
+    for (auto &item : gameData.items) {
+        labels.insert(std::make_pair(item.first, pos));
+        pos += 13;
+    }
+
     for (auto &node : gameData.nodes) {
         const std::string &nodeName = node.second->name;
         labels.insert(std::make_pair(nodeName, pos));
@@ -134,6 +139,18 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     }
     dbgout << std::dec;
 
+    idByte = idItem;
+    for (auto &item : gameData.items) {
+        out.write(reinterpret_cast<char*>(&idByte), 1);
+        uint32_t v;
+
+        v = labels[item.second->article];
+        out.write((const char *)&v, 4);
+        v = labels[item.second->singular];
+        out.write((const char *)&v, 4);
+        v = labels[item.second->plural];
+        out.write((const char *)&v, 4);
+    }
 
     idByte = idNode;
     for (auto &node : gameData.nodes) {

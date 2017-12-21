@@ -42,10 +42,15 @@ static void drawInventory(Game &game, GameIO &io) {
         for (CarriedItem &ci : game.inventory) {
             io.say(i++);
             io.say(") ");
-            io.say(game.getString(ci.itemIdent));
-            io.say(" (x");
-            io.say(ci.qty);
-            io.say(")\n");
+            if (ci.qty == 1) {
+                io.say(game.getString(game.getProperty(ci.itemIdent, itmArticle)));
+                io.say(game.getString(game.getProperty(ci.itemIdent, itmSingular)));
+            } else {
+                io.say(ci.qty);
+                io.say(" ");
+                io.say(game.getString(game.getProperty(ci.itemIdent, itmPlural)));
+            }
+            io.say("\n");
         }
     }
     io.setWindow(GameIO::Main);

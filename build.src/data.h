@@ -44,6 +44,13 @@ public:
     std::shared_ptr<Block> block;
 };
 
+class ItemDef {
+public:
+    std::string name;
+
+    std::string article, singular, plural;
+    Value onUse;
+};
 std::ostream& operator<<(std::ostream &out, const Value &type);
 
 #endif

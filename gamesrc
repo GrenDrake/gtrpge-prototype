@@ -9,6 +9,26 @@ CONSTANT flg-talked-to-caged-gnoll 2;
 CONSTANT flg-visited-gnoll 3;
 
 /* ************************************************************************* *
+ * ITEM DEFINITIONS                                                          *
+ * ************************************************************************* */
+
+ITEM common-sword {
+    "a " "common sword" "common swords"
+}
+
+ITEM odd-drink {
+    "an " "odd drink" "odd drinks"
+}
+
+ITEM gnoll-potion {
+    "a " "potion of gnoll" "potions of gnoll"
+}
+
+ITEM gnoll-cage-key {
+    "a " "very shiny key" ""
+}
+
+/* ************************************************************************* *
  * THE FOREST ITSELF                                                         *
  * ************************************************************************* */
 
@@ -43,7 +63,7 @@ NODE town-gate {
 }
 
 NODE take-key {
-    add-items 1 "shiny key";
+    add-items 1 gnoll-cage-key;
     store flg-took-key true;
     say "You pick up the key and stick it in your pocket.";
     add-return;
@@ -78,10 +98,10 @@ NODE talk-to-gnoll {
 
 NODE open-cage {
     add-return;
-    item-qty "shiny key";
+    item-qty gnoll-cage-key;
     jump-false no-key;
     say "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\"";
-    remove-items 1 "shiny key";
+    remove-items 1 gnoll-cage-key;
     store flg-rescued-gnoll true;
     end;
 

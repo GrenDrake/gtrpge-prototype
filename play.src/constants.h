@@ -9,6 +9,11 @@ const int headerBuildNumber = 0x18;
 
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
+const int idItem            = 0xFD;
+
+const int itmArticle        = 0x01;
+const int itmSingular       = 0x05;
+const int itmPlural         = 0x09;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;

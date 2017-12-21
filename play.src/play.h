@@ -56,11 +56,14 @@ public:
 
     void loadDataFromFile(const std::string &filename);
 
+    int getType(std::uint32_t address) const;
     bool isType(std::uint32_t address, uint8_t type) const;
     std::uint8_t readByte(std::uint32_t pos) const;
     std::uint16_t readShort(std::uint32_t pos) const;
     std::uint32_t readWord(std::uint32_t pos) const;
     const char *getString(std::uint32_t address) const;
+
+    std::uint32_t getProperty(std::uint32_t address, int propId) const;
 
     void startGame();
     void doOption(int optionNumber);

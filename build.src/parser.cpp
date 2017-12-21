@@ -30,6 +30,8 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doVersion();
         } else if (matches("CONSTANT")) {
             doConstant();
+        } else if (matches("ITEM")) {
+            doItemDef();
         } else {
             std::stringstream ss;
             throw BuildError(cur->origin, "Expected top level construct");
@@ -92,6 +94,37 @@ void Parser::doNode() {
 
     if (!gameData.nodes.insert(std::make_pair(node->name, node)).second) {
         throw BuildError(origin, "Duplicate node " + node->name);
+    }
+}
+
+void Parser::doItemDef() {
+    const Origin &origin = cur->origin;
+    require("ITEM");
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    checkSymbol(origin, name, SymbolDef::Item);
+    ++cur;
+
+    std::shared_ptr<ItemDef> item(new ItemDef);
+    item->name = name;
+    require(Token::OpenBrace, true);
+    require(Token::String);
+    item->article = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    item->singular = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    item->plural = gameData.addString(cur->text);
+    ++cur;
+
+    while (!matches(Token::CloseBrace)) {
+        ++cur;
+    }
+    ++cur;
+
+    if (!gameData.items.insert(std::make_pair(item->name, item)).second) {
+        throw BuildError(origin, "Duplicate item " + item->name);
     }
 }
 

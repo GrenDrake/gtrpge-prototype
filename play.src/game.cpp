@@ -18,6 +18,10 @@ void Game::loadDataFromFile(const std::string &filename) {
     }
 }
 
+int Game::getType(std::uint32_t address) const {
+    return readByte(address);
+}
+
 bool Game::isType(std::uint32_t address, uint8_t type) const {
     return readByte(address) == type;
 }
@@ -53,6 +57,10 @@ const char *Game::getString(std::uint32_t address) const {
         throw PlayError(ss.str());
     }
     return reinterpret_cast<const char*>(&data[address+1]);
+}
+
+std::uint32_t Game::getProperty(std::uint32_t address, int propId) const {
+    return readWord(address + propId);
 }
 
 void Game::startGame() {
@@ -144,7 +152,26 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opSay:
-                io.say(getString(nextOperand(ip)));
+                a1 = nextOperand(ip);
+                a2 = getType(a1);
+                switch(a2) {
+                    case idString:
+                        io.say(getString(a1));
+                        break;
+                    case idItem:
+                        a2 = a1 + itmArticle;
+                        io.say(getString(readWord(a2)));
+                        a2 = a1 + itmSingular;
+                        io.say(getString(readWord(a2)));
+                        break;
+                    default: {
+                        std::stringstream ss;
+                        ss << "Tried to say object at 0x";
+                        ss << std::hex << std::uppercase << a1;
+                        ss << " which is of un-sayable type " << std::dec << (int) a2 << '.';
+                        throw PlayError(ss.str());
+                    }
+                }
                 break;
             case opSayNumber:
                 io.say(nextOperand(ip));
