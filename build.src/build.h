@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include <vector>
 
 class Origin {
 public:
@@ -27,7 +28,7 @@ public:
     BuildError(const Origin &origin, const std::string &msg);
     virtual const char* what() const throw();
 private:
-    static const int errorMessageLength = 64;
+    static const int errorMessageLength = 128;
     char errorMessage[errorMessageLength];
 };
 
@@ -133,6 +134,20 @@ private:
     int line, column;
 };
 
+class SymbolDef {
+public:
+    enum Type {
+        Node, Constant
+    };
+
+    SymbolDef(const Origin &origin, const std::string &name, Type type)
+    : origin(origin), name(name), type(type)
+    { }
+
+    Origin origin;
+    std::string name;
+    Type type;
+};
 class Parser {
 public:
     Parser(GameData &gameData)
@@ -154,6 +169,9 @@ private:
     bool matches(Token::Type type);
     bool matches(const std::string &text);
 
+    void checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type);
+
+    std::vector<SymbolDef> symbols;
     std::list<Token>::iterator cur;
     GameData &gameData;
 };

@@ -4,6 +4,17 @@
 
 #include "build.h"
 
+void Parser::checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type) {
+    for (const auto &i : symbols) {
+        if (i.name == name) {
+            std::stringstream ss;
+            ss << "Symbol " << name << " was already defined at " << i.origin << ".";
+            throw BuildError(origin, ss.str());
+        }
+    }
+    symbols.push_back(SymbolDef(origin, name, type));
+}
+
 void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end) {
     cur = start;
 
@@ -52,12 +63,11 @@ void Parser::doVersion() {
 }
 
 void Parser::doConstant() {
+    const Origin &origin = cur->origin;
     require("CONSTANT");
     require(Token::Identifier);
     const std::string &name = cur->text;
-    if (gameData.constants.count(name) > 0) {
-        throw BuildError("Already defined constant " + name);
-    }
+    checkSymbol(origin, name, SymbolDef::Constant);
     ++cur;
 
     require(Token::Integer);
@@ -72,6 +82,8 @@ void Parser::doNode() {
     require(Token::Identifier);
 
     std::string nodeName = cur->text;
+    checkSymbol(origin, nodeName, SymbolDef::Node);
+
     ++cur;
     std::shared_ptr<Block> block(doBlock());
     std::shared_ptr<Node> node(new Node);
