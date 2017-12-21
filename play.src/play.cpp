@@ -33,63 +33,67 @@ static void drawOptions(Game &game, GameIO &io) {
     io.setWindow(GameIO::Main);
 }
 
-static void drawInventory(Game &game, GameIO &io) {
-    io.setWindow(GameIO::Sidebar);
+static void doInventory(Game &game, GameIO &io) {
+    io.setWindow(GameIO::Options);
     io.clear();
-    io.say("You are carrying:\n\n");
-    if (game.inventory.empty()) {
-        io.say("Nothing");
-    } else {
-        int i = 1;
-        for (CarriedItem &ci : game.inventory) {
-            io.say(i++);
-            io.say(") ");
-            if (ci.qty == 1) {
-                io.say(game.getString(game.getProperty(ci.itemIdent, itmArticle)));
-                io.say(game.getString(game.getProperty(ci.itemIdent, itmSingular)));
-            } else {
-                io.say(ci.qty);
-                io.say(" ");
-                io.say(game.getString(game.getProperty(ci.itemIdent, itmPlural)));
+    io.say("Use what item? (Z to cancel)");
+
+    io.setWindow(GameIO::Sidebar);
+
+
+    while (true) {
+        int lastItem = 0;
+        io.clear();
+        io.say("You are carrying:\n\n");
+        if (game.inventory.empty()) {
+            io.say("Nothing");
+        } else {
+            int i = 1;
+            for (CarriedItem &ci : game.inventory) {
+                ++lastItem;
+                io.say(i++);
+                io.say(") ");
+                if (ci.qty == 1) {
+                    io.say(game.getString(game.getProperty(ci.itemIdent, itmArticle)));
+                    io.say(game.getString(game.getProperty(ci.itemIdent, itmSingular)));
+                } else {
+                    io.say(ci.qty);
+                    io.say(" ");
+                    io.say(game.getString(game.getProperty(ci.itemIdent, itmPlural)));
+                }
+                io.say("\n");
             }
-            io.say("\n");
+        }
+
+        int key = io.getKey();
+        if (key == 'Z') {
+            io.setWindow(GameIO::Main);
+            return;
+        } else if (key >= '1' && key < '1' + lastItem) {
+            io.clear();
+            io.setWindow(GameIO::Main);
+            game.useItem(key - '1');
+            return;
         }
     }
-    io.setWindow(GameIO::Main);
 }
 
 void gameloop() {
-    enum SidebarMode {
-        Blank, Inventory
-    };
     GameIO io;
     Game game(io);
-    enum SidebarMode mode = Blank;
 
     game.loadDataFromFile("game.bin");
     game.startGame();
 
     while (true) {
         drawOptions(game, io);
-        switch(mode) {
-            case Blank:
-                break;
-            case Inventory:
-                drawInventory(game, io);
-                break;
-        }
 
         int key = io.getKey();
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
             drawStatus(game, io);
         } else if (key == 'I' && game.actionAllowed()) {
-            drawInventory(game, io);
-            mode = Inventory;
-        } else if (key == 'U' && game.actionAllowed()) {
-            if (!game.inventory.empty()) {
-                game.useItem(0);
-            }
+            doInventory(game, io);
         } else if (key == 'Q') {
             io.style(GameIO::Emphasis);
             io.say("\nGoodbye!\n");
