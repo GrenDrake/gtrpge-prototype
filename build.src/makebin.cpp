@@ -58,6 +58,30 @@ std::string mangleLabel(const std::string &nodeName, const std::string &original
     return labelName;
 }
 
+
+static uint32_t processValue(const Origin &origin, const std::unordered_map<std::string, unsigned> labels, const Value &value, const std::string &nodeName) {
+    switch(value.type) {
+        case Value::Integer:
+            return value.value;
+            break;
+        case Value::Identifier:
+            const auto &v = labels.find(value.text);
+            if (v != labels.end()) {
+                return v->second;
+            }
+
+            if (nodeName != "") {
+                std::string mangled = mangleLabel(nodeName, value.text);
+                const auto &mv = labels.find(mangled);
+                if (mv != labels.end()) {
+                    return mv->second;
+                }
+            }
+            std::cerr << "WARNING: " << origin << " Unknown symbol " << value.text << '\n';
+            return 0;
+    }
+}
+
 void make_bin(GameData &gameData, std::ostream &dbgout) {
     if (gameData.nodes.count("start") == 0) {
         throw BuildError("Game lacks \"start\" node.");
@@ -98,7 +122,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
 
     for (auto &item : gameData.items) {
         labels.insert(std::make_pair(item.first, pos));
-        pos += 13;
+        pos += itmSize;
     }
 
     for (auto &node : gameData.nodes) {
@@ -150,6 +174,8 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         out.write((const char *)&v, 4);
         v = labels[item.second->plural];
         out.write((const char *)&v, 4);
+        v = processValue(item.second->origin, labels, item.second->onUse, "");
+        out.write((const char *)&v, 4);
     }
 
     idByte = idNode;
@@ -168,24 +194,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
             std::list<Value>::iterator cur = stmt->parts.begin();
             ++cur;
             while (cur != stmt->parts.end()) {
-                int v = 0;
-                switch(cur->type) {
-                    case Value::Integer:
-                        v = cur->value;
-                        break;
-                    case Value::Identifier:
-                        if (labels.count(cur->text) == 0) {
-                            std::string mangled = mangleLabel(nodeName, cur->text);
-                            if (labels.count(mangled)) {
-                                v = labels[mangled];
-                            } else {
-                                std::cerr << "WARNING: " << stmt->origin << " Unknown symbol " << cur->text << '\n';
-                            }
-                        } else {
-                            v = labels[cur->text];
-                        }
-                        break;
-                }
+                uint32_t v = processValue(stmt->origin, labels, *cur, nodeName);
                 out.write((const char *)&v, 4);
                 ++cur;
             }

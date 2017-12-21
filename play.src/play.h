@@ -67,6 +67,7 @@ public:
 
     void startGame();
     void doOption(int optionNumber);
+    void useItem(int itemNumber);
     void newNode(std::uint32_t address);
     void doNode(std::uint32_t address);
 

@@ -106,6 +106,7 @@ void Parser::doItemDef() {
     ++cur;
 
     std::shared_ptr<ItemDef> item(new ItemDef);
+    item->origin = origin;
     item->name = name;
     require(Token::OpenBrace, true);
     require(Token::String);
@@ -119,12 +120,48 @@ void Parser::doItemDef() {
     ++cur;
 
     while (!matches(Token::CloseBrace)) {
+        const Origin &pOrigin = cur->origin;
+        require(Token::Identifier);
+        const std::string &pName = cur->text;
         ++cur;
+        const Value &value = doProperty(item->name);
+
+        if (pName == "onUse") {
+            item->onUse = value;
+        } else {
+            throw BuildError(pOrigin, "Unknown item property " + pName);
+        }
     }
     ++cur;
 
     if (!gameData.items.insert(std::make_pair(item->name, item)).second) {
         throw BuildError(origin, "Duplicate item " + item->name);
+    }
+}
+
+Value Parser::doProperty(const std::string &forName) {
+    const Origin &origin = cur->origin;
+    if (matches(Token::Identifier)) {
+        const std::string &name = cur->text;
+        ++cur;
+        return Value(name);
+    } else if (matches(Token::OpenBrace)) {
+        std::stringstream ss;
+        ss << "__an_" << forName << "_" << anonymousCounter;
+        ++anonymousCounter;
+        std::shared_ptr<Node> node(new Node);
+        node->block = std::shared_ptr<Block>(doBlock());
+        node->name = ss.str();
+        if (!gameData.nodes.insert(std::make_pair(node->name, node)).second) {
+            throw BuildError(origin, "Duplicate node " + node->name);
+        }
+        return Value(node->name);
+    } else if (matches(Token::Integer)) {
+        int v = cur->value;
+        ++cur;
+        return Value(v);
+    } else {
+        throw BuildError(origin, "Expected property value.");
     }
 }
 

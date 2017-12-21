@@ -26,6 +26,10 @@ ITEM gnoll-potion {
 
 ITEM gnoll-cage-key {
     "a " "very shiny key" ""
+    onUse {
+        say "You admire the key for a few minutes.";
+        add-return;
+    }
 }
 
 /* ************************************************************************* *

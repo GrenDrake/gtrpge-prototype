@@ -46,6 +46,7 @@ public:
 
 class ItemDef {
 public:
+    Origin origin;
     std::string name;
 
     std::string article, singular, plural;

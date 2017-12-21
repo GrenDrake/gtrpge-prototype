@@ -83,6 +83,10 @@ void gameloop() {
         } else if (key == 'I' && game.actionAllowed()) {
             drawInventory(game, io);
             mode = Inventory;
+        } else if (key == 'U' && game.actionAllowed()) {
+            if (!game.inventory.empty()) {
+                game.useItem(0);
+            }
         } else if (key == 'Q') {
             io.style(GameIO::Emphasis);
             io.say("\nGoodbye!\n");

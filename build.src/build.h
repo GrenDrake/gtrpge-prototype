@@ -152,7 +152,7 @@ public:
 class Parser {
 public:
     Parser(GameData &gameData)
-    : gameData(gameData)
+    : gameData(gameData), anonymousCounter(0)
     { }
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);
@@ -163,6 +163,7 @@ private:
     void doConstant();
     void doNode();
     void doItemDef();
+    Value doProperty(const std::string &forName);
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();
 
@@ -176,6 +177,7 @@ private:
     std::vector<SymbolDef> symbols;
     std::list<Token>::iterator cur;
     GameData &gameData;
+    int anonymousCounter;
 };
 
 std::string readFile(const std::string &file);

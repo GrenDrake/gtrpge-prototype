@@ -344,6 +344,31 @@ void Game::doOption(int optionNumber) {
     newNode(dest);
 }
 
+void Game::useItem(int itemNumber) {
+    if (itemNumber < 0 || itemNumber >= (signed)inventory.size()) {
+        return;
+    }
+
+    uint32_t item = inventory[itemNumber].itemIdent;
+    if (!item) return;
+
+    uint32_t onUse = getProperty(item, itmOnUse);
+    if (!onUse) return;
+
+    uint32_t article = getProperty(item, itmArticle);
+    uint32_t name = getProperty(item, itmSingular);
+
+    io.style(GameIO::Emphasis);
+    io.say("\n> Using ");
+    io.say(getString(article));
+    io.say(getString(name));
+    io.say("\n\n");
+    io.style(GameIO::Normal);
+
+    newNode(onUse);
+}
+
+
 bool Game::actionAllowed() const {
     return inLocation && isRunning;
 }
