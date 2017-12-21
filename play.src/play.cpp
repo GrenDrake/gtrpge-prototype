@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 
 #include "play.h"
@@ -52,7 +51,7 @@ static void drawInventory(Game &game, GameIO &io) {
     io.setWindow(GameIO::Main);
 }
 
-void glk_main() {
+void gameloop() {
     enum SidebarMode {
         Blank, Inventory
     };
@@ -60,36 +59,29 @@ void glk_main() {
     Game game(io);
     enum SidebarMode mode = Blank;
 
-    try {
-        game.loadDataFromFile("game.bin");
-        game.startGame();
+    game.loadDataFromFile("game.bin");
+    game.startGame();
 
-        while (true) {
-            update(game, io);
-            switch(mode) {
-                case Blank:
-                    break;
-                case Inventory:
-                    drawInventory(game, io);
-                    break;
-            }
-
-            int key = io.getKey();
-            if (key >= '1' && key <= '9') {
-                game.doOption(key - '1');
-            } else if (key == 'I' && game.actionAllowed()) {
+    while (true) {
+        update(game, io);
+        switch(mode) {
+            case Blank:
+                break;
+            case Inventory:
                 drawInventory(game, io);
-                mode = Inventory;
-            } else if (key == 'Q') {
-                io.style(GameIO::Emphasis);
-                io.say("\nGoodbye!\n");
-                return;
-            }
+                break;
         }
 
-    } catch (PlayError &e) {
-        std::cerr << "FATAL: " << e.what() << "\n";
+        int key = io.getKey();
+        if (key >= '1' && key <= '9') {
+            game.doOption(key - '1');
+        } else if (key == 'I' && game.actionAllowed()) {
+            drawInventory(game, io);
+            mode = Inventory;
+        } else if (key == 'Q') {
+            io.style(GameIO::Emphasis);
+            io.say("\nGoodbye!\n");
+            return;
+        }
     }
-
-    return;
 }
