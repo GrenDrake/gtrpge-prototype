@@ -11,7 +11,7 @@
 BuildError::BuildError(const std::string &msg)
 : std::runtime_error(msg), errorMessage("")
 {
-    strncpy(errorMessage, msg.c_str(), 63);
+    strncpy(errorMessage, msg.c_str(), errorMessageLength-1);
 }
 BuildError::BuildError(const Origin &origin, const std::string &msg)
 : std::runtime_error(msg)
@@ -19,7 +19,7 @@ BuildError::BuildError(const Origin &origin, const std::string &msg)
     std::stringstream ss;
     ss << origin << ' ' << msg;
 
-    strncpy(errorMessage, ss.str().c_str(), 63);
+    strncpy(errorMessage, ss.str().c_str(), errorMessageLength-1);
 }
 const char* BuildError::what() const throw() {
     return errorMessage;
