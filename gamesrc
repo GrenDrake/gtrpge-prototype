@@ -2,6 +2,11 @@ TITLE "Forest of the Gnoll";
 VERSION "Alpha-1";
 BYLINE "Gren Drake, 2017";
 
+CONSTANT flg-took-key 0;
+CONSTANT flg-rescued-gnoll 1;
+CONSTANT flg-talked-to-caged-gnoll 2;
+CONSTANT flg-visited-gnoll 3;
+
 NODE start {
     say "Welcome to the game!";
     add-option-xtra "Begin Game (male)" do-chargen "male";
@@ -25,7 +30,7 @@ NODE town-gate {
     say "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed.";
     add-option "Return to the forest" forest-path;
 
-    fetch #took-key;
+    fetch flg-took-key;
     jump-true no-key;
     say "\n\nA key can be seen glinting in the sun not far from the gate.";
     add-option "Take key" take-key;
@@ -34,7 +39,7 @@ NODE town-gate {
 
 NODE take-key {
     add-items 1 "shiny key";
-    store #took-key true;
+    store flg-took-key true;
     say "You pick up the key and stick it in your pocket.";
     add-return;
 }
@@ -44,7 +49,7 @@ NODE gnoll-cage {
     say "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage.";
     add-option "Return to the forest path" forest-path;
 
-    fetch #rescued-gnoll;
+    fetch flg-rescued-gnoll;
     jump-true no-gnoll;
     say " Inside the cage you can see a rather emaciated gnoll.";
     add-option "Open the cage" open-cage;
@@ -57,9 +62,9 @@ NODE gnoll-cage {
 
 NODE talk-to-gnoll {
     add-return;
-    fetch #talked-to-caged-gnoll;
+    fetch flg-talked-to-caged-gnoll;
     jump-true second-talk;
-    store #talked-to-caged-gnoll true;
+    store flg-talked-to-caged-gnoll true;
     say "You can barely make out the gnoll's words; \"Help me, please!\"";
     end;
     label second-talk;
@@ -72,7 +77,7 @@ NODE open-cage {
     jump-false no-key;
     say "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\"";
     remove-items 1 "shiny key";
-    store #rescued-gnoll true;
+    store flg-rescued-gnoll true;
     end;
 
     label no-key;
@@ -90,7 +95,7 @@ NODE forest-fork {
 NODE outside-cabin {
     set-location "A Cabin in the Forest";
     say "A small cabin has been built here, nestled between the trees.";
-    fetch #rescued-gnoll;
+    fetch flg-rescued-gnoll;
     jump-false no-gnoll;
     say " A trail of smoke can be seen curling up from the chimney; it appears someone is home!";
     label no-gnoll;
@@ -99,14 +104,14 @@ NODE outside-cabin {
 }
 
 NODE entering-cabin {
-    fetch #rescued-gnoll;
+    fetch flg-rescued-gnoll;
     jump-true gnoll-home;
     say "Try as you might, the door is quite secure.";
     add-return;
     end;
 
     label gnoll-home;
-    store #visited-gnoll true;
+    store flg-visited-gnoll true;
     say "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n";
     do-node inside-cabin;
 }

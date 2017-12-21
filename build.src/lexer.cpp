@@ -121,14 +121,6 @@ void Lexer::doFile(const std::string &file) {
             unescape(origin, str);
             next();
             tokens.push_back(Token(origin, Token::String, str));
-        } else if (here() == '#') {
-            next();
-            unsigned start = pos;
-            while (isIdentifier(here())) {
-                next();
-            }
-            uint32_t value = getConstant(text.substr(start, pos-start));
-            tokens.push_back(Token(origin, Token::Integer, value));
         } else if (isIdentifier(here(), true)) {
             unsigned start = pos;
             while (isIdentifier(here())) {
@@ -150,16 +142,5 @@ void Lexer::doFile(const std::string &file) {
             std::cout << ' ' << here();
             next();
         }
-    }
-}
-
-uint32_t Lexer::getConstant(const std::string &name) {
-    auto result = constants.find(name);
-    if (result == constants.end()) {
-        int v = nextConstant++;
-        constants.insert(std::make_pair(name, v));
-        return v;
-    } else {
-        return result->second;
     }
 }

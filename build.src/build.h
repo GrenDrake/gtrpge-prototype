@@ -40,6 +40,7 @@ public:
 
     std::string addString(const std::string &text);
 
+    std::unordered_map<std::string, std::uint32_t> constants;
     std::unordered_map<std::string, std::string> strings;
     std::unordered_map<std::string, std::shared_ptr<Node> > nodes;
     std::string title, byline, version;
@@ -81,14 +82,9 @@ public:
 
 class Lexer {
 public:
-    Lexer()
-    : nextConstant(32)
-    { }
-
     void doFile(const std::string &file);
 
     std::list<Token> tokens;
-    std::unordered_map<std::string,uint32_t> constants;
 private:
     void unescape(const Origin &origin, std::string &text);
     int here() const {
@@ -124,13 +120,11 @@ private:
         }
         return false;
     }
-    uint32_t getConstant(const std::string &name);
 
     std::string text;
     std::string file;
     std::uint32_t pos;
     int line, column;
-    std::uint32_t nextConstant;
 };
 
 class Parser {
@@ -144,6 +138,7 @@ private:
     void doTitle();
     void doByline();
     void doVersion();
+    void doConstant();
     void doNode();
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();

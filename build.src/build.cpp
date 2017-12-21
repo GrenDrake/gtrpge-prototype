@@ -78,8 +78,8 @@ int main() {
 
     std::ofstream out("dbg_dump.txt");
 
-    out << "FOUND " << lexer.constants.size() << " CONSTANTS:\n";
-    for (auto &constant : lexer.constants) {
+    out << "FOUND " << gameData.constants.size() << " CONSTANTS:\n";
+    for (auto &constant : gameData.constants) {
         out << std::setw(8) << constant.first << ": ";
         out << constant.second;
         out << "\n";

@@ -17,6 +17,8 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doByline();
         } else if (matches("VERSION")) {
             doVersion();
+        } else if (matches("CONSTANT")) {
+            doConstant();
         } else {
             std::stringstream ss;
             throw BuildError(cur->origin, "Expected top level construct");
@@ -45,6 +47,21 @@ void Parser::doVersion() {
     require("VERSION");
     require(Token::String);
     gameData.version = gameData.addString(cur->text);
+    ++cur;
+    require(Token::Semicolon, true);
+}
+
+void Parser::doConstant() {
+    require("CONSTANT");
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    if (gameData.constants.count(name) > 0) {
+        throw BuildError("Already defined constant " + name);
+    }
+    ++cur;
+
+    require(Token::Integer);
+    gameData.constants.insert(std::make_pair(name, cur->value));
     ++cur;
     require(Token::Semicolon, true);
 }

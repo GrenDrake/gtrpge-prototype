@@ -83,6 +83,10 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     labels.insert(std::make_pair("false", 0));
     labels.insert(std::make_pair("stack", stackOperand));
 
+    for (auto &c : gameData.constants) {
+        labels.insert(std::make_pair(c.first, c.second));
+    }
+
     std::uint8_t idByte = idString;
     for (auto &str : gameData.strings) {
         labels.insert(std::make_pair(str.second, pos));
