@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "build.h"
 
@@ -139,7 +140,9 @@ void Lexer::doFile(const std::string &file) {
             }
             tokens.push_back(Token(origin, Token::Integer, value));
         } else {
-            std::cout << ' ' << here();
+            std::stringstream ss;
+            ss << "Found unexpected character " << (char)here() << " (" << here() << ").";
+            throw BuildError(origin, ss.str());
             next();
         }
     }
