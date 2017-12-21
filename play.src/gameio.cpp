@@ -54,6 +54,37 @@ int GameIO::getKey() {
     }
 }
 
+std::string GameIO::getLineRaw(const std::string &initial) {
+    event_t event;
+
+    char inBuffer[128] = {0};
+    int initLen = initial.size();
+    if (initLen) {
+        strncpy(inBuffer, initial.c_str(), 127);
+    }
+
+    glk_request_line_event(optionsWindow, inBuffer, 127, initLen);
+    while (true) {
+        glk_select(&event);
+
+        switch (event.type) {
+            case evtype_LineInput:
+                inBuffer[event.val1] = 0;
+                return inBuffer;
+        }
+    }
+}
+
+std::string GameIO::getLine(const std::string &prompt, const std::string &initial) {
+    setWindow(GameIO::Options);
+    clear();
+    say(prompt);
+    std::string s = getLineRaw(initial);
+    setWindow(GameIO::Main);
+    return s;
+}
+
+
 void GameIO::style(Style style) {
     switch(style) {
         case Normal:

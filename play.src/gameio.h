@@ -18,6 +18,8 @@ public:
     void say(const std::string &text);
     void say(int value);
     int getKey();
+    std::string getLineRaw(const std::string &initial);
+    std::string getLine(const std::string &prompt, const std::string &initial = "");
     void style(Style style = Normal);
     void setWindow(Window window);
     void clear();
