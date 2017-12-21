@@ -3,7 +3,6 @@ VERSION "Alpha-1";
 BYLINE "Gren Drake, 2017";
 
 NODE start {
-    say start;
     say "Welcome to the game!";
     add-option-xtra "Begin Game (male)" do-chargen "male";
     add-option-xtra "Begin Game (female)" do-chargen "female";

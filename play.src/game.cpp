@@ -18,6 +18,10 @@ void Game::loadDataFromFile(const std::string &filename) {
     }
 }
 
+bool Game::isType(std::uint32_t address, uint8_t type) const {
+    return readByte(address) == type;
+}
+
 std::uint8_t Game::readByte(std::uint32_t pos) const {
     if (!data) return 0;
     return (uint8_t)data[pos];
@@ -42,7 +46,7 @@ std::uint32_t Game::readWord(std::uint32_t pos) const {
 }
 
 const char *Game::getString(std::uint32_t address) const {
-    if (readByte(address) != idString) {
+    if (!isType(address, idString)) {
         std::stringstream ss;
         ss << "Tried to read non-string at address 0x" << std::hex << address;
         ss << " as a string.";
@@ -84,7 +88,7 @@ int Game::nextOperand(std::uint32_t &ip) {
 }
 void Game::doNode(std::uint32_t address) {
     std::uint32_t ip = address;
-    if (readByte(ip++) != idNode) {
+    if (!isType(ip++, idNode)) {
         std::stringstream ss;
         ss << "Tried to run non-node at " << std::hex << (int)readByte(ip-1) << ".";
         throw PlayError(ss.str());

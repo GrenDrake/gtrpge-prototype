@@ -56,6 +56,7 @@ public:
 
     void loadDataFromFile(const std::string &filename);
 
+    bool isType(std::uint32_t address, uint8_t type) const;
     std::uint8_t readByte(std::uint32_t pos) const;
     std::uint16_t readShort(std::uint32_t pos) const;
     std::uint32_t readWord(std::uint32_t pos) const;
