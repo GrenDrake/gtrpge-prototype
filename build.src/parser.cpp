@@ -144,6 +144,7 @@ Value Parser::doProperty(const std::string &forName) {
     if (matches(Token::Identifier)) {
         const std::string &name = cur->text;
         ++cur;
+        require(Token::Semicolon, true);
         return Value(name);
     } else if (matches(Token::OpenBrace)) {
         std::stringstream ss;
@@ -159,6 +160,7 @@ Value Parser::doProperty(const std::string &forName) {
     } else if (matches(Token::Integer)) {
         int v = cur->value;
         ++cur;
+        require(Token::Semicolon, true);
         return Value(v);
     } else {
         throw BuildError(origin, "Expected property value.");
