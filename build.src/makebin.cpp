@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <unordered_map>
 
 #include "build.h"
@@ -167,6 +168,19 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     for (auto &item : gameData.items) {
         out.write(reinterpret_cast<char*>(&idByte), 1);
         uint32_t v;
+
+        v = 0;
+        if (!item.second->flags.empty()) {
+            for (auto &flg : item.second->flags) {
+                uint32_t flagNo = processValue(item.second->origin, labels, flg, "");
+                if (flagNo >= 32) {
+                    throw BuildError(item.second->origin, "Flag values must be in range (0-31).");
+                }
+                uint32_t fv = 1 << flagNo;
+                v |= fv;
+            }
+        }
+        out.write((const char *)&v, 4);
 
         v = labels[item.second->article];
         out.write((const char *)&v, 4);

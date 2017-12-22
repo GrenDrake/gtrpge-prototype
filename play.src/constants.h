@@ -11,11 +11,12 @@ const int idString          = 0xFF;
 const int idNode            = 0xFE;
 const int idItem            = 0xFD;
 
-const int itmArticle        = 1;
-const int itmSingular       = 5;
-const int itmPlural         = 9;
-const int itmOnUse          = 13;
-const int itmSize           = 17;
+const int itmFlags          = 1;
+const int itmArticle        = 5;
+const int itmSingular       = 9;
+const int itmPlural         = 13;
+const int itmOnUse          = 17;
+const int itmSize           = 21;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;

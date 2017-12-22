@@ -168,6 +168,7 @@ private:
     Value doProperty(const std::string &forName);
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();
+    Value doValue();
 
     void require(Token::Type type, bool advance = false);
     void require(const std::string &text);

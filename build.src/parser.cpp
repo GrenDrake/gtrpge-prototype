@@ -119,6 +119,14 @@ void Parser::doItemDef() {
     item->plural = gameData.addString(cur->text);
     ++cur;
 
+    if (matches(Token::OpenParan)) {
+        ++cur; // eat open paran
+        while (!matches(Token::CloseParan)) {
+            item->flags.insert(doValue());
+        }
+        ++cur; // eat close paran
+    }
+
     while (!matches(Token::CloseBrace)) {
         const Origin &pOrigin = cur->origin;
         require(Token::Identifier);
@@ -188,21 +196,7 @@ std::shared_ptr<Statement> Parser::doStatement() {
     std::shared_ptr<Statement> statement(new Statement);
     statement->origin = origin;
     while (!matches(Token::Semicolon)) {
-        if (matches(Token::String)) {
-            std::string label = gameData.addString(cur->text);
-            statement->parts.push_back(Value(label));
-            ++cur;
-        } else if (matches(Token::Identifier)) {
-            statement->parts.push_back(Value(cur->text));
-            ++cur;
-        } else if (matches(Token::Integer)) {
-            statement->parts.push_back(Value(cur->value));
-            ++cur;
-        } else {
-            std::stringstream ss;
-            ss << "Unexpected " << cur->type << '.';
-            throw BuildError(origin, ss.str());
-        }
+        statement->parts.push_back(doValue());
     }
     ++cur;
     if (statement->parts.empty()) {
@@ -211,7 +205,25 @@ std::shared_ptr<Statement> Parser::doStatement() {
     return statement;
 }
 
-
+Value Parser::doValue() {
+    if (matches(Token::String)) {
+        std::string label = gameData.addString(cur->text);
+        ++cur;
+        return Value(label);
+    } else if (matches(Token::Identifier)) {
+        std::string label = cur->text;
+        ++cur;
+        return Value(label);
+    } else if (matches(Token::Integer)) {
+        int v = cur->value;
+        ++cur;
+        return v;
+    } else {
+        std::stringstream ss;
+        ss << "Expected value type, but found " << cur->type << '.';
+        throw BuildError(cur->origin, ss.str());
+    }
+}
 
 
 
