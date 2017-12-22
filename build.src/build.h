@@ -60,7 +60,9 @@ public:
         OpenBrace,
         CloseBrace,
         Semicolon,
-        Colon
+        Colon,
+        OpenParan,
+        CloseParan
     };
 
     Token()
