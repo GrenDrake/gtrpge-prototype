@@ -32,6 +32,14 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doConstant();
         } else if (matches("ITEM")) {
             doItemDef();
+        } else if (matches("SEX")) {
+            doSex();
+        } else if (matches("SPECIES")) {
+            doSpecies();
+        } else if (matches("SKILL")) {
+            doSkill();
+        } else if (matches("CHARACTER")) {
+            doCharacter();
         } else {
             std::stringstream ss;
             throw BuildError(cur->origin, "Expected top level construct");
@@ -144,6 +152,185 @@ void Parser::doItemDef() {
 
     if (!gameData.items.insert(std::make_pair(item->name, item)).second) {
         throw BuildError(origin, "Duplicate item " + item->name);
+    }
+}
+
+void Parser::doSex() {
+    const Origin &origin = cur->origin;
+    require("SEX");
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    checkSymbol(origin, name, SymbolDef::Sex);
+    ++cur;
+
+    std::shared_ptr<SexDef> sex(new SexDef);
+    sex->origin = origin;
+    sex->name = name;
+    require(Token::OpenBrace, true);
+
+    require(Token::String);
+    sex->displayName = gameData.addString(cur->text);
+    ++cur;
+
+    if (matches(Token::OpenParan)) {
+        ++cur; // eat open paran
+        while (!matches(Token::CloseParan)) {
+            sex->flags.insert(doValue());
+        }
+        ++cur; // eat close paran
+    }
+
+    require(Token::String);
+    sex->subject = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    sex->object = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    sex->possess = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    sex->adject = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    sex->reflex = gameData.addString(cur->text);
+    ++cur;
+
+    require(Token::CloseBrace, true);
+    if (!gameData.sexes.insert(std::make_pair(sex->name, sex)).second) {
+        throw BuildError(origin, "Duplicate sex " + sex->name);
+    }
+}
+
+void Parser::doSpecies() {
+    const Origin &origin = cur->origin;
+    require("SPECIES");
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    checkSymbol(origin, name, SymbolDef::Species);
+    ++cur;
+
+    std::shared_ptr<SpeciesDef> species(new SpeciesDef);
+    species->origin = origin;
+    species->name = name;
+    require(Token::OpenBrace, true);
+
+    require(Token::String);
+    species->displayName = gameData.addString(cur->text);
+    ++cur;
+
+    if (matches(Token::OpenParan)) {
+        ++cur; // eat open paran
+        while (!matches(Token::CloseParan)) {
+            species->flags.insert(doValue());
+        }
+        ++cur; // eat close paran
+    }
+
+    require(Token::CloseBrace, true);
+    if (!gameData.species.insert(std::make_pair(species->name, species)).second) {
+        throw BuildError(origin, "Duplicate species " + species->name);
+    }
+}
+
+void Parser::doSkill() {
+    const Origin &origin = cur->origin;
+    require("SKILL");
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    checkSymbol(origin, name, SymbolDef::Skill);
+    ++cur;
+
+    std::shared_ptr<SkillDef> skill(new SkillDef);
+    skill->origin = origin;
+    skill->name = name;
+
+    skill->statSkill = doValue();
+
+    require(Token::String);
+    skill->displayName = gameData.addString(cur->text);
+    ++cur;
+
+    skill->defaultValue = doValue();
+
+    require(Token::Semicolon, true);
+    if (!gameData.skills.insert(std::make_pair(skill->name, skill)).second) {
+        throw BuildError(origin, "Duplicate skill " + skill->name);
+    }
+}
+
+void Parser::doCharacter() {
+    const Origin &origin = cur->origin;
+    require("CHARACTER");
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    checkSymbol(origin, name, SymbolDef::Character);
+    ++cur;
+
+    std::shared_ptr<CharacterDef> character(new CharacterDef);
+    character->origin = origin;
+    character->name = name;
+    require(Token::OpenBrace, true);
+
+    require(Token::String);
+    character->article = gameData.addString(cur->text);
+    ++cur;
+    require(Token::String);
+    character->displayName = gameData.addString(cur->text);
+    ++cur;
+
+    character->sex = doValue();
+    character->species = doValue();
+
+    if (matches(Token::OpenParan)) {
+        ++cur; // eat open paran
+        while (!matches(Token::CloseParan)) {
+            character->flags.insert(doValue());
+        }
+        ++cur; // eat close paran
+    }
+
+    while (!matches(Token::CloseBrace)) {
+        require(Token::Identifier);
+        if (cur->text == "faction") {
+            ++cur;
+            character->faction = doValue();
+        } else if (cur->text == "skills") {
+            ++cur;
+            require(Token::OpenParan);
+            ++cur;
+            while (!matches(Token::CloseParan)) {
+                require(Token::Identifier);
+                const std::string &name = cur->text;
+                ++cur;
+                const Value &v = doValue();
+                require(Token::Semicolon, true);
+                character->skills.insert(std::make_pair(name, v));
+            }
+            ++cur;
+        } else if (cur->text == "gear") {
+            ++cur;
+            require(Token::OpenParan);
+            ++cur;
+            while (!matches(Token::CloseParan)) {
+                require(Token::String);
+                const std::string &name = gameData.addString(cur->text);
+                ++cur;
+                require(Token::Identifier);
+                const std::string &v = cur->text;
+                ++cur;
+                require(Token::Semicolon, true);
+                character->gear.insert(std::make_pair(name, v));
+            }
+            ++cur;
+        } else {
+            throw BuildError(origin, "Unknown character property " + cur->text);
+        }
+    }
+
+    require(Token::CloseBrace, true);
+    if (!gameData.characters.insert(std::make_pair(character->name, character)).second) {
+        throw BuildError(origin, "Duplicate character " + character->name);
     }
 }
 

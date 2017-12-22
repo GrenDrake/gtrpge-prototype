@@ -2,6 +2,7 @@
 #define DATA_H
 
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
 #include <string>
 #include <list>
@@ -68,6 +69,48 @@ class Node {
 public:
     std::string name;
     std::shared_ptr<Block> block;
+};
+
+class SpeciesDef {
+public:
+    Origin origin;
+    std::string name;
+
+    std::string displayName;
+    std::unordered_set<Value> flags;
+};
+
+class SexDef {
+public:
+    Origin origin;
+    std::string name;
+
+    std::string displayName;
+    std::unordered_set<Value> flags;
+    std::string subject, object, possess, adject, reflex;
+};
+
+class SkillDef {
+public:
+    Origin origin;
+    std::string name;
+
+    Value statSkill;
+    std::string displayName;
+    Value defaultValue;
+};
+
+class CharacterDef {
+public:
+    Origin origin;
+    std::string name;
+
+    std::string article, displayName;
+    Value sex, species;
+    std::unordered_set<Value> flags;
+    Value faction;
+    std::unordered_map<std::string, Value> skills;
+    std::unordered_map<std::string, std::string> gear;
 };
 
 class ItemDef {

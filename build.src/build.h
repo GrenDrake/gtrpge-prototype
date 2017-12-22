@@ -45,6 +45,10 @@ public:
     std::unordered_map<std::string, std::string> strings;
     std::unordered_map<std::string, std::shared_ptr<Node> > nodes;
     std::unordered_map<std::string, std::shared_ptr<ItemDef> > items;
+    std::unordered_map<std::string, std::shared_ptr<SexDef> > sexes;
+    std::unordered_map<std::string, std::shared_ptr<SpeciesDef> > species;
+    std::unordered_map<std::string, std::shared_ptr<SkillDef> > skills;
+    std::unordered_map<std::string, std::shared_ptr<CharacterDef> > characters;
     std::string title, byline, version;
 private:
     int nextString;
@@ -140,7 +144,7 @@ private:
 class SymbolDef {
 public:
     enum Type {
-        Node, Constant, Item
+        Node, Constant, Item, Sex, Species, Skill, Character
     };
 
     SymbolDef(const Origin &origin, const std::string &name, Type type)
@@ -164,6 +168,10 @@ private:
     void doVersion();
     void doConstant();
     void doNode();
+    void doSex();
+    void doSpecies();
+    void doSkill();
+    void doCharacter();
     void doItemDef();
     Value doProperty(const std::string &forName);
     std::shared_ptr<Block> doBlock();
