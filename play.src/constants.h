@@ -21,6 +21,7 @@ const int itmSize           = 21;
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
 const int opSetLocation     = 0x02;
+const int opHasFlag         = 0x03;
 const int opPush            = 0x0E;
 const int opPop             = 0x0F;
 const int opAddOption       = 0x10;

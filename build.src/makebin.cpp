@@ -19,6 +19,7 @@ Command commands[] = {
     { "label",           -1,                1 },
     { "end",             opEnd,             0 },
     { "do-node",         opDoNode,          1 },
+    { "has-flag",        opHasFlag,         2 },
     { "push",            opPush,            1 },
     { "pop",             opPop,             0 },
     { "set-location",    opSetLocation,     1 },

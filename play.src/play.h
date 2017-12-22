@@ -64,6 +64,7 @@ public:
     const char *getString(std::uint32_t address) const;
 
     std::uint32_t getProperty(std::uint32_t address, int propId) const;
+    std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
 
     void startGame();
     void doOption(int optionNumber);

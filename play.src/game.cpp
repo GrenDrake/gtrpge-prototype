@@ -63,6 +63,29 @@ std::uint32_t Game::getProperty(std::uint32_t address, int propId) const {
     return readWord(address + propId);
 }
 
+std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
+    std::uint32_t curFlags = 0;
+    flags = 1 << flags;
+    io.say("TESTING FOR ");
+    io.say(flags);
+    io.say(".\n");
+    switch(getType(address)) {
+        case idItem:
+            curFlags = getProperty(address, itmFlags);
+            io.say("CUR FALGS ");
+            io.say(curFlags);
+            io.say(".\n");
+            return (flags & curFlags) == flags;
+            break;
+        default: {
+            std::stringstream ss;
+            ss << "Tried to test flag of unflagged object type ";
+            ss << getType(address) << " at 0x" << std::hex << address << ".";
+            throw PlayError(ss.str());
+        }
+    }
+}
+
 void Game::startGame() {
     location = 0;
     isRunning = true;
@@ -123,6 +146,11 @@ void Game::doNode(std::uint32_t address) {
                     locationName = a1;
                     location = address;
                 }
+                break;
+            case opHasFlag:
+                a1 = nextOperand(ip);
+                a2 = nextOperand(ip);
+                push(hasFlag(a1, a2));
                 break;
             case opPush:
                 a1 = nextOperand(ip);
