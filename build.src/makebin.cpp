@@ -61,7 +61,7 @@ std::string mangleLabel(const std::string &nodeName, const std::string &original
 }
 
 
-static uint32_t processValue(const Origin &origin, const std::unordered_map<std::string, unsigned> labels, const Value &value, const std::string &nodeName) {
+static uint32_t processValue(const Origin &origin, const std::unordered_map<std::string, unsigned> &labels, const Value &value, const std::string &nodeName) {
     switch(value.type) {
         case Value::Integer:
             return value.value;
@@ -82,6 +82,25 @@ static uint32_t processValue(const Origin &origin, const std::unordered_map<std:
             std::cerr << "WARNING: " << origin << " Unknown symbol " << value.text << '\n';
             return 0;
     }
+}
+
+static std::uint32_t processFlags(const Origin &origin,
+                                  const std::unordered_map<std::string, unsigned> &labels,
+                                  const std::unordered_set<Value> &flags) {
+    if (flags.empty()) {
+        return 0;
+    }
+
+    uint32_t result = 0;
+    for (auto &flg : flags) {
+        uint32_t flagNo = processValue(origin, labels, flg, "");
+        if (flagNo >= 32) {
+            throw BuildError(origin, "Flag values must be in range (0-31).");
+        }
+        uint32_t fv = 1 << flagNo;
+        result |= fv;
+    }
+    return result;
 }
 
 void make_bin(GameData &gameData, std::ostream &dbgout) {
@@ -170,17 +189,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         out.write(reinterpret_cast<char*>(&idByte), 1);
         uint32_t v;
 
-        v = 0;
-        if (!item.second->flags.empty()) {
-            for (auto &flg : item.second->flags) {
-                uint32_t flagNo = processValue(item.second->origin, labels, flg, "");
-                if (flagNo >= 32) {
-                    throw BuildError(item.second->origin, "Flag values must be in range (0-31).");
-                }
-                uint32_t fv = 1 << flagNo;
-                v |= fv;
-            }
-        }
+        v = processFlags(item.second->origin, labels, item.second->flags);
         out.write((const char *)&v, 4);
 
         v = labels[item.second->article];

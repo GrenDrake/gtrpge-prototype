@@ -66,17 +66,10 @@ std::uint32_t Game::getProperty(std::uint32_t address, int propId) const {
 std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
     std::uint32_t curFlags = 0;
     flags = 1 << flags;
-    io.say("TESTING FOR ");
-    io.say(flags);
-    io.say(".\n");
     switch(getType(address)) {
         case idItem:
             curFlags = getProperty(address, itmFlags);
-            io.say("CUR FALGS ");
-            io.say(curFlags);
-            io.say(".\n");
             return (flags & curFlags) == flags;
-            break;
         default: {
             std::stringstream ss;
             ss << "Tried to test flag of unflagged object type ";
