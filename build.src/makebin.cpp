@@ -103,6 +103,12 @@ static std::uint32_t processFlags(const Origin &origin,
     return result;
 }
 
+static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std::uint32_t &position, std::shared_ptr<DataType> data) {
+    labels.insert(std::make_pair(data->name, position));
+    data->pos = position;
+    position += itmSize;
+}
+
 void make_bin(GameData &gameData, std::ostream &dbgout) {
     // if (gameData.nodes.count("start") == 0) {
     //     throw BuildError("Game lacks \"start\" node.");
@@ -142,8 +148,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     }
 
     for (auto &item : gameData.items) {
-        labels.insert(std::make_pair(item->name, pos));
-        pos += itmSize;
+        doPositioning(labels, pos, item);
     }
 
     for (auto &node : gameData.nodes) {

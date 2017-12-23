@@ -7,6 +7,7 @@
 #include <string>
 #include <list>
 
+#include "../play.src/constants.h"
 
 class Value {
 public:
@@ -65,6 +66,18 @@ public:
     std::list<std::shared_ptr<Statement> > statements;
 };
 
+class DataType {
+public:
+    virtual ~DataType() {
+
+    }
+    virtual size_t getSize() const = 0;
+
+    Origin origin;
+    std::string name;
+    std::uint32_t pos;
+};
+
 class Node {
 public:
     std::string name;
@@ -113,10 +126,11 @@ public:
     std::unordered_map<std::string, std::string> gear;
 };
 
-class ItemDef {
+class ItemDef : public DataType {
 public:
-    Origin origin;
-    std::string name;
+    virtual size_t getSize() const {
+        return itmSize;
+    }
 
     std::unordered_set<Value> flags;
     std::string article, singular, plural;
