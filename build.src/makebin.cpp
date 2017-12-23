@@ -126,12 +126,12 @@ static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std
     }
 }
 
-void make_bin(GameData &gameData, std::ostream &dbgout) {
+void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &dbgout) {
     // if (gameData.nodes.count("start") == 0) {
     //     throw BuildError("Game lacks \"start\" node.");
     // }
 
-    std::fstream out("game.bin", std::ios::out | std::ios::in | std::ios::binary | std::ios::trunc);
+    std::fstream out(outputFile, std::ios::out | std::ios::in | std::ios::binary | std::ios::trunc);
     if (!out) {
         throw BuildError("Could not open output file.");
     }
@@ -309,4 +309,6 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     v += (aTime->tm_mon + 1) * 100;
     v += (aTime->tm_mday);
     out.write((const char *)&v, 4);
+
+    std::cerr << "Created " << outputFile << ".\n";
 }

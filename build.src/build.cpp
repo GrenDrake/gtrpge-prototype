@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "build.h"
 
@@ -39,7 +40,7 @@ std::string GameData::addString(const std::string &text) {
 std::string readFile(const std::string &file) {
     std::ifstream inf(file);
     if (!inf) {
-        throw std::runtime_error("Could not open file.");
+        throw BuildError(Origin(), "Could not open file "+file+".");
     }
     std::string content( (std::istreambuf_iterator<char>(inf)),
                          std::istreambuf_iterator<char>() );
@@ -61,17 +62,37 @@ std::string formatForDump(std::string text, size_t maxlen) {
     }
 }
 
-int main() {
-
+int main(int argc, char *argv[]) {
     GameData gameData;
     Lexer lexer;
+
+    std::vector<std::string> sourceFiles;
+    std::string outputFile = "game.bin";
+
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "-o") == 0) {
+            ++i;
+            if (i >= argc) {
+                std::cerr << "-o options requires output filename\n";
+                return 1;
+            }
+            outputFile = argv[i];
+        } else {
+            sourceFiles.push_back(argv[i]);
+        }
+    }
+
+    if (sourceFiles.empty()) {
+        std::cerr << "No source files provided!\n";
+        return 1;
+    }
+
     try {
-
-        lexer.doFile("gamesrc");
-
-        Parser parser(gameData);
-
-        parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
+        for (const std::string &file : sourceFiles) {
+            lexer.doFile(file);
+            Parser parser(gameData);
+            parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
+        }
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
         return 1;
@@ -131,7 +152,7 @@ int main() {
     }
 
     try {
-        make_bin(gameData, out);
+        make_bin(gameData, outputFile, out);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
     }
