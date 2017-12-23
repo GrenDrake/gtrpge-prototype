@@ -1,58 +1,18 @@
-TITLE "Forest of the Gnoll";
-VERSION "Alpha-1";
-BYLINE "Gren Drake, 2017";
+/* ************************************************************************* *
+ * FOREST ITEMS                                                              *
+ * ************************************************************************* */
 
-// constants that are used to refer to storage locations
-CONSTANT flg-took-key 0;
-CONSTANT flg-rescued-gnoll 1;
-CONSTANT flg-talked-to-caged-gnoll 2;
-CONSTANT flg-visited-gnoll 3;
-
-// constants for species flag definitions
-CONSTANT sflg-biped 0;
-CONSTANT sflg-quad  1;
-
-SPECIES spc-human {
-    "human" ( sflg-biped )
+ITEM gnoll-cage-key {
+    "a " "very shiny key" ""
+    onUse {
+        say "You admire the key for a few minutes.";
+        add-return;
+    }
 }
 
-SPECIES spc-gnoll {
-    "gnoll" ( sflg-biped )
-}
-
-SPECIES spc-dragon {
-    "dragon" ( sflg-quad )
-}
-
-SEX sex-male {
-    "male" ( /* sflg-male */ )
-    "he"      // subject  : _he_ ate dinner
-    "him"     // object   : dinner ate _him_
-    "his"     // possess  : the dinner was _his_
-    "his"     // adject   : it's _his_ dinner
-    "himself" // reflex   : he ate _himself_
-}
-
-SEX sex-female {
-    "female" ()
-    "she" "her" "hers" "her" "herself"
-}
-
-//    iname             stat            dname           default-value
-SKILL skl-strength      0               "strength"      10;
-SKILL skl-dexterity     0               "dexterity"     10;
-SKILL skl-toughness     0               "toughness"     10; // consitution
-SKILL skl-intelligence  0               "intelligence"  10;
-SKILL skl-spirit        0               "spirit"        10; // wisdom
-SKILL skl-one-handed    skl-dexterity   "one handed"    0;
-SKILL skl-two-handed    skl-dexterity   "two handed"    0;
-SKILL skl-unarmed       skl-dexterity   "unarmed"       0;
-
-CHARACTER the-player {
-    "the " "player"
-    sex-male spc-human
-    faction 0
-}
+/* ************************************************************************* *
+ * FOREST CHARACTERS                                                         *
+ * ************************************************************************* */
 
 CHARACTER the-gnoll {
     "the " "gnoll"
@@ -70,36 +30,7 @@ CHARACTER the-gnoll {
 }
 
 /* ************************************************************************* *
- * ITEM DEFINITIONS                                                          *
- * ************************************************************************* */
-
-ITEM common-sword {
-    "a " "common sword" "common swords"
-}
-
-ITEM teleport-crystal {
-    "a " "teleport crystal" "teleport crystals"
-    onUse {
-        remove-items 1 teleport-crystal;
-        say "Light flashes and you vision goes blank. Moments later, the world returns.";
-        add-continue town-gate;
-    }
-}
-
-ITEM gnoll-potion {
-    "a " "potion of gnoll" "potions of gnoll"
-}
-
-ITEM gnoll-cage-key {
-    "a " "very shiny key" ""
-    onUse {
-        say "You admire the key for a few minutes.";
-        add-return;
-    }
-}
-
-/* ************************************************************************* *
- * THE FOREST ITSELF                                                         *
+ * FOREST NODES                                                              *
  * ************************************************************************* */
 
 NODE start {

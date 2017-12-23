@@ -17,8 +17,8 @@ build: $(BUILD_OBJS)
 play: $(PLAY_OBJS)
 	$(CXX) $(PLAY_OBJS) -L$(GLKPATH) $(GLKLIB) -o $(PLAY_TARGET)
 
-game.bin: gamesrc
-	./build
+game.bin: demo.src/*
+	./build demo.src/*
 
 clean:
 	$(RM) build.src/*.o play.src/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)
