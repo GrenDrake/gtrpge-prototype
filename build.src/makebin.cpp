@@ -248,14 +248,10 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
 
     std::uint32_t v;
     out.seekp(headerStartNode);
-    v = labels["start"];
-    out.write((const char *)&v, 4);
-    v = labels[gameData.title];
-    out.write((const char *)&v, 4);
-    v = labels[gameData.byline];
-    out.write((const char *)&v, 4);
-    v = labels[gameData.version];
-    out.write((const char *)&v, 4);
+    writeLabelValue(out, labels, "start");
+    writeLabelValue(out, labels, gameData.title);
+    writeLabelValue(out, labels, gameData.byline);
+    writeLabelValue(out, labels, gameData.version);
 
     time_t theTime = time(nullptr);
     struct tm *aTime = localtime(&theTime);
