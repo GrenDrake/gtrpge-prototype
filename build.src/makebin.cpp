@@ -55,7 +55,7 @@ static const Command* getCommand(const std::string name) {
     return nullptr;
 }
 
-std::string mangleLabel(const std::string &nodeName, const std::string &original) {
+static std::string mangleLabel(const std::string &nodeName, const std::string &original) {
     std::string labelName = "__n_"+nodeName+"_"+original;
     return labelName;
 }
@@ -65,7 +65,6 @@ static uint32_t processValue(const Origin &origin, const std::unordered_map<std:
     switch(value.type) {
         case Value::Integer:
             return value.value;
-            break;
         case Value::Identifier:
             const auto &v = labels.find(value.text);
             if (v != labels.end()) {
@@ -84,23 +83,34 @@ static uint32_t processValue(const Origin &origin, const std::unordered_map<std:
     }
 }
 
-static std::uint32_t processFlags(const Origin &origin,
+static void writeValue(std::ostream &out, const Origin &origin, const std::unordered_map<std::string, unsigned> &labels, const Value &value) {
+    std::uint32_t result = processValue(origin, labels, value, "");
+    out.write((const char *)&result, sizeof(std::uint32_t));
+}
+
+static void writeFlags(std::ostream &out,
+                                const Origin &origin,
                                   const std::unordered_map<std::string, unsigned> &labels,
                                   const std::unordered_set<Value> &flags) {
-    if (flags.empty()) {
-        return 0;
-    }
+    std::uint32_t result = 0;
 
-    uint32_t result = 0;
+    if (!flags.empty()) {
     for (auto &flg : flags) {
-        uint32_t flagNo = processValue(origin, labels, flg, "");
+            std::uint32_t flagNo = processValue(origin, labels, flg, "");
         if (flagNo >= 32) {
             throw BuildError(origin, "Flag values must be in range (0-31).");
         }
-        uint32_t fv = 1 << flagNo;
+            std::uint32_t fv = 1 << flagNo;
         result |= fv;
     }
-    return result;
+}
+
+    out.write((const char *)&result, sizeof(std::uint32_t));
+}
+
+static void writeLabelValue(std::ostream &out, std::unordered_map<std::string, unsigned> &labels, const std::string &labelName) {
+    std::uint32_t v = labels[labelName];
+    out.write((const char *)&v, sizeof(std::uint32_t));
 }
 
 template<class T>
@@ -193,19 +203,11 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     idByte = idItem;
     for (auto &item : gameData.items) {
         out.write(reinterpret_cast<char*>(&idByte), 1);
-        uint32_t v;
-
-        v = processFlags(item->origin, labels, item->flags);
-        out.write((const char *)&v, 4);
-
-        v = labels[item->article];
-        out.write((const char *)&v, 4);
-        v = labels[item->singular];
-        out.write((const char *)&v, 4);
-        v = labels[item->plural];
-        out.write((const char *)&v, 4);
-        v = processValue(item->origin, labels, item->onUse, "");
-        out.write((const char *)&v, 4);
+        writeFlags(out, item->origin, labels, item->flags);
+        writeLabelValue(out, labels, item->article);
+        writeLabelValue(out, labels, item->singular);
+        writeLabelValue(out, labels, item->plural);
+        writeValue(out, item->origin, labels, item->onUse);
     }
 
     idByte = idNode;
