@@ -103,10 +103,13 @@ static std::uint32_t processFlags(const Origin &origin,
     return result;
 }
 
-static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std::uint32_t &position, std::shared_ptr<DataType> data) {
-    labels.insert(std::make_pair(data->name, position));
-    data->pos = position;
-    position += itmSize;
+template<class T>
+static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std::uint32_t &position, std::vector<std::shared_ptr<T> > data) {
+    for (std::shared_ptr<T> &c : data) {
+        labels.insert(std::make_pair(c->name, position));
+        c->pos = position;
+        position += itmSize;
+    }
 }
 
 void make_bin(GameData &gameData, std::ostream &dbgout) {
@@ -147,9 +150,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         out.put(0);
     }
 
-    for (auto &item : gameData.items) {
-        doPositioning(labels, pos, item);
-    }
+    doPositioning(labels, pos, gameData.sexes);
 
     for (auto &node : gameData.nodes) {
         const std::string &nodeName = node->name;
