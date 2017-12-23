@@ -105,20 +105,22 @@ public:
     std::string subject, object, possess, adject, reflex;
 };
 
-class SkillDef {
+class SkillDef : public DataType {
 public:
-    Origin origin;
-    std::string name;
+    virtual size_t getSize() const {
+        return sklSize;
+    }
 
     Value statSkill;
     std::string displayName;
     Value defaultValue;
 };
 
-class CharacterDef {
+class CharacterDef : public DataType {
 public:
-    Origin origin;
-    std::string name;
+    virtual size_t getSize() const {
+        return chrSize + skills.size()*csSize + gear.size()*cgSize;
+    }
 
     std::string article, displayName;
     Value sex, species;

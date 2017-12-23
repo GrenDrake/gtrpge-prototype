@@ -12,6 +12,7 @@ const int idNode            = 0xFE;
 const int idItem            = 0xFD;
 const int idSex             = 0xFC;
 const int idSpecies         = 0xFB;
+const int idCharacter       = 0xFA;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -32,6 +33,27 @@ const int sexSize           = 29;
 const int spcFlags          = 1;
 const int spcName           = 5;
 const int spcSize           = 9;
+
+const int sklBaseSkill      = 0;
+const int sklName           = 4;
+const int sklDefault        = 8;
+const int sklSize           = 12;
+
+const int chrFlags          = 1;
+const int chrArticle        = 5;
+const int chrName           = 9;
+const int chrSex            = 13;
+const int chrSpecies        = 17;
+const int chrFaction        = 21;
+const int chrSkillList      = 25;
+const int chrGearList       = 29;
+const int chrSize           = 33;
+const int csIdent           = 0;
+const int csValue           = 4;
+const int csSize            = 8;
+const int cgSlot            = 0;
+const int cgItem            = 4;
+const int cgSize            = 8;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;

@@ -83,6 +83,10 @@ static uint32_t processValue(const Origin &origin, const std::unordered_map<std:
     }
 }
 
+static void writeWord(std::ostream &out, std::uint32_t word) {
+    out.write((const char *)&word, sizeof(std::uint32_t));
+}
+
 static void writeValue(std::ostream &out, const Origin &origin, const std::unordered_map<std::string, unsigned> &labels, const Value &value) {
     std::uint32_t result = processValue(origin, labels, value, "");
     out.write((const char *)&result, sizeof(std::uint32_t));
@@ -160,9 +164,18 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         out.put(0);
     }
 
+    labels.insert(std::make_pair("__skill_table", pos));
+    pos += 4;
+    for (int i = 0; i < gameData.skills.size(); ++i) {
+        labels.insert(std::make_pair(gameData.skills[i]->name, i));
+        gameData.skills[i]->pos = pos;
+        pos += sklSize;
+    }
+
     doPositioning(labels, pos, gameData.sexes);
     doPositioning(labels, pos, gameData.species);
     doPositioning(labels, pos, gameData.items);
+    doPositioning(labels, pos, gameData.characters);
 
     for (auto &node : gameData.nodes) {
         const std::string &nodeName = node->name;
@@ -202,6 +215,13 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     }
     dbgout << std::dec;
 
+    writeWord(out, gameData.skills.size());
+    for (auto &skill : gameData.skills) {
+        writeValue(out, skill->origin, labels, skill->statSkill);
+        writeLabelValue(out, labels, skill->displayName);
+        writeValue(out, skill->origin, labels, skill->defaultValue);
+    }
+
     idByte = idSex;
     for (auto &sex : gameData.sexes) {
         out.write(reinterpret_cast<char*>(&idByte), 1);
@@ -229,6 +249,27 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         writeLabelValue(out, labels, item->singular);
         writeLabelValue(out, labels, item->plural);
         writeValue(out, item->origin, labels, item->onUse);
+    }
+
+    idByte = idCharacter;
+    for (auto &who : gameData.characters) {
+        out.write(reinterpret_cast<char*>(&idByte), 1);
+        writeFlags(out, who->origin, labels, who->flags);
+        writeLabelValue(out, labels, who->article);
+        writeLabelValue(out, labels, who->displayName);
+        writeValue(out, who->origin, labels, who->sex);
+        writeValue(out, who->origin, labels, who->species);
+        writeValue(out, who->origin, labels, who->faction);
+        writeWord(out, who->skills.size());
+        writeWord(out, who->gear.size());
+        for (const auto &skill : who->skills) {
+            writeLabelValue(out, labels, skill.first);
+            writeValue(out, who->origin, labels, skill.second);
+        }
+        for (const auto &gear : who->gear) {
+            writeLabelValue(out, labels, gear.first);
+            writeLabelValue(out, labels, gear.second);
+        }
     }
 
     idByte = idNode;
@@ -260,6 +301,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     writeLabelValue(out, labels, gameData.title);
     writeLabelValue(out, labels, gameData.byline);
     writeLabelValue(out, labels, gameData.version);
+    writeLabelValue(out, labels, "__skill_table");
 
     time_t theTime = time(nullptr);
     struct tm *aTime = localtime(&theTime);
