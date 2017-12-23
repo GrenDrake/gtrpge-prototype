@@ -100,9 +100,7 @@ void Parser::doNode() {
     node->name = nodeName;
     node->block = block;
 
-    if (!gameData.nodes.insert(std::make_pair(node->name, node)).second) {
-        throw BuildError(origin, "Duplicate node " + node->name);
-    }
+    gameData.nodes.push_back(node);
 }
 
 void Parser::doItemDef() {
@@ -150,9 +148,7 @@ void Parser::doItemDef() {
     }
     ++cur;
 
-    if (!gameData.items.insert(std::make_pair(item->name, item)).second) {
-        throw BuildError(origin, "Duplicate item " + item->name);
-    }
+    gameData.items.push_back(item);
 }
 
 void Parser::doSex() {
@@ -197,9 +193,7 @@ void Parser::doSex() {
     ++cur;
 
     require(Token::CloseBrace, true);
-    if (!gameData.sexes.insert(std::make_pair(sex->name, sex)).second) {
-        throw BuildError(origin, "Duplicate sex " + sex->name);
-    }
+    gameData.sexes.push_back(sex);
 }
 
 void Parser::doSpecies() {
@@ -228,9 +222,7 @@ void Parser::doSpecies() {
     }
 
     require(Token::CloseBrace, true);
-    if (!gameData.species.insert(std::make_pair(species->name, species)).second) {
-        throw BuildError(origin, "Duplicate species " + species->name);
-    }
+    gameData.species.push_back(species);
 }
 
 void Parser::doSkill() {
@@ -254,9 +246,7 @@ void Parser::doSkill() {
     skill->defaultValue = doValue();
 
     require(Token::Semicolon, true);
-    if (!gameData.skills.insert(std::make_pair(skill->name, skill)).second) {
-        throw BuildError(origin, "Duplicate skill " + skill->name);
-    }
+    gameData.skills.push_back(skill);
 }
 
 void Parser::doCharacter() {
@@ -329,9 +319,7 @@ void Parser::doCharacter() {
     }
 
     require(Token::CloseBrace, true);
-    if (!gameData.characters.insert(std::make_pair(character->name, character)).second) {
-        throw BuildError(origin, "Duplicate character " + character->name);
-    }
+    gameData.characters.push_back(character);
 }
 
 Value Parser::doProperty(const std::string &forName) {
@@ -348,9 +336,7 @@ Value Parser::doProperty(const std::string &forName) {
         std::shared_ptr<Node> node(new Node);
         node->block = std::shared_ptr<Block>(doBlock());
         node->name = ss.str();
-        if (!gameData.nodes.insert(std::make_pair(node->name, node)).second) {
-            throw BuildError(origin, "Duplicate node " + node->name);
-        }
+        gameData.nodes.push_back(node);
         return Value(node->name);
     } else if (matches(Token::Integer)) {
         int v = cur->value;

@@ -95,33 +95,33 @@ int main() {
 
     out << "\nFOUND " << gameData.items.size() << " ITEMS\n";
     for (auto &item : gameData.items) {
-        out << item.first << ' ';
+        out << item->name << ' ';
     }
 
     out << "\n\nFOUND " << gameData.sexes.size() << " SEXES\n";
     for (auto &sex : gameData.sexes) {
-        out << sex.first << ' ';
+        out << sex->name << ' ';
     }
 
     out << "\n\nFOUND " << gameData.species.size() << " SPECIES\n";
     for (auto &species : gameData.species) {
-        out << species.first << ' ';
+        out << species->name << ' ';
     }
 
     out << "\n\nFOUND " << gameData.skills.size() << " SKILLS\n";
     for (auto &skill : gameData.skills) {
-        out << skill.first << ' ';
+        out << skill->name << ' ';
     }
 
     out << "\n\nFOUND " << gameData.characters.size() << " CHARACTERS\n";
     for (auto &character : gameData.characters) {
-        out << character.first << ' ';
+        out << character->name << ' ';
     }
 
     out << "\n\nFOUND " << gameData.nodes.size() << " NODES\n";
     for (auto &node : gameData.nodes) {
-        out << "    " << node.first << '\n';
-        for (auto &stmt : node.second->block->statements) {
+        out << "    " << node->name << '\n';
+        for (auto &stmt : node->block->statements) {
             out << "       ";
             for (auto &text : stmt->parts) {
                 out << ' ' << text;

@@ -104,9 +104,9 @@ static std::uint32_t processFlags(const Origin &origin,
 }
 
 void make_bin(GameData &gameData, std::ostream &dbgout) {
-    if (gameData.nodes.count("start") == 0) {
-        throw BuildError("Game lacks \"start\" node.");
-    }
+    // if (gameData.nodes.count("start") == 0) {
+    //     throw BuildError("Game lacks \"start\" node.");
+    // }
 
     std::fstream out("game.bin", std::ios::out | std::ios::in | std::ios::binary | std::ios::trunc);
     if (!out) {
@@ -142,15 +142,15 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     }
 
     for (auto &item : gameData.items) {
-        labels.insert(std::make_pair(item.first, pos));
+        labels.insert(std::make_pair(item->name, pos));
         pos += itmSize;
     }
 
     for (auto &node : gameData.nodes) {
-        const std::string &nodeName = node.second->name;
+        const std::string &nodeName = node->name;
         labels.insert(std::make_pair(nodeName, pos));
         ++pos;
-        for (auto &stmt : node.second->block->statements) {
+        for (auto &stmt : node->block->statements) {
             stmt->pos = pos;
             if (stmt->parts.empty()) continue;
 
@@ -189,24 +189,24 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         out.write(reinterpret_cast<char*>(&idByte), 1);
         uint32_t v;
 
-        v = processFlags(item.second->origin, labels, item.second->flags);
+        v = processFlags(item->origin, labels, item->flags);
         out.write((const char *)&v, 4);
 
-        v = labels[item.second->article];
+        v = labels[item->article];
         out.write((const char *)&v, 4);
-        v = labels[item.second->singular];
+        v = labels[item->singular];
         out.write((const char *)&v, 4);
-        v = labels[item.second->plural];
+        v = labels[item->plural];
         out.write((const char *)&v, 4);
-        v = processValue(item.second->origin, labels, item.second->onUse, "");
+        v = processValue(item->origin, labels, item->onUse, "");
         out.write((const char *)&v, 4);
     }
 
     idByte = idNode;
     for (auto &node : gameData.nodes) {
-        const std::string &nodeName = node.second->name;
+        const std::string &nodeName = node->name;
         out.write(reinterpret_cast<char*>(&idByte), 1);
-        for (auto &stmt : node.second->block->statements) {
+        for (auto &stmt : node->block->statements) {
             const std::string &cmdName = stmt->parts.front().text;
             const Command *cmd = getCommand(cmdName);
             if (!cmd) {
