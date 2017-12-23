@@ -93,10 +93,11 @@ public:
     std::unordered_set<Value> flags;
 };
 
-class SexDef {
+class SexDef : public DataType {
 public:
-    Origin origin;
-    std::string name;
+    virtual size_t getSize() const {
+        return sexSize;
+    }
 
     std::string displayName;
     std::unordered_set<Value> flags;

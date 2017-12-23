@@ -95,15 +95,15 @@ static void writeFlags(std::ostream &out,
     std::uint32_t result = 0;
 
     if (!flags.empty()) {
-    for (auto &flg : flags) {
+        for (auto &flg : flags) {
             std::uint32_t flagNo = processValue(origin, labels, flg, "");
-        if (flagNo >= 32) {
-            throw BuildError(origin, "Flag values must be in range (0-31).");
-        }
+            if (flagNo >= 32) {
+                throw BuildError(origin, "Flag values must be in range (0-31).");
+            }
             std::uint32_t fv = 1 << flagNo;
-        result |= fv;
+            result |= fv;
+        }
     }
-}
 
     out.write((const char *)&result, sizeof(std::uint32_t));
 }
@@ -118,7 +118,7 @@ static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std
     for (std::shared_ptr<T> &c : data) {
         labels.insert(std::make_pair(c->name, position));
         c->pos = position;
-        position += itmSize;
+        position += c->getSize();
     }
 }
 
@@ -161,6 +161,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     }
 
     doPositioning(labels, pos, gameData.sexes);
+    doPositioning(labels, pos, gameData.items);
 
     for (auto &node : gameData.nodes) {
         const std::string &nodeName = node->name;
@@ -199,6 +200,18 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         dbgout << "0x" << std::setw(8) << label.second << ": " << label.first << '\n';
     }
     dbgout << std::dec;
+
+    idByte = idSex;
+    for (auto &sex : gameData.sexes) {
+        out.write(reinterpret_cast<char*>(&idByte), 1);
+        writeFlags(out, sex->origin, labels, sex->flags);
+        writeLabelValue(out, labels, sex->displayName);
+        writeLabelValue(out, labels, sex->subject);
+        writeLabelValue(out, labels, sex->object);
+        writeLabelValue(out, labels, sex->possess);
+        writeLabelValue(out, labels, sex->adject);
+        writeLabelValue(out, labels, sex->reflex);
+    }
 
     idByte = idItem;
     for (auto &item : gameData.items) {

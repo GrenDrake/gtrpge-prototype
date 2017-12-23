@@ -10,6 +10,7 @@ const int headerBuildNumber = 0x18;
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
 const int idItem            = 0xFD;
+const int idSex             = 0xFC;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -17,6 +18,15 @@ const int itmSingular       = 9;
 const int itmPlural         = 13;
 const int itmOnUse          = 17;
 const int itmSize           = 21;
+
+const int sexFlags          = 1;
+const int sexName           = 5;
+const int sexSubject        = 9;
+const int sexObject         = 13;
+const int sexPossessive     = 17;
+const int sexAdjective      = 21;
+const int sexReflexive      = 25;
+const int sexSize           = 29;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
