@@ -84,10 +84,11 @@ public:
     std::shared_ptr<Block> block;
 };
 
-class SpeciesDef {
+class SpeciesDef : public DataType{
 public:
-    Origin origin;
-    std::string name;
+    virtual size_t getSize() const {
+        return spcSize;
+    }
 
     std::string displayName;
     std::unordered_set<Value> flags;

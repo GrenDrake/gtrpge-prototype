@@ -11,6 +11,7 @@ const int idString          = 0xFF;
 const int idNode            = 0xFE;
 const int idItem            = 0xFD;
 const int idSex             = 0xFC;
+const int idSpecies         = 0xFB;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -27,6 +28,10 @@ const int sexPossessive     = 17;
 const int sexAdjective      = 21;
 const int sexReflexive      = 25;
 const int sexSize           = 29;
+
+const int spcFlags          = 1;
+const int spcName           = 5;
+const int spcSize           = 9;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;

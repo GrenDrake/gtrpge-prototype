@@ -161,6 +161,7 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
     }
 
     doPositioning(labels, pos, gameData.sexes);
+    doPositioning(labels, pos, gameData.species);
     doPositioning(labels, pos, gameData.items);
 
     for (auto &node : gameData.nodes) {
@@ -211,6 +212,13 @@ void make_bin(GameData &gameData, std::ostream &dbgout) {
         writeLabelValue(out, labels, sex->possess);
         writeLabelValue(out, labels, sex->adject);
         writeLabelValue(out, labels, sex->reflex);
+    }
+
+    idByte = idSpecies;
+    for (auto &species : gameData.species) {
+        out.write(reinterpret_cast<char*>(&idByte), 1);
+        writeFlags(out, species->origin, labels, species->flags);
+        writeLabelValue(out, labels, species->displayName);
     }
 
     idByte = idItem;
