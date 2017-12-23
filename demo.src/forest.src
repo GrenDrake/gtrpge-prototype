@@ -33,17 +33,6 @@ CHARACTER the-gnoll {
  * FOREST NODES                                                              *
  * ************************************************************************* */
 
-NODE start {
-    say "Welcome to the game!";
-    add-option-xtra "Begin Game (male)" do-chargen "male";
-    add-option-xtra "Begin Game (female)" do-chargen "female";
-}
-
-NODE do-chargen {
-    add-items 20 teleport-crystal;
-    do-node forest-path;
-}
-
 NODE forest-path {
     set-location "On Forest Path";
     say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail.";

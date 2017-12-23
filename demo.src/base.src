@@ -83,3 +83,17 @@ ITEM gnoll-potion {
     "a " "potion of gnoll" "potions of gnoll"
 }
 
+/* ************************************************************************* *
+ * BASE GAME NODES                                                           *
+ * ************************************************************************* */
+
+NODE start {
+    say "Welcome to the game!";
+    add-option-xtra "Begin Game (male)" do-chargen "male";
+    add-option-xtra "Begin Game (female)" do-chargen "female";
+}
+
+NODE do-chargen {
+    add-items 20 teleport-crystal;
+    do-node forest-path;
+}
