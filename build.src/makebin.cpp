@@ -81,6 +81,7 @@ static uint32_t processValue(const Origin &origin, const std::unordered_map<std:
             std::cerr << "WARNING: " << origin << " Unknown symbol " << value.text << '\n';
             return 0;
     }
+    return 0;
 }
 
 static void writeWord(std::ostream &out, std::uint32_t word) {
@@ -166,7 +167,7 @@ void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &d
 
     labels.insert(std::make_pair("__skill_table", pos));
     pos += 4;
-    for (int i = 0; i < gameData.skills.size(); ++i) {
+    for (unsigned i = 0; i < gameData.skills.size(); ++i) {
         labels.insert(std::make_pair(gameData.skills[i]->name, i));
         gameData.skills[i]->pos = pos;
         pos += sklSize;

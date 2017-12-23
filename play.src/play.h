@@ -42,7 +42,7 @@ public:
     { }
 
     int qty;
-    int itemIdent;
+    std::uint32_t itemIdent;
 };
 
 class Game {

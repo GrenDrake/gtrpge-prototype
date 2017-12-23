@@ -85,5 +85,5 @@ const int opItemQty         = 0x52;
 const int opIncrement       = 0x60;
 const int opDecrement       = 0x61;
 
-const int stackOperand      = 0xFFFFFFFF;
+const unsigned stackOperand      = 0xFFFFFFFF;
 #endif
