@@ -79,6 +79,29 @@ std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
     }
 }
 
+void Game::sayAddress(std::uint32_t address) {
+    int type = getType(address);
+    int work;
+    switch(type) {
+        case idString:
+            io.say(getString(address));
+            break;
+        case idItem:
+            work = address + itmArticle;
+            io.say(getString(readWord(work)));
+            work = address + itmSingular;
+            io.say(getString(readWord(work)));
+            break;
+        default: {
+            std::stringstream ss;
+            ss << "[object#";
+            ss << std::hex << std::uppercase << address;
+            ss << '/' << (int) type << ']';
+            io.say(ss.str());
+        }
+    }
+}
+
 bool Game::addItems(int qty, std::uint32_t itemIdent) {
     for (unsigned i = 0; i < inventory.size(); ++i) {
         if (inventory[i].itemIdent == itemIdent) {

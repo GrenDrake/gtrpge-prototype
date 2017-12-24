@@ -64,25 +64,7 @@ void Game::doNode(std::uint32_t address) {
 
             case opSay:
                 a1 = nextOperand(ip);
-                a2 = getType(a1);
-                switch(a2) {
-                    case idString:
-                        io.say(getString(a1));
-                        break;
-                    case idItem:
-                        a2 = a1 + itmArticle;
-                        io.say(getString(readWord(a2)));
-                        a2 = a1 + itmSingular;
-                        io.say(getString(readWord(a2)));
-                        break;
-                    default: {
-                        std::stringstream ss;
-                        ss << "Tried to say object at 0x";
-                        ss << std::hex << std::uppercase << a1;
-                        ss << " which is of un-sayable type " << std::dec << (int) a2 << '.';
-                        throw PlayError(ss.str());
-                    }
-                }
+                sayAddress(a1);
                 break;
             case opSayNumber:
                 io.say(nextOperand(ip));
