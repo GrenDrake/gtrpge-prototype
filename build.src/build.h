@@ -154,8 +154,8 @@ public:
 };
 class Parser {
 public:
-    Parser(GameData &gameData)
-    : gameData(gameData), anonymousCounter(0)
+    Parser(GameData &gameData, std::vector<SymbolDef> &symbols)
+    : symbols(symbols), gameData(gameData), anonymousCounter(0)
     { }
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);
@@ -182,7 +182,7 @@ private:
 
     void checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type);
 
-    std::vector<SymbolDef> symbols;
+    std::vector<SymbolDef> &symbols;
     std::list<Token>::iterator cur;
     GameData &gameData;
     int anonymousCounter;

@@ -88,10 +88,27 @@ int main(int argc, char *argv[]) {
     }
 
     try {
+        std::vector<SymbolDef> symbols;
+
         for (const std::string &file : sourceFiles) {
             lexer.doFile(file);
-            Parser parser(gameData);
+            Parser parser(gameData, symbols);
             parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
+        }
+
+        bool hasStartSymbol = false;
+        for (const auto &symbol : symbols) {
+            if (symbol.name == "start") {
+                if (symbol.type != SymbolDef::Node) {
+                    std::cerr << symbol.origin << " Start node must be node.\n";
+                    return 1;
+                }
+                hasStartSymbol = true;
+            }
+        }
+        if (!hasStartSymbol) {
+            std::cerr << "FATAL: No start node defined.\n";
+            return 1;
         }
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
@@ -141,4 +158,6 @@ int main(int argc, char *argv[]) {
             out << ";\n";
         }
     }
+
+    return 0;
 }
