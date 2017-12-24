@@ -4,5 +4,7 @@ play
 game.bin
 dbg_dump.txt
 
+Make.glkterm
+Make.gtkglk
 glkterm
 libglkterm.a
