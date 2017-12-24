@@ -49,7 +49,7 @@ static void doInventory(Game &game, GameIO &io) {
             io.say("Nothing");
         } else {
             int i = 1;
-            for (CarriedItem &ci : game.inventory) {
+            for (Game::CarriedItem &ci : game.inventory) {
                 ++lastItem;
                 io.say(i++);
                 io.say(") ");

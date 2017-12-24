@@ -12,35 +12,35 @@
 #include "playerror.h"
 
 
-class Option {
-public:
-    Option()
-    : dest(0)
-    { }
-    Option(std::uint32_t name, std::uint32_t destination, std::uint32_t extra = 0)
-    : name(name), dest(destination), extra(extra)
-    { }
-
-    std::uint32_t name;
-    std::uint32_t dest;
-    std::uint32_t extra;
-};
-
-class CarriedItem {
-public:
-    CarriedItem()
-    : qty(0), itemIdent(0)
-    { }
-    CarriedItem(int qty, int itemIdent)
-    : qty(qty), itemIdent(itemIdent)
-    { }
-
-    int qty;
-    std::uint32_t itemIdent;
-};
-
 class Game {
 public:
+    class Option {
+    public:
+        Option()
+        : dest(0)
+        { }
+        Option(std::uint32_t name, std::uint32_t destination, std::uint32_t extra = 0)
+        : name(name), dest(destination), extra(extra)
+        { }
+
+        std::uint32_t name;
+        std::uint32_t dest;
+        std::uint32_t extra;
+    };
+
+    class CarriedItem {
+    public:
+        CarriedItem()
+        : qty(0), itemIdent(0)
+        { }
+        CarriedItem(int qty, int itemIdent)
+        : qty(qty), itemIdent(itemIdent)
+        { }
+
+        int qty;
+        std::uint32_t itemIdent;
+    };
+
     Game(GameIO &io)
     : isRunning(false), locationName(0), io(io), data(nullptr)
     { }
