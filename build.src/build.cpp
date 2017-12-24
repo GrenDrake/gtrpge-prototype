@@ -100,6 +100,12 @@ int main(int argc, char *argv[]) {
 
     std::ofstream out("dbg_dump.txt");
 
+    try {
+        make_bin(gameData, outputFile, out);
+    } catch (BuildError &e) {
+        std::cerr << e.what() << "\n";
+    }
+
     out << "FOUND " << gameData.constants.size() << " CONSTANTS:\n";
     for (auto &constant : gameData.constants) {
         out << std::setw(8) << constant.first << ": ";
@@ -114,29 +120,14 @@ int main(int argc, char *argv[]) {
         out << "~\n";
     }
 
-    out << "\nFOUND " << gameData.items.size() << " ITEMS\n";
-    for (auto &item : gameData.items) {
-        out << item->name << ' ';
-    }
-
-    out << "\n\nFOUND " << gameData.sexes.size() << " SEXES\n";
-    for (auto &sex : gameData.sexes) {
-        out << sex->name << ' ';
-    }
-
-    out << "\n\nFOUND " << gameData.species.size() << " SPECIES\n";
-    for (auto &species : gameData.species) {
-        out << species->name << ' ';
+    out << "\nFOUND " << std::dec << gameData.dataItems.size() << " DATA ITEMS\n" << std::hex << std::uppercase;
+    for (auto &item : gameData.dataItems) {
+        out << std::setfill(' ') << std::left << std::setw(20) << item->name << " : " << std::right << std::setfill('0') << std::setw(8) << item->pos << " : " << item->origin << '\n';
     }
 
     out << "\n\nFOUND " << gameData.skills.size() << " SKILLS\n";
     for (auto &skill : gameData.skills) {
         out << skill->name << ' ';
-    }
-
-    out << "\n\nFOUND " << gameData.characters.size() << " CHARACTERS\n";
-    for (auto &character : gameData.characters) {
-        out << character->name << ' ';
     }
 
     out << "\n\nFOUND " << gameData.nodes.size() << " NODES\n";
@@ -149,11 +140,5 @@ int main(int argc, char *argv[]) {
             }
             out << ";\n";
         }
-    }
-
-    try {
-        make_bin(gameData, outputFile, out);
-    } catch (BuildError &e) {
-        std::cerr << e.what() << "\n";
     }
 }

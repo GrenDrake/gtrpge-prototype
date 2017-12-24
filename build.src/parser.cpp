@@ -148,7 +148,7 @@ void Parser::doItemDef() {
     }
     ++cur;
 
-    gameData.items.push_back(item);
+    gameData.dataItems.push_back(item);
 }
 
 void Parser::doSex() {
@@ -193,7 +193,7 @@ void Parser::doSex() {
     ++cur;
 
     require(Token::CloseBrace, true);
-    gameData.sexes.push_back(sex);
+    gameData.dataItems.push_back(sex);
 }
 
 void Parser::doSpecies() {
@@ -222,7 +222,7 @@ void Parser::doSpecies() {
     }
 
     require(Token::CloseBrace, true);
-    gameData.species.push_back(species);
+    gameData.dataItems.push_back(species);
 }
 
 void Parser::doSkill() {
@@ -319,7 +319,7 @@ void Parser::doCharacter() {
     }
 
     require(Token::CloseBrace, true);
-    gameData.characters.push_back(character);
+    gameData.dataItems.push_back(character);
 }
 
 Value Parser::doProperty(const std::string &forName) {

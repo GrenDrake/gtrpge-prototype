@@ -180,10 +180,7 @@ void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &d
         pos += sklSize;
     }
 
-    doPositioning(labels, pos, gameData.sexes);
-    doPositioning(labels, pos, gameData.species);
-    doPositioning(labels, pos, gameData.items);
-    doPositioning(labels, pos, gameData.characters);
+    doPositioning(labels, pos, gameData.dataItems);
 
     for (auto &node : gameData.nodes) {
         const std::string &nodeName = node->name;
@@ -217,12 +214,6 @@ void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &d
         }
     }
 
-    dbgout << "\n\nLABELS (" << labels.size() << "):\n" << std::hex << std::setfill('0');
-    for (auto &label : labels) {
-        dbgout << "0x" << std::setw(8) << label.second << ": " << label.first << '\n';
-    }
-    dbgout << std::dec;
-
     writeWord(out, gameData.skills.size());
     for (auto &skill : gameData.skills) {
         writeValue(out, skill->origin, skill->statSkill);
@@ -230,20 +221,8 @@ void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &d
         writeValue(out, skill->origin, skill->defaultValue);
     }
 
-    for (auto &sex : gameData.sexes) {
-        sex->write(out);
-    }
-
-    for (auto &species : gameData.species) {
-        species->write(out);
-    }
-
-    for (auto &item : gameData.items) {
-        item->write(out);
-    }
-
-    for (auto &who : gameData.characters) {
-        who->write(out);
+    for (auto &dataItem : gameData.dataItems) {
+        dataItem->write(out);
     }
 
     idByte = idNode;
@@ -285,4 +264,10 @@ void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &d
     writeWord(out, v);
 
     std::cerr << "Created " << outputFile << ".\n";
+
+    dbgout << "\n\nLABELS (" << labels.size() << "):\n" << std::hex << std::setfill('0');
+    for (auto &label : labels) {
+        dbgout << "0x" << std::setw(8) << label.second << ": " << label.first << '\n';
+    }
+    dbgout << std::dec;
 }

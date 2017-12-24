@@ -44,11 +44,8 @@ public:
     std::unordered_map<std::string, std::uint32_t> constants;
     std::unordered_map<std::string, std::string> strings;
     std::vector<std::shared_ptr<Node> > nodes;
-    std::vector<std::shared_ptr<ItemDef> > items;
-    std::vector<std::shared_ptr<SexDef> > sexes;
-    std::vector<std::shared_ptr<SpeciesDef> > species;
     std::vector<std::shared_ptr<SkillDef> > skills;
-    std::vector<std::shared_ptr<CharacterDef> > characters;
+    std::vector<std::shared_ptr<DataType> > dataItems;
     std::string title, byline, version;
 private:
     int nextString;
