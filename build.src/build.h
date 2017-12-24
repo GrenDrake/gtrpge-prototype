@@ -193,6 +193,6 @@ std::ostream& operator<<(std::ostream &out, const Token::Type &type);
 std::ostream& operator<<(std::ostream &out, const Origin &origin);
 std::ostream& operator<<(std::ostream &out, const Token &token);
 
-void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &dbgout);
+void make_bin(GameData &gameData, const std::string &outputFile);
 
 #endif

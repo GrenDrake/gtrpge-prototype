@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
     std::ofstream out("dbg_dump.txt");
 
     try {
-        make_bin(gameData, outputFile, out);
+        make_bin(gameData, outputFile);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
     }

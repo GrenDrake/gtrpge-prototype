@@ -133,7 +133,7 @@ static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std
     }
 }
 
-void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &dbgout) {
+void make_bin(GameData &gameData, const std::string &outputFile) {
     // if (gameData.nodes.count("start") == 0) {
     //     throw BuildError("Game lacks \"start\" node.");
     // }
@@ -265,9 +265,9 @@ void make_bin(GameData &gameData, const std::string &outputFile, std::ostream &d
 
     std::cerr << "Created " << outputFile << ".\n";
 
-    dbgout << "\n\nLABELS (" << labels.size() << "):\n" << std::hex << std::setfill('0');
+    std::ofstream labelFile("dbg_labels.txt");
+    labelFile << "LABELS (" << labels.size() << "):\n" << std::hex << std::setfill('0');
     for (auto &label : labels) {
-        dbgout << "0x" << std::setw(8) << label.second << ": " << label.first << '\n';
+        labelFile << "0x" << std::setw(8) << label.second << ": " << label.first << '\n';
     }
-    dbgout << std::dec;
 }

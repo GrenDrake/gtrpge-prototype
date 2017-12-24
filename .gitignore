@@ -2,6 +2,8 @@
 build
 play
 game.bin
+
+dbg_labels.txt
 dbg_dump.txt
 
 Make.glkterm
