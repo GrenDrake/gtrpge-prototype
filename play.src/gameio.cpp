@@ -1,10 +1,27 @@
+#include <iostream>
 #include <cstring>
 #include <string>
 
+#include "playerror.h"
 #include "gameio.h"
 extern "C" {
 #include "glk.h"
 }
+
+
+
+void gameloop();
+void glk_main() {
+    try {
+        gameloop();
+    } catch (PlayError &e) {
+        std::cerr << "FATAL: " << e.what() << "\n";
+    }
+
+    return;
+}
+
+
 
 static winid_t mainWindow = nullptr;
 static winid_t optionsWindow = nullptr;

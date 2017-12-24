@@ -9,13 +9,7 @@
 #include "gameio.h"
 #include "constants.h"
 
-class PlayError : public std::runtime_error {
-public:
-        PlayError(const std::string &msg)
-        : std::runtime_error(msg)
-        { }
-};
-
+#include "playerror.h"
 
 
 class Option {
