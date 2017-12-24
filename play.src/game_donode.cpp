@@ -171,44 +171,16 @@ void Game::doNode(std::uint32_t address) {
             case opAddItems:
                 a1 = nextOperand(ip);
                 a2 = nextOperand(ip);
-                for (unsigned i = 0; i < inventory.size(); ++i) {
-                    if (inventory[i].itemIdent == a2) {
-                        inventory[i].qty += a1;
-                        a1 = 0;
-                        break;
-                    }
-                }
-                if (a1 > 0) {
-                    inventory.push_back(CarriedItem(a1, a2));
-                }
+                push(addItems(a1, a2));
                 break;
             case opRemoveItems:
                 a1 = nextOperand(ip); // qty
                 a2 = nextOperand(ip); // itemIdent
-                for (auto ci = inventory.begin(); ci != inventory.end(); ++ci) {
-                    if (ci->itemIdent == a2) {
-                        if (ci->qty >= static_cast<int>(a1)) {
-                            ci->qty -= a1;
-                            if (ci->qty <= 0) {
-                                inventory.erase(ci);
-                                break;
-                            }
-                            a1 = 0;
-                        }
-                    }
-                }
-                push(a1 == 0);
+                push(removeItems(a1, a2));
                 break;
             case opItemQty:
                 a1 = nextOperand(ip); // itemIdent
-                a2 = 0;
-                for (CarriedItem &ci : inventory) {
-                    if (ci.itemIdent == a1) {
-                        a2 = ci.qty;
-                        break;
-                    }
-                }
-                push(a2);
+                push(itemQty(a1));
                 break;
 
             case opIncrement:

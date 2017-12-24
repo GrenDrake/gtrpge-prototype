@@ -59,6 +59,9 @@ public:
 
     std::uint32_t getProperty(std::uint32_t address, int propId) const;
     std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
+    bool addItems(int qty, std::uint32_t itemIdent);
+    bool removeItems(int qty, std::uint32_t itemIdent);
+    bool itemQty(std::uint32_t itemIdent);
 
     void startGame();
     void doOption(int optionNumber);

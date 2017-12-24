@@ -79,6 +79,41 @@ std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
     }
 }
 
+bool Game::addItems(int qty, std::uint32_t itemIdent) {
+    for (unsigned i = 0; i < inventory.size(); ++i) {
+        if (inventory[i].itemIdent == itemIdent) {
+            inventory[i].qty += qty;
+            return true;
+        }
+    }
+    inventory.push_back(CarriedItem(qty, itemIdent));
+    return true;
+}
+
+bool Game::removeItems(int qty, std::uint32_t itemIdent) {
+    for (auto ci = inventory.begin(); ci != inventory.end(); ++ci) {
+        if (ci->itemIdent == itemIdent) {
+            if (ci->qty >= qty) {
+                ci->qty -= qty;
+                if (ci->qty <= 0) {
+                    inventory.erase(ci);
+                }
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::itemQty(std::uint32_t itemIdent) {
+    for (CarriedItem &ci : inventory) {
+        if (ci.itemIdent == itemIdent) {
+            return ci.qty;
+        }
+    }
+    return 0;
+}
+
 void Game::startGame() {
     location = 0;
     isRunning = true;
