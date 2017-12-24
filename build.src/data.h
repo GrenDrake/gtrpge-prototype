@@ -25,15 +25,7 @@ public:
     : type(Integer), value(value)
     { }
 
-    bool operator==(const Value &rhs) const {
-        if (rhs.type != type) {
-            return false;
-        }
-        if (type == Integer && rhs.value != value) {
-            return false;
-        }
-        return rhs.text == text;
-    }
+    bool operator==(const Value &rhs) const;
 
     Type type;
     std::string text;
@@ -72,6 +64,7 @@ public:
 
     }
     virtual size_t getSize() const = 0;
+    virtual void write(std::ostream &out) = 0;
 
     Origin origin;
     std::string name;
@@ -84,11 +77,12 @@ public:
     std::shared_ptr<Block> block;
 };
 
-class SpeciesDef : public DataType{
+class SpeciesDef : public DataType {
 public:
     virtual size_t getSize() const {
         return spcSize;
     }
+    virtual void write(std::ostream &out);
 
     std::string displayName;
     std::unordered_set<Value> flags;
@@ -99,6 +93,7 @@ public:
     virtual size_t getSize() const {
         return sexSize;
     }
+    virtual void write(std::ostream &out);
 
     std::string displayName;
     std::unordered_set<Value> flags;
@@ -109,6 +104,8 @@ class SkillDef : public DataType {
 public:
     virtual size_t getSize() const {
         return sklSize;
+    }
+    virtual void write(std::ostream &out) {
     }
 
     Value statSkill;
@@ -121,6 +118,7 @@ public:
     virtual size_t getSize() const {
         return chrSize + skills.size()*csSize + gear.size()*cgSize;
     }
+    virtual void write(std::ostream &out);
 
     std::string article, displayName;
     Value sex, species;
@@ -135,6 +133,7 @@ public:
     virtual size_t getSize() const {
         return itmSize;
     }
+    virtual void write(std::ostream &out);
 
     std::unordered_set<Value> flags;
     std::string article, singular, plural;
