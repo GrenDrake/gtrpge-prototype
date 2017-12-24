@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <cstring>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
@@ -110,6 +112,11 @@ bool Game::addItems(int qty, std::uint32_t itemIdent) {
         }
     }
     inventory.push_back(CarriedItem(qty, itemIdent));
+    std::sort(inventory.begin(), inventory.end(), [this](const Game::CarriedItem &a, const Game::CarriedItem &b) {
+        const char *aName = getString(getProperty(a.itemIdent, itmSingular));
+        const char *bName = getString(getProperty(b.itemIdent, itmSingular));
+        return strcmp(aName, bName) < 0;
+    });
     return true;
 }
 
