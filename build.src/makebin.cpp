@@ -8,13 +8,6 @@
 #include "build.h"
 #include "../play.src/constants.h"
 
-class Command {
-public:
-    const char *text;
-    int code;
-    int argCount;
-};
-
 Command commands[] = {
     { "label",           -1,                1 },
     { "end",             opEnd,             0 },
@@ -46,7 +39,7 @@ Command commands[] = {
     { "increment",       opIncrement,       0 },
     { "decrement",       opDecrement,       0 },
 };
-static const Command* getCommand(const std::string name) {
+const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {
         if (name == cmd.text) {
             return &cmd;
@@ -194,18 +187,8 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
                 throw BuildError(stmt->origin, "Command must be identifier");
             }
 
-            const std::string &cmdName = stmt->parts.front().text;
-            const Command *cmd = getCommand(cmdName);
-            if (!cmd) {
-                throw BuildError(stmt->origin, "Unknown command " + cmdName);
-            }
-
-            if (stmt->parts.size() != (unsigned)cmd->argCount + 1) {
-                throw BuildError(stmt->origin, "Wrong arg count.");
-            }
-
             unsigned size = 0;
-            if (cmdName == "label") {
+            if (stmt->parts.front().text == "label") {
                 labels.insert(std::make_pair(mangleLabel(nodeName, stmt->parts.back().text), pos));
             } else {
                 size = 1 + (stmt->parts.size() - 1) * 4;

@@ -193,6 +193,7 @@ std::ostream& operator<<(std::ostream &out, const Token::Type &type);
 std::ostream& operator<<(std::ostream &out, const Origin &origin);
 std::ostream& operator<<(std::ostream &out, const Token &token);
 
+const Command* getCommand(const std::string name);
 void make_bin(GameData &gameData, const std::string &outputFile);
 
 #endif

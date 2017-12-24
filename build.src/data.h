@@ -9,6 +9,13 @@
 
 #include "../play.src/constants.h"
 
+class Command {
+public:
+    const char *text;
+    int code;
+    int argCount;
+};
+
 class Value {
 public:
     enum Type {
@@ -51,6 +58,8 @@ public:
     Origin origin;
     std::list<Value> parts;
     std::uint32_t pos;
+
+    const Command *commandInfo;
 };
 
 class Block {
@@ -73,6 +82,7 @@ public:
 
 class Node {
 public:
+    Origin origin;
     std::string name;
     std::shared_ptr<Block> block;
 };

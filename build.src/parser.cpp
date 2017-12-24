@@ -99,6 +99,7 @@ void Parser::doNode() {
     std::shared_ptr<Node> node(new Node);
     node->name = nodeName;
     node->block = block;
+    node->origin = origin;
 
     gameData.nodes.push_back(node);
 }
@@ -375,6 +376,25 @@ std::shared_ptr<Statement> Parser::doStatement() {
     if (statement->parts.empty()) {
         return nullptr;
     }
+
+    const Value &cmdName = statement->parts.front();
+    if (cmdName.type != Value::Identifier) {
+        throw BuildError(origin, "Command must be identifier");
+    }
+
+    statement->commandInfo = getCommand(cmdName.text);
+    if (!statement->commandInfo) {
+        throw BuildError(origin, "Unknown command " + cmdName.text);
+    }
+
+    if (statement->parts.size() != (unsigned)statement->commandInfo->argCount + 1) {
+        std::stringstream ss;
+        ss << "Command " << cmdName.text << " expects " << statement->commandInfo->argCount;
+        ss << " arguments, but " << (statement->parts.size() - 1) << " were found.";
+        throw BuildError(origin, ss.str());
+    }
+
+
     return statement;
 }
 
