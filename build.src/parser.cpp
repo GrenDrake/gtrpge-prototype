@@ -404,9 +404,16 @@ Value Parser::doValue() {
         ++cur;
         return Value(label);
     } else if (matches(Token::Identifier)) {
-        std::string label = cur->text;
-        ++cur;
-        return Value(label);
+        std::string label;
+        if (cur->text[0] == '#') {
+            std::string label = cur->text.substr(1);
+            ++cur;
+            return Value(Value::Global, label);
+        } else {
+            std::string label = cur->text;
+            ++cur;
+            return Value(Value::Identifier, label);
+        }
     } else if (matches(Token::Integer)) {
         int v = cur->value;
         ++cur;

@@ -28,6 +28,11 @@ void Game::doNode(std::uint32_t address) {
                 case operandStack:
                     operands[i] = pop();
                     break;
+                case operandStorage:
+                    a1 = readWord(ip);
+                    operands[i] = fetch(a1);
+                    ip += 4;
+                    break;
                 case operandImmediate:
                     operands[i] = readWord(ip);
                     ip += 4;

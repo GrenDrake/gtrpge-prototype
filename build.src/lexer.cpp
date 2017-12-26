@@ -151,6 +151,7 @@ void Lexer::doFile(const std::string &file) {
             tokens.push_back(Token(origin, Token::String, str));
         } else if (isIdentifier(here(), true)) {
             unsigned start = pos;
+            ++pos;
             while (isIdentifier(here())) {
                 next();
             }

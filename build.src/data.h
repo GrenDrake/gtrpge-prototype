@@ -20,7 +20,7 @@ public:
 class Value {
 public:
     enum Type {
-        Identifier, Integer
+        Identifier, Global, Integer
     };
 
     Value()
@@ -28,6 +28,9 @@ public:
     { }
     Value(const std::string &text)
     : type(Identifier), text(text), value(0)
+    { }
+    Value(Type type, const std::string &text)
+    : type(type), text(text), value(0)
     { }
     Value(int value)
     : type(Integer), value(value)

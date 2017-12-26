@@ -126,6 +126,9 @@ private:
         if (!initial && isdigit(c)) {
             return true;
         }
+        if (initial && c == '#') {
+            return true;
+        }
         if (isalpha(c) || c == '-' || c == '_') {
             return true;
         }

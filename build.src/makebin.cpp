@@ -65,6 +65,7 @@ static uint32_t processValue(const Origin &origin, const std::unordered_map<std:
     switch(value.type) {
         case Value::Integer:
             return value.value;
+        case Value::Global:
         case Value::Identifier:
             const auto &v = labels.find(value.text);
             if (v != labels.end()) {
@@ -235,7 +236,9 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
             uint8_t typesByte = 0;
             for (int i = 1; i < stmt->parts.size(); ++i) {
                 uint8_t value = 0;
-                if (stmt->parts[i].type == Value::Identifier && stmt->parts[i].text == "stack") {
+                if (stmt->parts[i].type == Value::Global) {
+                    value = operandStorage;
+                } else if (stmt->parts[i].type == Value::Identifier && stmt->parts[i].text == "stack") {
                     value = operandStack;
                 } else {
                     value = operandImmediate;
