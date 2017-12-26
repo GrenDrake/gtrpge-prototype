@@ -245,6 +245,7 @@ void Game::doOption(int optionNumber) {
     io.say("\n\n");
     io.style(GameIO::Normal);
 
+    storage[xtraValue] = options[optionNumber].extra;
     newNode(dest);
 }
 

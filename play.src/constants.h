@@ -91,5 +91,6 @@ const int opRandomFromList  = 0x73;
 const int opCreateList      = 0x74;
 const int opAddToListChance = 0x75;
 
+const unsigned xtraValue        = 0xFFFFFFFE;
 const unsigned stackOperand      = 0xFFFFFFFF;
 #endif

@@ -156,6 +156,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
     labels.insert(std::make_pair("stack", stackOperand));
+    labels.insert(std::make_pair("xtra", xtraValue));
 
     for (auto &c : gameData.constants) {
         labels.insert(std::make_pair(c.first, c.second));
