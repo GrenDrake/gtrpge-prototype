@@ -87,10 +87,13 @@ ITEM gnoll-potion {
  * BASE GAME NODES                                                           *
  * ************************************************************************* */
 
+CONSTANT forest-events 77;
 NODE start {
     say "Welcome to the game!";
     add-option-xtra "Begin Game (male)" do-chargen "male";
     add-option-xtra "Begin Game (female)" do-chargen "female";
+
+    do-node forest-event-setup;
 }
 
 NODE do-chargen {

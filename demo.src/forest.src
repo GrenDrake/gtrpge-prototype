@@ -143,3 +143,40 @@ NODE gnoll-cabin-talk {
     say "You have a nice chat with the gnoll.";
     add-return;
 }
+
+NODE deep-forest {
+    set-location "Deep in the Forest";
+    say "You are deep within the forest. A path leads back out towards civilization, or you can take your chances exploring the forest.";
+    add-option "Head towards civilization" forest-fork;
+    add-option "Explore a while" forest-do-event;
+}
+
+/* ************************************************************************* *
+ * SOME RANDOM FOREST EVENTS                                                 *
+ * ************************************************************************* */
+
+NODE forest-do-event {
+    random-from-list forest-events;
+    do-node stack;
+}
+NODE forest-event-setup {
+    create-list forest-events;
+    add-to-list forest-event-imps forest-events;
+    add-to-list forest-event-nothing forest-events;
+    add-to-list forest-event-skeleton forest-events;
+}
+
+NODE forest-event-imps {
+    say "You stumble across a pair of imps eating a meal. They wish you a good day and you carry on your way.";
+    add-return;
+}
+
+NODE forest-event-skeleton {
+    say "You discover a menacing looking skeleton loitering around a grave. It fails to notice you entirely.";
+    add-return;
+}
+
+NODE forest-event-nothing {
+    say "You stumble around in the forest for a while, but eventually end up back were you started without finding anything.";
+    add-return;
+}
