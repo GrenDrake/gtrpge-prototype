@@ -60,6 +60,7 @@ void Game::loadDataFromFile(const std::string &filename) {
         throw PlayError("Could not read game data.");
     }
 
+    dataSize = size;
     nextDataItem = size + 32;
 }
 
@@ -73,11 +74,13 @@ bool Game::isType(std::uint32_t address, uint8_t type) const {
 
 std::uint8_t Game::readByte(std::uint32_t pos) const {
     if (!data) return 0;
+    if (pos >= dataSize) throw PlayError("Tried to read past end of file.");
     return (uint8_t)data[pos];
 }
 
 std::uint16_t Game::readShort(std::uint32_t pos) const {
     if (!data) return 0;
+    if (pos >= dataSize) throw PlayError("Tried to read past end of file.");
     std::uint16_t v = 0;
     v |= (unsigned char)data[pos];
     v |= (unsigned char)data[pos+1] << 8;
@@ -86,6 +89,7 @@ std::uint16_t Game::readShort(std::uint32_t pos) const {
 
 std::uint32_t Game::readWord(std::uint32_t pos) const {
     if (!data) return 0;
+    if (pos >= dataSize) throw PlayError("Tried to read past end of file.");
     std::uint32_t result = 0, value;
     value = data[pos];  result |= value;
     value = data[pos+1];  result |= value << 8;

@@ -123,6 +123,7 @@ private:
     bool inLocation;
     bool newLocation;
     uint8_t *data;
+    size_t dataSize;
     std::vector<uint32_t> stack;
     uint32_t nextDataItem;
     std::map<std::uint32_t, RuntimeData> runtimeData;
