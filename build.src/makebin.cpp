@@ -42,7 +42,7 @@ Command commands[] = {
     { "is-in-list",         opIsInList,         2 },
     { "remove-from-list",   opRemoveFromList,   2 },
     { "random-from-list",   opRandomFromList,   1 },
-    { "create-list",        opCreateList,       0 },
+    { "create-list",        opCreateList,       1 },
     { "add-to-list-chance", opAddToListChance,  3 },
 };
 const Command* getCommand(const std::string name) {

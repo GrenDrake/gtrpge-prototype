@@ -176,7 +176,7 @@ void Game::doNode(std::uint32_t address) {
 
             case opAddToList: {
                 a1 = nextOperand(ip); // item to add
-                a2 = nextOperand(ip); // list ident
+                a2 = fetch(nextOperand(ip)); // list ident
                 std::shared_ptr<List> list = getDataAsList(a2);
                 if (list) {
                     list->add(a1, 1);
@@ -189,7 +189,7 @@ void Game::doNode(std::uint32_t address) {
             }
             case opRemoveFromList: {
                 a1 = nextOperand(ip); // item to remove
-                a2 = nextOperand(ip); // list ident
+                a2 = fetch(nextOperand(ip)); // list ident
                 std::shared_ptr<List> list = getDataAsList(a2);
                 if (list) {
                     list->remove(a1);
@@ -202,7 +202,7 @@ void Game::doNode(std::uint32_t address) {
             }
             case opIsInList: {
                 a1 = nextOperand(ip); // item to check for
-                a2 = nextOperand(ip); // list ident
+                a2 = fetch(nextOperand(ip)); // list ident
                 std::shared_ptr<List> list = getDataAsList(a3);
                 if (!list) {
                     push(false);
@@ -212,7 +212,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRandomFromList: {
-                a1 = nextOperand(ip); // list ident
+                a1 = fetch(nextOperand(ip)); // list ident
                 std::shared_ptr<List> list = getDataAsList(a1);
                 if (list) {
                     push(list->random());
@@ -224,16 +224,17 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opCreateList: {
+                a1 = nextOperand(ip); // location to store list
                 List *list = new List;
                 std::uint32_t ident = nextDataItem++;
                 addData(ident, list);
-                push(ident);
+                storage[a1] = ident;
                 break;
             }
             case opAddToListChance: {
                 a1 = nextOperand(ip); // item to add
                 a2 = nextOperand(ip); // item chance
-                a3 = nextOperand(ip); // list ident
+                a3 = fetch(nextOperand(ip)); // list ident
                 std::shared_ptr<List> list = getDataAsList(a3);
                 if (list) {
                     list->add(a1, a2);
