@@ -14,6 +14,34 @@
 
 class Game {
 public:
+    struct ListItem {
+        ListItem(std::uint32_t value, std::uint32_t chance)
+        : value(value), chance(chance)
+        { }
+
+        std::uint32_t value;
+        std::uint32_t chance;
+    };
+    struct List {
+        void add(std::uint32_t value, std::uint32_t chance);
+        void remove(std::uint32_t value);
+        bool contains(std::uint32_t value) const;
+        std::uint32_t random() const;
+
+        std::vector<ListItem> items;
+    };
+
+    struct RuntimeData {
+        RuntimeData()
+        : list(nullptr)
+        { }
+        RuntimeData(List *list)
+        : list(list)
+        { }
+
+        std::shared_ptr<List> list;
+    };
+
     class Option {
     public:
         Option()
@@ -42,7 +70,7 @@ public:
     };
 
     Game(GameIO &io)
-    : isRunning(false), locationName(0), io(io), data(nullptr)
+    : isRunning(false), locationName(0), io(io), data(nullptr), nextDataItem(0)
     { }
     ~Game() {
         delete[] data;
@@ -77,6 +105,10 @@ public:
     void push(uint32_t value);
     uint32_t pop();
 
+    void addData(std::uint32_t ident, List *list);
+    std::shared_ptr<List> getDataAsList(std::uint32_t ident);
+    void freeData(std::uint32_t ident);
+
     bool isRunning;
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
@@ -92,5 +124,7 @@ private:
     bool newLocation;
     uint8_t *data;
     std::vector<uint32_t> stack;
+    uint32_t nextDataItem;
+    std::map<std::uint32_t, RuntimeData> runtimeData;
 };
 #endif

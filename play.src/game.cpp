@@ -1,10 +1,51 @@
 #include <algorithm>
 #include <cstring>
+#include <cstdlib>
+#include <ctime>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 
 #include "play.h"
+
+
+void Game::List::add(std::uint32_t value, std::uint32_t chance) {
+    for (ListItem &item : items) {
+        if (item.value == value) {
+            item.chance = chance;
+            return;
+        }
+    }
+    items.push_back(ListItem(value, chance));
+}
+void Game::List::remove(std::uint32_t value) {
+    for (auto item = items.begin(); item != items.end(); ++item) {
+        if (item->value == value) {
+            items.erase(item);
+            return;
+        }
+    }
+}
+bool Game::List::contains(std::uint32_t value) const {
+    for (const ListItem &item : items) {
+        if (item.value == value) {
+            return true;
+        }
+    }
+    return false;
+}
+std::uint32_t Game::List::random() const {
+    std::vector<std::uint32_t> deck;
+    for (const ListItem &item : items) {
+        for (unsigned i = 0; i < item.chance; ++i) {
+            deck.push_back(item.value);
+        }
+    }
+    unsigned i = rand() % deck.size();
+    return deck[i];
+}
+
+
 
 void Game::loadDataFromFile(const std::string &filename) {
     std::ifstream inf(filename, std::ios::binary | std::ios::in | std::ios::ate);
@@ -18,6 +59,8 @@ void Game::loadDataFromFile(const std::string &filename) {
     if (!inf.read((char*)data, size)) {
         throw PlayError("Could not read game data.");
     }
+
+    nextDataItem = size + 32;
 }
 
 int Game::getType(std::uint32_t address) const {
@@ -153,6 +196,7 @@ void Game::startGame() {
     io.say(")\n");
     io.say(getString(readWord(headerByline)));
     io.say("\n\n");
+    srand(time(nullptr));
     newNode(readWord(headerStartNode));
 }
 
@@ -258,4 +302,24 @@ uint32_t Game::pop() {
     uint32_t value = stack.back();
     stack.pop_back();
     return value;
+}
+
+void Game::addData(std::uint32_t ident, List *list) {
+    RuntimeData data(list);
+    runtimeData.insert(std::make_pair(ident, data));
+}
+
+std::shared_ptr<Game::List> Game::getDataAsList(std::uint32_t ident) {
+    auto i = runtimeData.find(ident);
+    if (i != runtimeData.end()) {
+        return i->second.list;
+    }
+    return nullptr;
+}
+
+void Game::freeData(std::uint32_t ident) {
+    auto i = runtimeData.find(ident);
+    if (i != runtimeData.end()) {
+        runtimeData.erase(i);
+    }
 }

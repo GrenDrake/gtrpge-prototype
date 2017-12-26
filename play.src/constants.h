@@ -84,6 +84,12 @@ const int opRemoveItems     = 0x51;
 const int opItemQty         = 0x52;
 const int opIncrement       = 0x60;
 const int opDecrement       = 0x61;
+const int opAddToList       = 0x70;
+const int opRemoveFromList  = 0x71;
+const int opIsInList        = 0x72;
+const int opRandomFromList  = 0x73;
+const int opCreateList      = 0x74;
+const int opAddToListChance = 0x75;
 
 const unsigned stackOperand      = 0xFFFFFFFF;
 #endif

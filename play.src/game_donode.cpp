@@ -174,6 +174,76 @@ void Game::doNode(std::uint32_t address) {
                 push(a1-1);
                 break;
 
+            case opAddToList: {
+                a1 = nextOperand(ip); // item to add
+                a2 = nextOperand(ip); // list ident
+                std::shared_ptr<List> list = getDataAsList(a2);
+                if (list) {
+                    list->add(a1, 1);
+                } else {
+                    std::stringstream ss;
+                    ss << "Tried to add to non-existant list " << a2 << '.';
+                    throw PlayError(ss.str());
+                }
+                break;
+            }
+            case opRemoveFromList: {
+                a1 = nextOperand(ip); // item to remove
+                a2 = nextOperand(ip); // list ident
+                std::shared_ptr<List> list = getDataAsList(a2);
+                if (list) {
+                    list->remove(a1);
+                } else {
+                    std::stringstream ss;
+                    ss << "Tried to remove from non-existant list " << a2 << '.';
+                    throw PlayError(ss.str());
+                }
+                break;
+            }
+            case opIsInList: {
+                a1 = nextOperand(ip); // item to check for
+                a2 = nextOperand(ip); // list ident
+                std::shared_ptr<List> list = getDataAsList(a3);
+                if (!list) {
+                    push(false);
+                } else {
+                    push(list->contains(a1));
+                }
+                break;
+            }
+            case opRandomFromList: {
+                a1 = nextOperand(ip); // list ident
+                std::shared_ptr<List> list = getDataAsList(a1);
+                if (list) {
+                    push(list->random());
+                } else {
+                    std::stringstream ss;
+                    ss << "Tried to get a random item from non-existant list " << a1 << '.';
+                    throw PlayError(ss.str());
+                }
+                break;
+            }
+            case opCreateList: {
+                List *list = new List;
+                std::uint32_t ident = nextDataItem++;
+                addData(ident, list);
+                push(ident);
+                break;
+            }
+            case opAddToListChance: {
+                a1 = nextOperand(ip); // item to add
+                a2 = nextOperand(ip); // item chance
+                a3 = nextOperand(ip); // list ident
+                std::shared_ptr<List> list = getDataAsList(a3);
+                if (list) {
+                    list->add(a1, a2);
+                } else {
+                    std::stringstream ss;
+                    ss << "Tried to add to non-existant list " << a3 << '.';
+                    throw PlayError(ss.str());
+                }
+                break;
+            }
             default: {
                 std::stringstream ss;
                 ss << std::hex;

@@ -38,6 +38,12 @@ Command commands[] = {
     { "item-qty",        opItemQty,         1 },
     { "increment",       opIncrement,       0 },
     { "decrement",       opDecrement,       0 },
+    { "add-to-list",        opAddToList,        2 },
+    { "is-in-list",         opIsInList,         2 },
+    { "remove-from-list",   opRemoveFromList,   2 },
+    { "random-from-list",   opRandomFromList,   1 },
+    { "create-list",        opCreateList,       0 },
+    { "add-to-list-chance", opAddToListChance,  3 },
 };
 const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {
