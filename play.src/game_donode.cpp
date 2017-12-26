@@ -201,7 +201,7 @@ void Game::doNode(std::uint32_t address) {
 
             case opAddToList: {
                 a1 = operands[0]; // item to add
-                a2 = fetch(operands[1]); // list ident
+                a2 = operands[1]; // list ident
                 std::shared_ptr<List> list = getDataAsList(a2);
                 if (list) {
                     list->add(a1, 1);
@@ -214,7 +214,7 @@ void Game::doNode(std::uint32_t address) {
             }
             case opRemoveFromList: {
                 a1 = operands[0]; // item to remove
-                a2 = fetch(operands[1]); // list ident
+                a2 = operands[1]; // list ident
                 std::shared_ptr<List> list = getDataAsList(a2);
                 if (list) {
                     list->remove(a1);
@@ -227,7 +227,7 @@ void Game::doNode(std::uint32_t address) {
             }
             case opIsInList: {
                 a1 = operands[0]; // item to check for
-                a2 = fetch(operands[1]); // list ident
+                a2 = operands[1]; // list ident
                 std::shared_ptr<List> list = getDataAsList(a3);
                 if (!list) {
                     push(false);
@@ -237,7 +237,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRandomFromList: {
-                a1 = fetch(operands[0]); // list ident
+                a1 = operands[0]; // list ident
                 std::shared_ptr<List> list = getDataAsList(a1);
                 if (list) {
                     push(list->random());
@@ -259,7 +259,7 @@ void Game::doNode(std::uint32_t address) {
             case opAddToListChance: {
                 a1 = operands[0]; // item to add
                 a2 = operands[1]; // item chance
-                a3 = fetch(operands[2]); // list ident
+                a3 = operands[2]; // list ident
                 std::shared_ptr<List> list = getDataAsList(a3);
                 if (list) {
                     list->add(a1, a2);

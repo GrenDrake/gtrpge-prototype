@@ -156,14 +156,14 @@ NODE deep-forest {
  * ************************************************************************* */
 
 NODE forest-do-event {
-    random-from-list forest-events;
+    random-from-list #forest-events;
     do-node stack;
 }
 NODE forest-event-setup {
     create-list forest-events;
-    add-to-list forest-event-imps forest-events;
-    add-to-list forest-event-nothing forest-events;
-    add-to-list forest-event-skeleton forest-events;
+    add-to-list forest-event-imps #forest-events;
+    add-to-list forest-event-nothing #forest-events;
+    add-to-list forest-event-skeleton #forest-events;
 }
 
 NODE forest-event-imps {
