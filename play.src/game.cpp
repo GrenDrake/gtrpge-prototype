@@ -217,17 +217,6 @@ void Game::newNode(std::uint32_t address) {
     io.say("\n");
 }
 
-int Game::nextOperand(std::uint32_t &ip) {
-    std::uint32_t v = readWord(ip);
-    ip += 4;
-
-    if (v == stackOperand) {
-        return pop();
-    } else {
-        return v;
-    }
-}
-
 void Game::doOption(int optionNumber) {
     if (optionNumber < 0 || optionNumber >= (signed)options.size()) {
         return;

@@ -12,17 +12,37 @@ void Game::doNode(std::uint32_t address) {
         throw PlayError(ss.str());
     }
 
-    std::uint32_t a1, a2, a3;
+    char operandTypes[4];
+    std::uint32_t operands[4], a1, a2, a3;
     while (true) {
         std::uint8_t cmdCode = readByte(ip++);
+        std::uint8_t operandTypesByte = readByte(ip++);
+        for (unsigned i = 0; i < 4; ++i) {
+            int type = operandTypesByte >> (i * 2);
+            type &= 0x03;
+            operandTypes[i] = type;
+            switch(type) {
+                case operandNone:
+                    operands[i] = 0;
+                    break;
+                case operandStack:
+                    operands[i] = pop();
+                    break;
+                case operandImmediate:
+                    operands[i] = readWord(ip);
+                    ip += 4;
+                    break;
+            }
+        }
+
         switch(cmdCode) {
             case opEnd:
                 return;
             case opDoNode:
-                doNode(nextOperand(ip));
+                doNode(operands[0]);
                 break;
             case opSetLocation:
-                a1 = nextOperand(ip);
+                a1 = operands[0];
                 inLocation = true;
                 if (locationName != a1) {
                     newLocation = true;
@@ -31,12 +51,12 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opHasFlag:
-                a1 = nextOperand(ip);
-                a2 = nextOperand(ip);
+                a1 = operands[0];
+                a2 = operands[1];
                 push(hasFlag(a1, a2));
                 break;
             case opPush:
-                a1 = nextOperand(ip);
+                a1 = operands[0];
                 push(a1);
                 break;
             case opPop:
@@ -44,18 +64,18 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opAddOption:
-                a1 = nextOperand(ip);
-                a2 = nextOperand(ip);
+                a1 = operands[0];
+                a2 = operands[1];
                 options.push_back(Option(a1, a2));
                 break;
             case opAddOptionXtra:
-                a1 = nextOperand(ip);
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a1 = operands[0];
+                a2 = operands[1];
+                a3 = operands[2];
                 options.push_back(Option(a1, a2, a3));
                 break;
             case opAddContinue:
-                a1 = nextOperand(ip);
+                a1 = operands[1];
                 options.push_back(Option(1, a1));
                 break;
             case opAddReturn:
@@ -63,82 +83,82 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opSay:
-                a1 = nextOperand(ip);
+                a1 = operands[0];
                 sayAddress(a1);
                 break;
             case opSayNumber:
-                io.say(nextOperand(ip));
+                io.say(operands[0]);
                 break;
 
             case opJump:
-                ip = nextOperand(ip);
+                ip = operands[0];
                 break;
             case opJumpTrue:
                 a1 = pop();
-                a2 = nextOperand(ip);
+                a2 = operands[0];
                 if (a1) {
                     ip = a2;
                 }
                 break;
             case opJumpFalse:
                 a1 = pop();
-                a2 = nextOperand(ip);
+                a2 = operands[0];
                 if (!a1) {
                     ip = a2;
                 }
                 break;
             case opJumpEq:
                 a1 = pop();
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a2 = operands[0];
+                a3 = operands[1];
                 if (a1 == a2) {
                     ip = a3;
                 }
                 break;
             case opJumpNeq:
                 a1 = pop();
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a2 = operands[0];
+                a3 = operands[1];
                 if (a1 != a2) {
                     ip = a3;
                 }
                 break;
             case opJumpLt:
                 a1 = pop();
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a2 = operands[0];
+                a3 = operands[1];
                 if (a1 < a2) {
                     ip = a3;
                 }
                 break;
             case opJumpLte:
                 a1 = pop();
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a2 = operands[0];
+                a3 = operands[1];
                 if (a1 <= a2) {
                     ip = a3;
                 }
                 break;
             case opJumpGt:
                 a1 = pop();
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a2 = operands[0];
+                a3 = operands[1];
                 if (a1 > a2) {
                     ip = a3;
                 }
                 break;
             case opJumpGte:
                 a1 = pop();
-                a2 = nextOperand(ip);
-                a3 = nextOperand(ip);
+                a2 = operands[0];
+                a3 = operands[1];
                 if (a1 >= a2) {
                     ip = a3;
                 }
                 break;
 
             case opStore:
-                a1 = nextOperand(ip);
-                a2 = nextOperand(ip);
+                a1 = operands[0];
+                a2 = operands[1];
                 if (a2) {
                     storage[a1] = a2;
                 } else {
@@ -146,22 +166,22 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opFetch:
-                a1 = nextOperand(ip);
+                a1 = operands[0];
                 push(fetch(a1));
                 break;
 
             case opAddItems:
-                a1 = nextOperand(ip);
-                a2 = nextOperand(ip);
+                a1 = operands[0];
+                a2 = operands[1];
                 push(addItems(a1, a2));
                 break;
             case opRemoveItems:
-                a1 = nextOperand(ip); // qty
-                a2 = nextOperand(ip); // itemIdent
+                a1 = operands[0]; // qty
+                a2 = operands[1]; // itemIdent
                 push(removeItems(a1, a2));
                 break;
             case opItemQty:
-                a1 = nextOperand(ip); // itemIdent
+                a1 = operands[0]; // itemIdent
                 push(itemQty(a1));
                 break;
 
@@ -175,8 +195,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opAddToList: {
-                a1 = nextOperand(ip); // item to add
-                a2 = fetch(nextOperand(ip)); // list ident
+                a1 = operands[0]; // item to add
+                a2 = fetch(operands[1]); // list ident
                 std::shared_ptr<List> list = getDataAsList(a2);
                 if (list) {
                     list->add(a1, 1);
@@ -188,8 +208,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRemoveFromList: {
-                a1 = nextOperand(ip); // item to remove
-                a2 = fetch(nextOperand(ip)); // list ident
+                a1 = operands[0]; // item to remove
+                a2 = fetch(operands[1]); // list ident
                 std::shared_ptr<List> list = getDataAsList(a2);
                 if (list) {
                     list->remove(a1);
@@ -201,8 +221,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opIsInList: {
-                a1 = nextOperand(ip); // item to check for
-                a2 = fetch(nextOperand(ip)); // list ident
+                a1 = operands[0]; // item to check for
+                a2 = fetch(operands[1]); // list ident
                 std::shared_ptr<List> list = getDataAsList(a3);
                 if (!list) {
                     push(false);
@@ -212,7 +232,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRandomFromList: {
-                a1 = fetch(nextOperand(ip)); // list ident
+                a1 = fetch(operands[0]); // list ident
                 std::shared_ptr<List> list = getDataAsList(a1);
                 if (list) {
                     push(list->random());
@@ -224,7 +244,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opCreateList: {
-                a1 = nextOperand(ip); // location to store list
+                a1 = operands[0]; // location to store list
                 List *list = new List;
                 std::uint32_t ident = nextDataItem++;
                 addData(ident, list);
@@ -232,9 +252,9 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opAddToListChance: {
-                a1 = nextOperand(ip); // item to add
-                a2 = nextOperand(ip); // item chance
-                a3 = fetch(nextOperand(ip)); // list ident
+                a1 = operands[0]; // item to add
+                a2 = operands[1]; // item chance
+                a3 = fetch(operands[2]); // list ident
                 std::shared_ptr<List> list = getDataAsList(a3);
                 if (list) {
                     list->add(a1, a2);

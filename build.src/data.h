@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <string>
 #include <list>
+#include <vector>
 
 #include "../play.src/constants.h"
 
@@ -56,7 +57,7 @@ namespace std {
 class Statement {
 public:
     Origin origin;
-    std::list<Value> parts;
+    std::vector<Value> parts;
     std::uint32_t pos;
 
     const Command *commandInfo;
@@ -64,7 +65,7 @@ public:
 
 class Block {
 public:
-    std::list<std::shared_ptr<Statement> > statements;
+    std::vector<std::shared_ptr<Statement> > statements;
 };
 
 class DataType {

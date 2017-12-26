@@ -155,7 +155,6 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     std::uint32_t pos = 32;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
-    labels.insert(std::make_pair("stack", stackOperand));
     labels.insert(std::make_pair("xtra", xtraValue));
 
     for (auto &c : gameData.constants) {
@@ -198,7 +197,13 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
             if (stmt->parts.front().text == "label") {
                 labels.insert(std::make_pair(mangleLabel(nodeName, stmt->parts.back().text), pos));
             } else {
-                size = 1 + (stmt->parts.size() - 1) * 4;
+                int countReal = 0;
+                for (const Value &part : stmt->parts) {
+                    if (part.type != Value::Identifier || part.text != "stack") {
+                        ++countReal;
+                    }
+                }
+                size = 2 + (countReal - 1) * 4;
             }
             pos += size;
         }
@@ -227,12 +232,26 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
             }
             if (cmd->code < 0) continue;
 
+            uint8_t typesByte = 0;
+            for (int i = 1; i < stmt->parts.size(); ++i) {
+                uint8_t value = 0;
+                if (stmt->parts[i].type == Value::Identifier && stmt->parts[i].text == "stack") {
+                    value = operandStack;
+                } else {
+                    value = operandImmediate;
+                }
+                typesByte |= value << ((i-1) * 2);
+            }
+
             out.put(cmd->code);
-            std::list<Value>::iterator cur = stmt->parts.begin();
+            out.put(typesByte);
+            auto cur = stmt->parts.begin();
             ++cur;
             while (cur != stmt->parts.end()) {
-                uint32_t v = processValue(stmt->origin, labels, *cur, nodeName);
-                out.write((const char *)&v, 4);
+                if (cur->type != Value::Identifier || cur->text != "stack") {
+                    uint32_t v = processValue(stmt->origin, labels, *cur, nodeName);
+                    out.write((const char *)&v, 4);
+                }
                 ++cur;
             }
         }

@@ -114,8 +114,6 @@ public:
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
 private:
-    int nextOperand(std::uint32_t &ip);
-
     GameIO &io;
 
     std::map<std::uint32_t, std::uint32_t> storage;

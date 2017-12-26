@@ -92,5 +92,10 @@ const int opCreateList      = 0x74;
 const int opAddToListChance = 0x75;
 
 const unsigned xtraValue        = 0xFFFFFFFE;
-const unsigned stackOperand      = 0xFFFFFFFF;
+
+const int operandNone           = 0;
+const int operandImmediate      = 1;
+const int operandStorage        = 2;
+const int operandStack          = 3;
+
 #endif
