@@ -103,6 +103,12 @@ void gameloop() {
             game.doOption(key - '1');
             io.say(game.getOutput());
             drawStatus(game, io);
+        } else if (key == 'L') {
+            if (io.hasTranscript()) {
+                io.stopTranscript();
+            } else {
+                io.startTranscript();
+            }
         } else if (key == 'I' && game.actionAllowed()) {
             doInventory(game, io);
         } else if (key == 'Q') {

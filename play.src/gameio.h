@@ -23,6 +23,10 @@ public:
     void style(Style style = Normal);
     void setWindow(Window window);
     void clear();
+
+    void startTranscript();
+    void stopTranscript();
+    bool hasTranscript();
 private:
 };
 

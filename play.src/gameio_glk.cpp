@@ -138,3 +138,26 @@ void GameIO::setWindow(Window window) {
 void GameIO::clear() {
     glk_window_clear(currentWindow);
 }
+
+strid_t transcriptStream;
+bool transcriptOn = false;
+
+void GameIO::startTranscript() {
+    frefid_t fileref = glk_fileref_create_by_prompt(fileusage_Transcript|fileusage_TextMode, filemode_Write, 0);
+    transcriptStream = glk_stream_open_file(fileref, filemode_Write, 0);
+    glk_fileref_destroy(fileref);
+    transcriptOn = true;
+    glk_window_set_echo_stream(mainWindow, transcriptStream);
+
+    say("\nStarting transcript\n");
+}
+
+void GameIO::stopTranscript() {
+    say("\nEnding transcript\n");
+    glk_stream_close(transcriptStream, nullptr);
+    transcriptOn = false;
+}
+
+bool GameIO::hasTranscript() {
+    return transcriptOn;
+}
