@@ -10,15 +10,24 @@
     *not* be compiled into the Glk library itself.
 */
 
+#include <string.h>
+
 #include "glk.h"
 #include "glkstart.h"
 
 glkunix_argumentlist_t glkunix_arguments[] = {
+    { "", glkunix_arg_ValueFollows, "filename: The game file to load." },
     { NULL, glkunix_arg_End, NULL }
 };
 
-int glkunix_startup_code(glkunix_startup_t *data)
-{
+extern char gamefile[64];
+
+int glkunix_startup_code(glkunix_startup_t *data) {
+    if (data->argc > 1) {
+        strncpy(gamefile, data->argv[1], 63);
+        gamefile[63] = 0;
+    }
+    glkunix_set_base_file(gamefile);
     return TRUE;
 }
 

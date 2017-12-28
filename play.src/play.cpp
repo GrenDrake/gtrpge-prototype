@@ -6,6 +6,8 @@ extern "C" {
 #include "glk.h"
 }
 
+char gamefile[64] = "game.bin";
+
 static void drawStatus(Game &game, GameIO &io) {
     io.setWindow(GameIO::Status);
     io.clear();
@@ -82,7 +84,14 @@ void gameloop() {
     GameIO io;
     Game game;
 
-    game.loadDataFromFile("game.bin");
+    try {
+        game.loadDataFromFile(gamefile);
+    } catch (PlayError &e) {
+        io.say("FATAL ERROR: ");
+        io.say(e.what());
+        return;
+    }
+
     game.startGame();
     io.say(game.getOutput());
 
