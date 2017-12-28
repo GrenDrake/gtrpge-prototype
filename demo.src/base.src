@@ -8,6 +8,7 @@ CONSTANT flg-rescued-gnoll 1;
 CONSTANT flg-talked-to-caged-gnoll 2;
 CONSTANT flg-visited-gnoll 3;
 
+CONSTANT forest-events 77;
 CONSTANT player 99;
 
 /* ************************************************************************* *
@@ -89,7 +90,6 @@ ITEM gnoll-potion {
  * BASE GAME NODES                                                           *
  * ************************************************************************* */
 
-CONSTANT forest-events 77;
 NODE start {
     say "Welcome to the game!";
     add-option-xtra "Begin Game (male)" do-chargen "male";
