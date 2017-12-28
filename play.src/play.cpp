@@ -80,10 +80,11 @@ static void doInventory(Game &game, GameIO &io) {
 
 void gameloop() {
     GameIO io;
-    Game game(io);
+    Game game;
 
     game.loadDataFromFile("game.bin");
     game.startGame();
+    io.say(game.getOutput());
 
     while (true) {
         drawOptions(game, io);
@@ -91,6 +92,7 @@ void gameloop() {
         int key = io.getKey();
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
+            io.say(game.getOutput());
             drawStatus(game, io);
         } else if (key == 'I' && game.actionAllowed()) {
             doInventory(game, io);

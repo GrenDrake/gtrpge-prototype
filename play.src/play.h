@@ -69,14 +69,17 @@ public:
         std::uint32_t itemIdent;
     };
 
-    Game(GameIO &io)
-    : isRunning(false), locationName(0), io(io), data(nullptr), nextDataItem(0)
+    Game()
+    : isRunning(false), locationName(0), data(nullptr), nextDataItem(0)
     { }
     ~Game() {
         delete[] data;
     }
 
     void loadDataFromFile(const std::string &filename);
+
+    void clearOutput();
+    std::string getOutput() const;
 
     int getType(std::uint32_t address) const;
     bool isType(std::uint32_t address, uint8_t type) const;
@@ -99,6 +102,8 @@ public:
     void doNode(std::uint32_t address);
 
     bool actionAllowed() const;
+    void say(const std::string text);
+    void say(int number);
     void sayError(const std::string &errorMessage);
 
     uint32_t fetch(uint32_t key) const;
@@ -113,9 +118,8 @@ public:
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
-private:
-    GameIO &io;
 
+private:
     std::map<std::uint32_t, std::uint32_t> storage;
     std::uint32_t location;
     bool inLocation;
@@ -125,5 +129,6 @@ private:
     std::vector<uint32_t> stack;
     uint32_t nextDataItem;
     std::map<std::uint32_t, RuntimeData> runtimeData;
+    std::string outputBuffer;
 };
 #endif

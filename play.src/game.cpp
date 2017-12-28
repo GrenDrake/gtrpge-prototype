@@ -64,6 +64,14 @@ void Game::loadDataFromFile(const std::string &filename) {
     nextDataItem = size + 32;
 }
 
+void Game::clearOutput() {
+    outputBuffer = "";
+}
+
+std::string Game::getOutput() const {
+    return outputBuffer;
+}
+
 int Game::getType(std::uint32_t address) const {
     return readByte(address);
 }
@@ -133,20 +141,20 @@ void Game::sayAddress(std::uint32_t address) {
     int work;
     switch(type) {
         case idString:
-            io.say(getString(address));
+            say(getString(address));
             break;
         case idItem:
             work = address + itmArticle;
-            io.say(getString(readWord(work)));
+            say(getString(readWord(work)));
             work = address + itmSingular;
-            io.say(getString(readWord(work)));
+            say(getString(readWord(work)));
             break;
         default: {
             std::stringstream ss;
             ss << "[object#";
             ss << std::hex << std::uppercase << address;
             ss << '/' << (int) type << ']';
-            io.say(ss.str());
+            say(ss.str());
         }
     }
 }
@@ -194,12 +202,12 @@ bool Game::itemQty(std::uint32_t itemIdent) {
 void Game::startGame() {
     location = 0;
     isRunning = true;
-    io.say(getString(readWord(headerTitle)));
-    io.say(" (");
-    io.say(getString(readWord(headerVersion)));
-    io.say(")\n");
-    io.say(getString(readWord(headerByline)));
-    io.say("\n\n");
+    say(getString(readWord(headerTitle)));
+    say(" (");
+    say(getString(readWord(headerVersion)));
+    say(")\n");
+    say(getString(readWord(headerByline)));
+    say("\n\n");
     srand(time(nullptr));
     newNode(readWord(headerStartNode));
 }
@@ -214,7 +222,7 @@ void Game::newNode(std::uint32_t address) {
         sayError(e.what());
     }
     stack.clear();
-    io.say("\n");
+    say("\n");
 }
 
 void Game::doOption(int optionNumber) {
@@ -227,16 +235,15 @@ void Game::doOption(int optionNumber) {
         return;
     }
 
-    io.style(GameIO::Emphasis);
-    io.say("\n> ");
+    clearOutput();
+    say("\n> ");
     uint32_t nameAddr = options[optionNumber].name;
     if (nameAddr == 1) {
-        io.say("Continue");
+        say("Continue");
     } else {
-        io.say(getString(nameAddr));
+        say(getString(nameAddr));
     }
-    io.say("\n\n");
-    io.style(GameIO::Normal);
+    say("\n\n");
 
     storage[xtraValue] = options[optionNumber].extra;
     newNode(dest);
@@ -256,12 +263,11 @@ void Game::useItem(int itemNumber) {
     uint32_t article = getProperty(item, itmArticle);
     uint32_t name = getProperty(item, itmSingular);
 
-    io.style(GameIO::Emphasis);
-    io.say("\n> Using ");
-    io.say(getString(article));
-    io.say(getString(name));
-    io.say("\n\n");
-    io.style(GameIO::Normal);
+    clearOutput();
+    say("\n> Using ");
+    say(getString(article));
+    say(getString(name));
+    say("\n\n");
 
     newNode(onUse);
 }
@@ -271,12 +277,18 @@ bool Game::actionAllowed() const {
     return inLocation && isRunning;
 }
 
+void Game::say(const std::string text) {
+    outputBuffer += text;
+}
+
+void Game::say(int number) {
+    say(std::to_string(number));
+}
+
 void Game::sayError(const std::string &errorMessage) {
-    io.style(GameIO::Bold);
-    io.say("INTERNAL ERROR: ");
-    io.say(errorMessage);
-    io.say("\nYour game may be in an invalid state; restoring or restarting is recommended.");
-    io.style(GameIO::Normal);
+    say("\n");
+    say(errorMessage);
+    say("\nYour game may be in an invalid state; restoring or restarting is recommended.\n");
 }
 
 uint32_t Game::fetch(uint32_t key) const {

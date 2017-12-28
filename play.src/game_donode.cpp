@@ -92,7 +92,7 @@ void Game::doNode(std::uint32_t address) {
                 sayAddress(a1);
                 break;
             case opSayNumber:
-                io.say(operands[0]);
+                say(operands[0]);
                 break;
 
             case opJump:
