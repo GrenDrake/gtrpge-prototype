@@ -45,6 +45,11 @@ SEX sex-female {
     "she" "her" "hers" "her" "herself"
 }
 
+SEX sex-neuter {
+    "neuter" ()
+    "it" "it" "its" "its" "itself"
+}
+
 //    iname             stat            dname           default-value
 SKILL skl-strength      0               "strength"      10;
 SKILL skl-dexterity     0               "dexterity"     10;
@@ -61,7 +66,7 @@ SKILL skl-unarmed       skl-dexterity   "unarmed"       0;
 
 CHARACTER the-player {
     "the " "player"
-    sex-male spc-human
+    sex-neuter spc-human
     faction 0
 }
 
@@ -101,6 +106,14 @@ NODE start {
 NODE do-chargen {
     make-character the-player;
     store player stack;
+
+    push #xtra;
+    jump-eq "male" do-male;
+    set-sex #player sex-female;
+    jump sex-set;
+    label do-male;
+    set-sex #player sex-male;
+    label sex-set;
 
     add-items 20 teleport-crystal;
     do-node forest-path;

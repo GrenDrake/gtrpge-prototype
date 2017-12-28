@@ -284,6 +284,22 @@ void Game::doNode(std::uint32_t address) {
                 push(c->species);
                 break;
             }
+            case opSetSex: {
+                if (!isType(operands[1], idSex)) {
+                    throw PlayError("Tried to set character sex to non-sex.");
+                }
+                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                c->sex = operands[1];
+                break;
+            }
+            case opSetSpecies: {
+                if (!isType(operands[1], idSpecies)) {
+                    throw PlayError("Tried to set character species to non-species.");
+                }
+                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                c->species = operands[1];
+                break;
+            }
 
             default: {
                 std::stringstream ss;
