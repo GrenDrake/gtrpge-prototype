@@ -288,7 +288,7 @@ void Game::doNode(std::uint32_t address) {
             default: {
                 std::stringstream ss;
                 ss << std::hex;
-                ss << "Encountered unknown command 0x" << cmdCode;
+                ss << "Encountered unknown command 0x" << (int)cmdCode;
                 ss << " at 0x" << (ip-1) << '.';
                 throw PlayError(ss.str());
             }
