@@ -173,6 +173,14 @@ void Game::sayAddress(std::uint32_t address) {
             work = address + itmSingular;
             say(getString(readWord(work)));
             break;
+        case idSex:
+            work = address + sexName;
+            say(getString(readWord(work)));
+            break;
+        case idSpecies:
+            work = address + spcName;
+            say(getString(readWord(work)));
+            break;
         default: {
             std::stringstream ss;
             ss << "[object#";
@@ -264,6 +272,8 @@ std::uint32_t Game::makeCharacter(std::uint32_t defAddress) {
     std::uint32_t ident = nextDataItem++;
     Character *c = new Character;
     c->def = def;
+    c->sex = def->sex;
+    c->species = def->species;
     addData(ident, c);
     return ident;
 }

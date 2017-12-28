@@ -274,6 +274,16 @@ void Game::doNode(std::uint32_t address) {
             case opMakeCharacter:
                 push(makeCharacter(operands[0]));
                 break;
+            case opGetSex: {
+                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                push(c->sex);
+                break;
+            }
+            case opGetSpecies: {
+                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                push(c->species);
+                break;
+            }
 
             default: {
                 std::stringstream ss;

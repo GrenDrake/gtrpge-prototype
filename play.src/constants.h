@@ -91,6 +91,10 @@ const int opRandomFromList  = 0x73;
 const int opCreateList      = 0x74;
 const int opAddToListChance = 0x75;
 const int opMakeCharacter   = 0x80;
+const int opGetSex          = 0x81;
+const int opSetSex          = 0x82;
+const int opGetSpecies      = 0x83;
+const int opSetSpecies      = 0x84;
 
 const unsigned xtraValue        = 0xFFFFFFFE;
 

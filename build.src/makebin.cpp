@@ -45,6 +45,10 @@ Command commands[] = {
     { "create-list",        opCreateList,       1 },
     { "add-to-list-chance", opAddToListChance,  3 },
     { "make-character",     opMakeCharacter,    1 },
+    { "get-sex",            opGetSex,           1 },
+    { "set-sex",            opSetSex,           1 },
+    { "get-species",        opGetSpecies,       1 },
+    { "set-species",        opSetSpecies,       1 },
 };
 const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {
