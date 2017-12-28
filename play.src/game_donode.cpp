@@ -270,6 +270,11 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             }
+
+            case opMakeCharacter:
+                push(makeCharacter(operands[0]));
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;

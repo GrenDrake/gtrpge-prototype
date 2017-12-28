@@ -11,6 +11,16 @@
 
 #include "playerror.h"
 
+struct CharacterDef {
+    std::uint32_t address;
+    std::uint32_t article, name;
+    std::uint32_t sex, species;
+    std::uint32_t faction;
+};
+struct Character {
+    const CharacterDef *def;
+    std::uint32_t sex, species;
+};
 
 class Game {
 public:
@@ -32,14 +42,27 @@ public:
     };
 
     struct RuntimeData {
+        enum Type {
+            NoneType, ListType, CharacterType
+        };
         RuntimeData()
-        : list(nullptr)
+        : list(nullptr), character(nullptr)
         { }
         RuntimeData(List *list)
-        : list(list)
+        : list(list), character(nullptr)
+        { }
+        RuntimeData(Character *character)
+        : list(nullptr), character(character)
         { }
 
+        Type getType() const {
+            if (list) return ListType;
+            if (character) return CharacterType;
+            return NoneType;
+        }
+
         std::shared_ptr<List> list;
+        std::shared_ptr<Character> character;
     };
 
     class Option {
@@ -95,6 +118,9 @@ public:
     bool removeItems(int qty, std::uint32_t itemIdent);
     bool itemQty(std::uint32_t itemIdent);
 
+    const CharacterDef* getCharacterDef(std::uint32_t address);
+    std::uint32_t makeCharacter(std::uint32_t defAddress);
+
     void startGame();
     void doOption(int optionNumber);
     void useItem(int itemNumber);
@@ -111,7 +137,10 @@ public:
     uint32_t pop();
 
     void addData(std::uint32_t ident, List *list);
+    void addData(std::uint32_t ident, Character *character);
+    RuntimeData::Type dataType(std::uint32_t ident);
     std::shared_ptr<List> getDataAsList(std::uint32_t ident);
+    std::shared_ptr<Character> getDataAsCharacter(std::uint32_t ident);
     void freeData(std::uint32_t ident);
 
     bool isRunning;
@@ -129,6 +158,7 @@ private:
     std::vector<uint32_t> stack;
     uint32_t nextDataItem;
     std::map<std::uint32_t, RuntimeData> runtimeData;
+    std::map<std::uint32_t, const CharacterDef*> characterDefs;
     std::string outputBuffer;
 };
 #endif

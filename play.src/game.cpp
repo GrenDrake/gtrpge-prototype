@@ -137,6 +137,30 @@ std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
 }
 
 void Game::sayAddress(std::uint32_t address) {
+    if (address > dataSize) {
+        std::stringstream ss;
+        switch(dataType(address)) {
+            case RuntimeData::Type::NoneType:
+                ss << "[unused address#";
+                ss << std::hex << std::setw(8) << std::setfill('0');
+                ss << address << "]";
+                say(ss.str());
+                break;
+            case RuntimeData::Type::CharacterType: {
+                std::shared_ptr<Character> c = getDataAsCharacter(address);
+                ss << getString(c->def->article);
+                ss << getString(c->def->name);
+                say(ss.str());
+                break;
+            }
+            default:
+                ss << std::hex << std::setw(8) << std::setfill('0');
+                ss << "[high memory object#"<<address<<"]";
+                say(ss.str());
+        }
+        return;
+    }
+
     int type = getType(address);
     int work;
     switch(type) {
@@ -197,6 +221,51 @@ bool Game::itemQty(std::uint32_t itemIdent) {
         }
     }
     return 0;
+}
+
+/*
+const int chrSkillList      = 25;
+const int chrGearList       = 29;
+const int chrSize           = 33;
+const int csIdent           = 0;
+const int csValue           = 4;
+const int csSize            = 8;
+const int cgSlot            = 0;
+const int cgItem            = 4;
+const int cgSize            = 8;
+*/
+
+const CharacterDef* Game::getCharacterDef(std::uint32_t address) {
+    if (!isType(address, idCharacter)) {
+        std::stringstream ss;
+        ss << "Tried to create character from non-character data at 0x";
+        ss << std::hex << std::setw(8) << std::setfill('0') << address;
+        throw PlayError(ss.str());
+    }
+
+    auto i = characterDefs.find(address);
+    if (i == characterDefs.end()) {
+        CharacterDef *cdef = new CharacterDef;
+        cdef->address = address;
+        cdef->article = getProperty(address, chrArticle);
+        cdef->name = getProperty(address, chrName);
+        cdef->sex = getProperty(address, chrSex);
+        cdef->species = getProperty(address, chrSpecies);
+        cdef->faction = getProperty(address, chrFaction);
+        characterDefs.insert(std::make_pair(address, cdef));
+        return cdef;
+    } else {
+        return i->second;
+    }
+}
+
+std::uint32_t Game::makeCharacter(std::uint32_t defAddress) {
+    const CharacterDef *def = getCharacterDef(defAddress);
+    std::uint32_t ident = nextDataItem++;
+    Character *c = new Character;
+    c->def = def;
+    addData(ident, c);
+    return ident;
 }
 
 void Game::startGame() {
@@ -315,10 +384,31 @@ void Game::addData(std::uint32_t ident, List *list) {
     runtimeData.insert(std::make_pair(ident, data));
 }
 
+void Game::addData(std::uint32_t ident, Character *character) {
+    RuntimeData data(character);
+    runtimeData.insert(std::make_pair(ident, data));
+}
+
+Game::RuntimeData::Type Game::dataType(std::uint32_t ident) {
+    auto i = runtimeData.find(ident);
+    if (i == runtimeData.end()) {
+        return RuntimeData::Type::NoneType;
+    }
+    return i->second.getType();
+}
+
 std::shared_ptr<Game::List> Game::getDataAsList(std::uint32_t ident) {
     auto i = runtimeData.find(ident);
     if (i != runtimeData.end()) {
         return i->second.list;
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Character> Game::getDataAsCharacter(std::uint32_t ident) {
+    auto i = runtimeData.find(ident);
+    if (i != runtimeData.end()) {
+        return i->second.character;
     }
     return nullptr;
 }

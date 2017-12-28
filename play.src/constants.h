@@ -90,6 +90,7 @@ const int opIsInList        = 0x72;
 const int opRandomFromList  = 0x73;
 const int opCreateList      = 0x74;
 const int opAddToListChance = 0x75;
+const int opMakeCharacter   = 0x80;
 
 const unsigned xtraValue        = 0xFFFFFFFE;
 

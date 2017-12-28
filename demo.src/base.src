@@ -8,6 +8,8 @@ CONSTANT flg-rescued-gnoll 1;
 CONSTANT flg-talked-to-caged-gnoll 2;
 CONSTANT flg-visited-gnoll 3;
 
+CONSTANT player 99;
+
 /* ************************************************************************* *
  * GENERAL DEFINITIONS                                                       *
  * ************************************************************************* */
@@ -97,6 +99,9 @@ NODE start {
 }
 
 NODE do-chargen {
+    make-character the-player;
+    store player stack;
+
     add-items 20 teleport-crystal;
     do-node forest-path;
 }
