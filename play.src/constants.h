@@ -5,7 +5,8 @@ const int headerStartNode   = 0x08;
 const int headerTitle       = 0x0C;
 const int headerByline      = 0x10;
 const int headerVersion     = 0x14;
-const int headerBuildNumber = 0x18;
+const int headerSkillTable  = 0x18;
+const int headerBuildNumber = 0x22;
 
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
@@ -36,8 +37,15 @@ const int spcSize           = 9;
 
 const int sklBaseSkill      = 0;
 const int sklName           = 4;
-const int sklDefault        = 8;
+const int sklFlags          = 8;
 const int sklSize           = 12;
+const int sklCount          = 32;
+
+const int sklVariable       = 0x01; // variable stat (like health, energy, mana, corruption, etc.)
+const int sklKOZero         = 0x02; // KO character if reaches 0
+const int sklKOFull         = 0x04; // KO character is becomes full
+const int sklResetOnRest    = 0x08; // current skill value is reset when character rests
+const int sklX5             = 0x10; // multiply (max) value of skill by 5 for final value
 
 const int chrFlags          = 1;
 const int chrArticle        = 5;
@@ -45,12 +53,8 @@ const int chrName           = 9;
 const int chrSex            = 13;
 const int chrSpecies        = 17;
 const int chrFaction        = 21;
-const int chrSkillList      = 25;
-const int chrGearList       = 29;
-const int chrSize           = 33;
-const int csIdent           = 0;
-const int csValue           = 4;
-const int csSize            = 8;
+const int chrSkillDefaults  = 25;
+const int chrGearList       = 25+(sklCount);
 const int cgSlot            = 0;
 const int cgItem            = 4;
 const int cgSize            = 8;
@@ -95,6 +99,10 @@ const int opGetSex          = 0x81;
 const int opSetSex          = 0x82;
 const int opGetSpecies      = 0x83;
 const int opSetSpecies      = 0x84;
+const int opGetSkill        = 0x85;
+const int opAdjSkill        = 0x86;
+const int opGetSkillCur     = 0x87;
+const int opAdjSkillCur     = 0x88;
 
 const unsigned xtraValue        = 0xFFFFFFFE;
 

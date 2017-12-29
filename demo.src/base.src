@@ -83,6 +83,11 @@ CHARACTER the-player {
     "the " "player"
     sex-neuter spc-human
     faction 0
+    skills (
+        skl-strength 12;
+        skl-toughness 14;
+        skl-melee 4;
+    )
 }
 
 /* ************************************************************************* *

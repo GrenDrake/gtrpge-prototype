@@ -1,6 +1,7 @@
 #ifndef PLAY_H
 #define PLAY_H
 
+#include <array>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -11,15 +12,11 @@
 
 #include "playerror.h"
 
-struct CharacterDef {
-    std::uint32_t address;
-    std::uint32_t article, name;
-    std::uint32_t sex, species;
-    std::uint32_t faction;
-};
 struct Character {
-    const CharacterDef *def;
+    std::uint32_t def;
     std::uint32_t sex, species;
+    std::array<std::int8_t, sklCount> skillAdj;
+    std::array<std::uint8_t, sklCount> skillCur;
 };
 
 class Game {
@@ -118,8 +115,13 @@ public:
     bool removeItems(int qty, std::uint32_t itemIdent);
     bool itemQty(std::uint32_t itemIdent);
 
-    const CharacterDef* getCharacterDef(std::uint32_t address);
     std::uint32_t makeCharacter(std::uint32_t defAddress);
+    void resetCharacter(std::uint32_t cRef);
+    bool testSkillFlags(int skillNo, uint32_t flags);
+    int getSkillMax(std::uint32_t cRef, int skillNo);
+    void adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment);
+    int getSkillCur(std::uint32_t cRef, int skillNo);
+    void adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment);
 
     void startGame();
     void doOption(int optionNumber);
@@ -158,7 +160,6 @@ private:
     std::vector<uint32_t> stack;
     uint32_t nextDataItem;
     std::map<std::uint32_t, RuntimeData> runtimeData;
-    std::map<std::uint32_t, const CharacterDef*> characterDefs;
     std::string outputBuffer;
 };
 #endif

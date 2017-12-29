@@ -300,6 +300,18 @@ void Game::doNode(std::uint32_t address) {
                 c->species = operands[1];
                 break;
             }
+            case opGetSkill:
+                push(getSkillMax(operands[0], operands[1]));
+                break;
+            case opAdjSkill:
+                adjSkillMax(operands[0], operands[1], operands[2]);
+                break;
+            case opGetSkillCur:
+                push(getSkillCur(operands[0], operands[1]));
+                break;
+            case opAdjSkillCur:
+                adjSkillCur(operands[0], operands[1], operands[2]);
+                break;
 
             default: {
                 std::stringstream ss;

@@ -148,8 +148,8 @@ void Game::sayAddress(std::uint32_t address) {
                 break;
             case RuntimeData::Type::CharacterType: {
                 std::shared_ptr<Character> c = getDataAsCharacter(address);
-                ss << getString(c->def->article);
-                ss << getString(c->def->name);
+                ss << getString(c->def+chrArticle);
+                ss << getString(c->def+chrName);
                 say(ss.str());
                 break;
             }
@@ -231,51 +231,84 @@ bool Game::itemQty(std::uint32_t itemIdent) {
     return 0;
 }
 
-/*
-const int chrSkillList      = 25;
-const int chrGearList       = 29;
-const int chrSize           = 33;
-const int csIdent           = 0;
-const int csValue           = 4;
-const int csSize            = 8;
-const int cgSlot            = 0;
-const int cgItem            = 4;
-const int cgSize            = 8;
-*/
-
-const CharacterDef* Game::getCharacterDef(std::uint32_t address) {
-    if (!isType(address, idCharacter)) {
-        std::stringstream ss;
-        ss << "Tried to create character from non-character data at 0x";
-        ss << std::hex << std::setw(8) << std::setfill('0') << address;
-        throw PlayError(ss.str());
+std::uint32_t Game::makeCharacter(std::uint32_t defAddress) {
+    std::uint32_t ident = nextDataItem++;
+    Character *c = new Character;
+    c->def = defAddress;
+    c->sex = getProperty(defAddress, chrSex);
+    c->species = getProperty(defAddress, chrSpecies);
+    for (int i = 0; i < sklCount; ++i) {
+        c->skillAdj[i] = 0;
+        c->skillCur[i] = 0;
     }
+    addData(ident, c);
+    resetCharacter(ident);
+    return ident;
+}
 
-    auto i = characterDefs.find(address);
-    if (i == characterDefs.end()) {
-        CharacterDef *cdef = new CharacterDef;
-        cdef->address = address;
-        cdef->article = getProperty(address, chrArticle);
-        cdef->name = getProperty(address, chrName);
-        cdef->sex = getProperty(address, chrSex);
-        cdef->species = getProperty(address, chrSpecies);
-        cdef->faction = getProperty(address, chrFaction);
-        characterDefs.insert(std::make_pair(address, cdef));
-        return cdef;
-    } else {
-        return i->second;
+void Game::resetCharacter(std::uint32_t cRef) {
+    std::shared_ptr<Character> c = getDataAsCharacter(cRef);
+    if (!c) return;
+
+    for (int i = 0; i < sklCount; ++i) {
+        if (testSkillFlags(i, sklVariable)) {
+            if (testSkillFlags(i, sklKOFull)) {
+                c->skillCur[i] = 0;
+            } else {
+                c->skillCur[i] = getSkillMax(cRef, i);
+            }
+        }
     }
 }
 
-std::uint32_t Game::makeCharacter(std::uint32_t defAddress) {
-    const CharacterDef *def = getCharacterDef(defAddress);
-    std::uint32_t ident = nextDataItem++;
-    Character *c = new Character;
-    c->def = def;
-    c->sex = def->sex;
-    c->species = def->species;
-    addData(ident, c);
-    return ident;
+bool Game::testSkillFlags(int skillNo, uint32_t flags) {
+    std::uint32_t theFlags = readByte(readWord(headerSkillTable)+sklSize*skillNo+sklFlags);
+    return (flags & theFlags) == flags;
+}
+
+int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
+    std::shared_ptr<Character> c = getDataAsCharacter(cRef);
+    if (!c) return 0;
+
+    int base = readByte(c->def + chrSkillDefaults + skillNo);
+
+    base += c->skillAdj[skillNo];
+
+    if (testSkillFlags(skillNo, sklX5)) {
+        base *= 5;
+    }
+    return base;
+}
+
+void Game::adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment) {
+    std::shared_ptr<Character> c = getDataAsCharacter(cRef);
+    if (!c) return;
+
+    c->skillAdj[skillNo] += adjustment;
+}
+
+int Game::getSkillCur(std::uint32_t cRef, int skillNo) {
+    if (testSkillFlags(skillNo, sklVariable)) {
+        std::shared_ptr<Character> c = getDataAsCharacter(cRef);
+        if (!c) return 0;
+        return c->skillCur[skillNo];
+    } else {
+        return getSkillMax(cRef, skillNo);
+    }
+}
+
+void Game::adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment) {
+    std::shared_ptr<Character> c = getDataAsCharacter(cRef);
+    if (!c) return;
+
+    int cur = c->skillCur[skillNo];
+    int max = getSkillMax(cRef, skillNo);
+
+    cur += adjustment;
+    if (cur < 0)    cur = 0;
+    if (cur > max)  cur = max;
+
+    c->skillCur[skillNo] = cur;
 }
 
 void Game::startGame() {

@@ -49,7 +49,12 @@ Command commands[] = {
     { "set-sex",            opSetSex,           2 },
     { "get-species",        opGetSpecies,       1 },
     { "set-species",        opSetSpecies,       2 },
+    { "get-skill",          opGetSkill,         2 },
+    { "adj-skill",          opAdjSkill,         3 },
+    { "get-skill-cur",      opGetSkillCur,      2 },
+    { "adj-skill-cur",      opAdjSkillCur,      3 },
 };
+
 const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {
         if (name == cmd.text) {

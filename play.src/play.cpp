@@ -80,6 +80,31 @@ static void doInventory(Game &game, GameIO &io) {
     }
 }
 
+static void doCharacter(Game &game, GameIO &io) {
+    std::uint32_t player = game.fetch(99);
+
+    io.setWindow(GameIO::Sidebar);
+    io.clear();
+    std::uint32_t skillTable = game.readWord(headerSkillTable);
+    for (int i = 0; i < sklCount; ++i) {
+        std::uint32_t nameAddr = game.readWord(skillTable + i*sklSize + sklName);
+        if (!nameAddr) continue;
+
+        const char *name = game.getString(nameAddr);
+        io.say(i);
+        io.say(") ");
+        io.say(name);
+        io.say(": ");
+        if (game.testSkillFlags(i, sklVariable)) {
+            io.say(game.getSkillCur(player, i));
+            io.say("/");
+        }
+        io.say(game.getSkillMax(player, i));
+        io.say("\n");
+    }
+    io.setWindow(GameIO::Main);
+}
+
 void gameloop() {
     GameIO io;
     Game game;
@@ -111,6 +136,8 @@ void gameloop() {
             }
         } else if (key == 'I' && game.actionAllowed()) {
             doInventory(game, io);
+        } else if (key == 'C') {
+            doCharacter(game, io);
         } else if (key == 'Q') {
             io.style(GameIO::Emphasis);
             io.say("\nGoodbye!\n");
