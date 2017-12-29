@@ -157,6 +157,22 @@ void Lexer::doFile(const std::string &file) {
             }
             std::string str = text.substr(start, pos-start);
             tokens.push_back(Token(origin, Token::Identifier, str));
+        } else if (here() == '0' && tolower(peek()) == 'x') {
+            ++pos; ++pos;
+            int value = 0;
+            while (isxdigit(here())) {
+                value *= 16;
+                if (isdigit(here())) {
+                    value += here() - '0';
+                } else {
+                    value += toupper(here()) - 'A' + 10;
+                }
+                next();
+            }
+            if (!isspace(here()) && !ispunct(here())) {
+                throw BuildError(origin, "Expected whitespace.");
+            }
+            tokens.push_back(Token(origin, Token::Integer, value));
         } else if (isdigit(here())) {
             int value = here() - '0';
             while (isdigit(next())) {
