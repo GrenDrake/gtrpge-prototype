@@ -312,6 +312,9 @@ void Game::doNode(std::uint32_t address) {
             case opAdjSkillCur:
                 adjSkillCur(operands[0], operands[1], operands[2]);
                 break;
+            case opSkillCheck:
+                push(doSkillCheck(operands[0], operands[1], operands[2], operands[3]));
+                break;
 
             default: {
                 std::stringstream ss;

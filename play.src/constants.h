@@ -103,6 +103,7 @@ const int opGetSkill        = 0x85;
 const int opAdjSkill        = 0x86;
 const int opGetSkillCur     = 0x87;
 const int opAdjSkillCur     = 0x88;
+const int opSkillCheck      = 0x89;
 
 const unsigned xtraValue        = 0xFFFFFFFE;
 

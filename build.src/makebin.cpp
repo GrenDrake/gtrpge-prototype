@@ -53,6 +53,7 @@ Command commands[] = {
     { "adj-skill",          opAdjSkill,         3 },
     { "get-skill-cur",      opGetSkillCur,      2 },
     { "adj-skill-cur",      opAdjSkillCur,      3 },
+    { "skill-check",        opSkillCheck,       4 },
 };
 
 const Command* getCommand(const std::string name) {

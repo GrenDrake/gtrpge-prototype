@@ -96,6 +96,8 @@ public:
         delete[] data;
     }
 
+    static int roll(int dice, int sides);
+
     void loadDataFromFile(const std::string &filename);
 
     void clearOutput();
@@ -117,6 +119,7 @@ public:
 
     std::uint32_t makeCharacter(std::uint32_t defAddress);
     void resetCharacter(std::uint32_t cRef);
+    int doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target);
     bool testSkillFlags(int skillNo, uint32_t flags);
     int getSkillMax(std::uint32_t cRef, int skillNo);
     void adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment);

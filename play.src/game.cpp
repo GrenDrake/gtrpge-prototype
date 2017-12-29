@@ -46,6 +46,13 @@ std::uint32_t Game::List::random() const {
 }
 
 
+int Game::roll(int dice, int sides) {
+    int result = 0;
+    for (int i = 0; i < dice; ++i) {
+        result += 1 + rand() % sides;
+    }
+    return result;
+}
 
 void Game::loadDataFromFile(const std::string &filename) {
     std::ifstream inf(filename, std::ios::binary | std::ios::in | std::ios::ate);
@@ -259,6 +266,35 @@ void Game::resetCharacter(std::uint32_t cRef) {
             }
         }
     }
+}
+
+int Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target) {
+    std::uint32_t baseSkill = readByte(readWord(headerSkillTable)+sklSize*skill+sklBaseSkill);
+    int dieResult = roll(3,6);
+    int baseSkillLvl = getSkillCur(cRef, baseSkill);
+    int skillLvl = getSkillCur(cRef, skill);
+    int finalLvl = skillLvl + baseSkillLvl;
+
+    say("[");
+    if (baseSkill) {
+        say(baseSkillLvl);
+        say("+");
+        say(skillLvl);
+        say("=");
+        say(finalLvl);
+    } else {
+        say(skillLvl);
+    }
+    if (modifiers) {
+        say(" + ");
+        say(modifiers);
+    }
+    say(" + ");
+    say(dieResult);
+    say("(3d6) vs ");
+    say(target);
+    say("]");
+    return (finalLvl + modifiers + dieResult) - target;
 }
 
 bool Game::testSkillFlags(int skillNo, uint32_t flags) {
