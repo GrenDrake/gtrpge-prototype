@@ -126,13 +126,7 @@ void Parser::doItemDef() {
     item->plural = gameData.addString(cur->text);
     ++cur;
 
-    if (matches(Token::OpenParan)) {
-        ++cur; // eat open paran
-        while (!matches(Token::CloseParan)) {
-            item->flags.insert(doValue());
-        }
-        ++cur; // eat close paran
-    }
+    item->flags = doFlags();
 
     while (!matches(Token::CloseBrace)) {
         const Origin &pOrigin = cur->origin;
@@ -169,13 +163,7 @@ void Parser::doSex() {
     sex->displayName = gameData.addString(cur->text);
     ++cur;
 
-    if (matches(Token::OpenParan)) {
-        ++cur; // eat open paran
-        while (!matches(Token::CloseParan)) {
-            sex->flags.insert(doValue());
-        }
-        ++cur; // eat close paran
-    }
+    sex->flags = doFlags();
 
     require(Token::String);
     sex->subject = gameData.addString(cur->text);
@@ -214,13 +202,7 @@ void Parser::doSpecies() {
     species->displayName = gameData.addString(cur->text);
     ++cur;
 
-    if (matches(Token::OpenParan)) {
-        ++cur; // eat open paran
-        while (!matches(Token::CloseParan)) {
-            species->flags.insert(doValue());
-        }
-        ++cur; // eat close paran
-    }
+    species->flags = doFlags();
 
     require(Token::CloseBrace, true);
     gameData.dataItems.push_back(species);
@@ -273,13 +255,7 @@ void Parser::doCharacter() {
     character->sex = doValue();
     character->species = doValue();
 
-    if (matches(Token::OpenParan)) {
-        ++cur; // eat open paran
-        while (!matches(Token::CloseParan)) {
-            character->flags.insert(doValue());
-        }
-        ++cur; // eat close paran
-    }
+    character->flags = doFlags();
 
     while (!matches(Token::CloseBrace)) {
         require(Token::Identifier);
@@ -348,6 +324,23 @@ Value Parser::doProperty(const std::string &forName) {
         throw BuildError(origin, "Expected property value.");
     }
 }
+
+std::unordered_set<Value> Parser::doFlags() {
+    std::unordered_set<Value> flags;
+
+    if (!matches(Token::OpenParan)) {
+        return flags;
+    }
+    ++cur;
+
+    while (!matches(Token::CloseParan)) {
+        flags.insert(doValue());
+    }
+    ++cur;
+
+    return flags;
+}
+
 
 std::shared_ptr<Block> Parser::doBlock() {
     std::shared_ptr<Block> block(new Block);

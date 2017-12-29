@@ -5,6 +5,7 @@
 #include <fstream>
 #include <list>
 #include <unordered_map>
+#include <unordered_set>
 #include <memory>
 #include <string>
 #include <vector>
@@ -174,6 +175,7 @@ private:
     void doCharacter();
     void doItemDef();
     Value doProperty(const std::string &forName);
+    std::unordered_set<Value> doFlags();
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();
     Value doValue();
