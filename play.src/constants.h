@@ -86,8 +86,6 @@ const int opFetch           = 0x41;
 const int opAddItems        = 0x50;
 const int opRemoveItems     = 0x51;
 const int opItemQty         = 0x52;
-const int opIncrement       = 0x60;
-const int opDecrement       = 0x61;
 const int opAddToList       = 0x70;
 const int opRemoveFromList  = 0x71;
 const int opIsInList        = 0x72;
@@ -104,6 +102,14 @@ const int opAdjSkill        = 0x86;
 const int opGetSkillCur     = 0x87;
 const int opAdjSkillCur     = 0x88;
 const int opSkillCheck      = 0x89;
+const int opAdd             = 0x90;
+const int opSubtract        = 0x91;
+const int opMultiply        = 0x92;
+const int opDivide          = 0x93;
+const int opModulo          = 0x94;
+const int opPower           = 0x95;
+const int opIncrement       = 0x96;
+const int opDecrement       = 0x97;
 
 const unsigned xtraValue        = 0xFFFFFFFE;
 

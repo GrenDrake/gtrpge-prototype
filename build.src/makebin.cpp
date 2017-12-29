@@ -36,8 +36,6 @@ Command commands[] = {
     { "add-items",       opAddItems,        2 },
     { "remove-items",    opRemoveItems,     2 },
     { "item-qty",        opItemQty,         1 },
-    { "increment",       opIncrement,       0 },
-    { "decrement",       opDecrement,       0 },
     { "add-to-list",        opAddToList,        2 },
     { "is-in-list",         opIsInList,         2 },
     { "remove-from-list",   opRemoveFromList,   2 },
@@ -54,7 +52,15 @@ Command commands[] = {
     { "get-skill-cur",      opGetSkillCur,      2 },
     { "adj-skill-cur",      opAdjSkillCur,      3 },
     { "skill-check",        opSkillCheck,       4 },
-};
+    { "add",                opAdd,              0 },
+    { "subtract",           opSubtract,         0 },
+    { "multiply",           opMultiply,         0 },
+    { "divide",             opDivide,           0 },
+    { "modulo",             opModulo,           0 },
+    { "power",              opPower,            0 },
+    { "increment",          opIncrement,        0 },
+    { "decrement",          opDecrement,        0 },
+    };
 
 const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {

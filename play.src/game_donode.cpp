@@ -190,15 +190,6 @@ void Game::doNode(std::uint32_t address) {
                 push(itemQty(a1));
                 break;
 
-            case opIncrement:
-                a1 = pop();
-                push(a1+1);
-                break;
-            case opDecrement:
-                a1 = pop();
-                push(a1-1);
-                break;
-
             case opAddToList: {
                 a1 = operands[0]; // item to add
                 a2 = operands[1]; // list ident
@@ -314,6 +305,37 @@ void Game::doNode(std::uint32_t address) {
                 break;
             case opSkillCheck:
                 push(doSkillCheck(operands[0], operands[1], operands[2], operands[3]));
+                break;
+
+            case opAdd:
+                push(pop()+pop());
+                break;
+            case opSubtract:
+                push(pop()-pop());
+                break;
+            case opMultiply:
+                push(pop()*pop());
+                break;
+            case opDivide:
+                push(pop()/pop());
+                break;
+            case opModulo:
+                push(pop()%pop());
+                break;
+            case opPower:
+                a1 = pop();
+                a2 = pop();
+                a3 = 1;
+                for (int i = 0; i < a2; ++i) {
+                    a3 *= a1;
+                }
+                push(a3);
+                break;
+            case opIncrement:
+                push(pop()+1);
+                break;
+            case opDecrement:
+                push(pop()-1);
                 break;
 
             default: {
