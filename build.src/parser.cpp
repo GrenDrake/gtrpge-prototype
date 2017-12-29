@@ -277,7 +277,7 @@ void Parser::doCharacter() {
                 ++cur;
                 const Value &v = doValue();
                 require(Token::Semicolon, true);
-                character->skills.insert(std::make_pair(name, v));
+                character->skillMap.insert(std::make_pair(name, v));
             }
             ++cur;
         } else if (cur->text == "gear") {

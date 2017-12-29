@@ -66,6 +66,14 @@ static std::string mangleLabel(const std::string &nodeName, const std::string &o
 
 static std::unordered_map<std::string, unsigned> labels;
 
+unsigned getLabel(const std::string &name) {
+    const auto &v = labels.find(name);
+    if (v != labels.end()) {
+        return v->second;
+    }
+    return 0;
+}
+
 static uint32_t processValue(const Origin &origin, const std::unordered_map<std::string, unsigned> &labels, const Value &value, const std::string &nodeName) {
     switch(value.type) {
         case Value::Integer:
@@ -215,7 +223,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         }
         writeValue(out, skill->origin, skill->statSkill);
         writeLabelValue(out, skill->displayName);
-        writeValue(out, skill->origin, skill->defaultValue);
+        writeFlags(out, skill->origin, skill->flags);
     }
 
     for (auto &dataItem : gameData.dataItems) {

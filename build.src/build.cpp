@@ -118,6 +118,27 @@ int main(int argc, char *argv[]) {
     std::ofstream out("dbg_dump.txt");
 
     try {
+        for (std::shared_ptr<DataType> i : gameData.dataItems) {
+            std::shared_ptr<CharacterDef> cd = std::dynamic_pointer_cast<CharacterDef>(i);
+            if (cd) {
+                for (int i = 0; i < sklCount; ++i) {
+                    if (i >= gameData.skills.size()) {
+                        cd->skills[i] = 0;
+                    } else {
+                        cd->skills[i] = gameData.skills[i]->defaultValue.value;
+                    }
+                }
+
+                for (auto &i : cd->skillMap) {
+                    const auto &v = gameData.constants.find(i.first);
+                    if (v != gameData.constants.end()) {
+                        cd->skills[v->second] = i.second.value;
+                    }
+                }
+                cd->skillMap.clear();
+            }
+        }
+
         make_bin(gameData, outputFile);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";

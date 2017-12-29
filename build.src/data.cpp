@@ -1,3 +1,4 @@
+#include <array>
 #include <ostream>
 
 #include "build.h"
@@ -45,16 +46,16 @@ void CharacterDef::write(std::ostream &out) {
     writeValue(out, origin, sex);
     writeValue(out, origin, species);
     writeValue(out, origin, faction);
-    writeWord(out, skills.size());
-    writeWord(out, gear.size());
-    for (const auto &skill : skills) {
-        writeLabelValue(out, skill.first);
-        writeValue(out, origin, skill.second);
+
+    for (std::uint8_t val : skills) {
+        writeByte(out, val);
     }
+
     for (const auto &gearItem : gear) {
         writeLabelValue(out, gearItem.first);
         writeLabelValue(out, gearItem.second);
     }
+    writeWord(out, 0);
 }
 
 void ItemDef::write(std::ostream &out) {

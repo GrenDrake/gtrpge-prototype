@@ -1,6 +1,7 @@
 #ifndef DATA_H
 #define DATA_H
 
+#include <array>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -131,7 +132,7 @@ public:
 class CharacterDef : public DataType {
 public:
     virtual size_t getSize() const {
-        return chrSize + skills.size()*csSize + gear.size()*cgSize;
+        return chrGearList + gear.size()*cgSize + 4;
     }
     virtual void write(std::ostream &out);
 
@@ -139,7 +140,8 @@ public:
     Value sex, species;
     std::unordered_set<Value> flags;
     Value faction;
-    std::unordered_map<std::string, Value> skills;
+    std::unordered_map<std::string, Value> skillMap;
+    std::array<std::uint8_t, sklCount> skills;
     std::unordered_map<std::string, std::string> gear;
 };
 
