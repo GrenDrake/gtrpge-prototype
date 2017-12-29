@@ -80,7 +80,6 @@ const int opJumpLt          = 0x35;
 const int opJumpLte         = 0x36;
 const int opJumpGt          = 0x37;
 const int opJumpGte         = 0x38;
-const int opJumpItemQty     = 0x39;
 const int opStore           = 0x40;
 const int opFetch           = 0x41;
 const int opAddItems        = 0x50;
