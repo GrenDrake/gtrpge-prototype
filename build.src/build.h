@@ -38,7 +38,9 @@ class GameData {
 public:
     GameData()
     : nextString(0)
-    { }
+    {
+        skills.push_back(std::shared_ptr<SkillDef>(new SkillDef));
+    }
 
     std::string addString(const std::string &text);
 
@@ -159,7 +161,7 @@ public:
 class Parser {
 public:
     Parser(GameData &gameData, std::vector<SymbolDef> &symbols)
-    : symbols(symbols), gameData(gameData), anonymousCounter(0)
+    : symbols(symbols), gameData(gameData), anonymousCounter(0), skillCounter(1)
     { }
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);
@@ -191,6 +193,7 @@ private:
     std::list<Token>::iterator cur;
     GameData &gameData;
     int anonymousCounter;
+    int skillCounter;
 };
 
 std::string readFile(const std::string &file);

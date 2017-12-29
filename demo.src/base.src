@@ -51,15 +51,29 @@ SEX sex-neuter {
     "it" "it" "its" "its" "itself"
 }
 
-//    iname             stat            dname           default-value
-SKILL skl-strength      0               "strength"      10;
-SKILL skl-dexterity     0               "dexterity"     10;
-SKILL skl-toughness     0               "toughness"     10; // consitution
-SKILL skl-intelligence  0               "intelligence"  10;
-SKILL skl-spirit        0               "spirit"        10; // wisdom
-SKILL skl-one-handed    skl-dexterity   "one handed"    0;
-SKILL skl-two-handed    skl-dexterity   "two handed"    0;
-SKILL skl-unarmed       skl-dexterity   "unarmed"       0;
+CONSTANT skl-variable       0x01; // variable stat (like health, energy, mana, corruption, etc.)
+CONSTANT skl-ko-0           0x02; // KO character if reaches 0
+CONSTANT skl-ko-full        0x04; // KO character is becomes full
+CONSTANT skl-rest-on-rest   0x08; // current skill value is reset when character rests
+CONSTANT skl-x5             0x10; // multiply (max) value of skill by 5 for final value
+
+//    iname             stat            dname            default-value  flags
+SKILL skl-strength      0               "strength"       10;
+SKILL skl-dexterity     0               "dexterity"      10;
+SKILL skl-toughness     0               "toughness"      10; // consitution
+SKILL skl-knowledge     0               "knowledge"      10;
+SKILL skl-spirit        0               "spirit"         10; // wisdom
+SKILL skl-unarmed       skl-strength    "unarmed combat" 0;
+SKILL skl-melee         skl-strength    "melee combat"   0;
+SKILL skl-ranged        skl-dexterity   "ranged combat"  0;
+SKILL skl-thievery      skl-dexterity   "thievery"       0;
+SKILL skl-persuasion    skl-spirit      "persuasion"     0;
+SKILL skl-black-magic   skl-knowledge   "black magic"    0;
+SKILL skl-holy-magic    skl-knowledge   "holy magic"     0;
+SKILL skl-void-magic    skl-knowledge   "void magic"     0;
+SKILL skl-health        0               "health"         5   ( skl-variable skl-ko-0 skl-reset-on-rest skl-x5 );
+SKILL skl-energy        0               "energy"         2   ( skl-variable skl-reset-on-rest skl-x5 );
+SKILL skl-void          0               "void-touched"   0   ( skl-variable skl-ko-full );
 
 /* ************************************************************************* *
  * GENERAL CHARACTER DEFINITIONS                                             *

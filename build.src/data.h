@@ -125,6 +125,7 @@ public:
     Value statSkill;
     std::string displayName;
     Value defaultValue;
+    std::unordered_set<Value> flags;
 };
 
 class CharacterDef : public DataType {

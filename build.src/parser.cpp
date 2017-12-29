@@ -216,6 +216,9 @@ void Parser::doSkill() {
     checkSymbol(origin, name, SymbolDef::Skill);
     ++cur;
 
+    // create constant with skill name
+    gameData.constants.insert(std::make_pair(name, skillCounter++));
+
     std::shared_ptr<SkillDef> skill(new SkillDef);
     skill->origin = origin;
     skill->name = name;
@@ -227,6 +230,8 @@ void Parser::doSkill() {
     ++cur;
 
     skill->defaultValue = doValue();
+
+    skill->flags = doFlags();
 
     require(Token::Semicolon, true);
     gameData.skills.push_back(skill);

@@ -116,7 +116,6 @@ void writeFlags(std::ostream &out, const Origin &origin, const std::unordered_se
             result |= value;
         }
     }
-    std::cerr << "FLAGS  " << result << "\n";
 
     writeWord(out, result);
 }
@@ -175,12 +174,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     }
 
     labels.insert(std::make_pair("__skill_table", pos));
-    pos += 4;
-    for (unsigned i = 0; i < gameData.skills.size(); ++i) {
-        labels.insert(std::make_pair(gameData.skills[i]->name, i));
-        gameData.skills[i]->pos = pos;
-        pos += sklSize;
-    }
+    pos += sklSize * sklCount;
 
     doPositioning(labels, pos, gameData.dataItems);
 
@@ -212,8 +206,13 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         }
     }
 
-    writeWord(out, gameData.skills.size());
-    for (auto &skill : gameData.skills) {
+    for (int i = 0; i < sklCount; ++i) {
+        std::shared_ptr<SkillDef> skill;
+        if (i < gameData.skills.size()) {
+            skill = gameData.skills[i];
+        } else {
+            skill = gameData.skills[0];
+        }
         writeValue(out, skill->origin, skill->statSkill);
         writeLabelValue(out, skill->displayName);
         writeValue(out, skill->origin, skill->defaultValue);
