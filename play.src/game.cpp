@@ -380,7 +380,7 @@ void Game::doOption(int optionNumber) {
 
     std::uint32_t dest = options[optionNumber].dest;
     if (dest == 0) {
-        return;
+        dest = location;
     }
 
     clearOutput();

@@ -75,6 +75,7 @@ static void doInventory(Game &game, GameIO &io) {
             io.clear();
             io.setWindow(GameIO::Main);
             game.useItem(key - '1');
+            io.say(game.getOutput());
             return;
         }
     }
