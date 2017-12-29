@@ -16,19 +16,20 @@ CONSTANT player 99;
  * ************************************************************************* */
 
 // constants for species flag definitions
-CONSTANT sflg-biped 0;
-CONSTANT sflg-quad  1;
+CONSTANT sflg-biped 0x01;
+CONSTANT sflg-quad  0x02;
+CONSTANT sflg-snout 0x04;
 
 SPECIES spc-human {
     "human" ( sflg-biped )
 }
 
 SPECIES spc-gnoll {
-    "gnoll" ( sflg-biped )
+    "gnoll" ( sflg-biped sflg-snout )
 }
 
 SPECIES spc-dragon {
-    "dragon" ( sflg-quad )
+    "dragon" ( sflg-quad sflg-snout )
 }
 
 SEX sex-male {
@@ -41,12 +42,12 @@ SEX sex-male {
 }
 
 SEX sex-female {
-    "female" ()
+    "female"
     "she" "her" "hers" "her" "herself"
 }
 
 SEX sex-neuter {
-    "neuter" ()
+    "neuter"
     "it" "it" "its" "its" "itself"
 }
 

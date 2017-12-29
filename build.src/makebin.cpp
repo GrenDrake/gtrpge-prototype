@@ -112,14 +112,11 @@ void writeFlags(std::ostream &out, const Origin &origin, const std::unordered_se
 
     if (!flags.empty()) {
         for (auto &flg : flags) {
-            std::uint32_t flagNo = processValue(origin, labels, flg, "");
-            if (flagNo >= 32) {
-                throw BuildError(origin, "Flag values must be in range (0-31).");
-            }
-            std::uint32_t fv = 1 << flagNo;
-            result |= fv;
+            std::uint32_t value = processValue(origin, labels, flg, "");
+            result |= value;
         }
     }
+    std::cerr << "FLAGS  " << result << "\n";
 
     writeWord(out, result);
 }
