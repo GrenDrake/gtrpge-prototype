@@ -82,15 +82,19 @@ static void doInventory(Game &game, GameIO &io) {
 }
 
 static void doCharacter(Game &game, GameIO &io) {
-    std::uint32_t player = game.fetch(99);
+    if (game.party.empty()) return;
+    int curParty = 0;
+    int curChar = game.party[curParty];
 
     io.setWindow(GameIO::Sidebar);
     io.clear();
-    for (std::uint32_t i : game.party) {
-        io.say(game.getNameOf(i));
-        io.say(" ");
-    }
-    io.say("X\n");
+    Character *c = game.getCharacter(curChar);
+    io.say(game.getNameOf(curChar));
+    io.say(" (");
+    io.say(game.getNameOf(c->sex));
+    io.say(" ");
+    io.say(game.getNameOf(c->species));
+    io.say(")\n");
 
     std::uint32_t skillTable = game.readWord(headerSkillTable);
     for (int i = 0; i < sklCount; ++i) {
@@ -103,10 +107,10 @@ static void doCharacter(Game &game, GameIO &io) {
         io.say(name);
         io.say(": ");
         if (game.testSkillFlags(i, sklVariable)) {
-            io.say(game.getSkillCur(player, i));
+            io.say(game.getSkillCur(curChar, i));
             io.say("/");
         }
-        io.say(game.getSkillMax(player, i));
+        io.say(game.getSkillMax(curChar, i));
         io.say("\n");
     }
     io.setWindow(GameIO::Main);

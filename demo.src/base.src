@@ -9,7 +9,6 @@ CONSTANT flg-talked-to-caged-gnoll 2;
 CONSTANT flg-visited-gnoll 3;
 
 CONSTANT forest-events 77;
-CONSTANT player 99;
 
 /* ************************************************************************* *
  * GENERAL DEFINITIONS                                                       *
@@ -124,16 +123,14 @@ NODE start {
 }
 
 NODE do-chargen {
-    make-character the-player;
-    store player stack;
-    add-to-party #player;
+    add-to-party the-player;
 
     push #xtra;
     jump-eq "male" do-male;
-    set-sex #player sex-female;
+    set-sex the-player sex-female;
     jump sex-set;
     label do-male;
-    set-sex #player sex-male;
+    set-sex the-player sex-male;
     label sex-set;
 
     add-items 20 teleport-crystal;

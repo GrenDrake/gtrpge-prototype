@@ -42,7 +42,7 @@ Command commands[] = {
     { "random-from-list",   opRandomFromList,   1 },
     { "create-list",        opCreateList,       1 },
     { "add-to-list-chance", opAddToListChance,  3 },
-    { "make-character",     opMakeCharacter,    1 },
+    { "reset-character",    opResetCharacter,   1 },
     { "get-sex",            opGetSex,           1 },
     { "set-sex",            opSetSex,           2 },
     { "get-species",        opGetSpecies,       1 },

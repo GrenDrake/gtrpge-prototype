@@ -40,26 +40,21 @@ public:
 
     struct RuntimeData {
         enum Type {
-            NoneType, ListType, CharacterType
+            NoneType, ListType
         };
         RuntimeData()
-        : list(nullptr), character(nullptr)
+        : list(nullptr)
         { }
         RuntimeData(List *list)
-        : list(list), character(nullptr)
-        { }
-        RuntimeData(Character *character)
-        : list(nullptr), character(character)
+        : list(list)
         { }
 
         Type getType() const {
             if (list) return ListType;
-            if (character) return CharacterType;
             return NoneType;
         }
 
         std::shared_ptr<List> list;
-        std::shared_ptr<Character> character;
     };
 
     class Option {
@@ -118,7 +113,7 @@ public:
     bool removeItems(int qty, std::uint32_t itemIdent);
     bool itemQty(std::uint32_t itemIdent);
 
-    std::uint32_t makeCharacter(std::uint32_t defAddress);
+    Character* getCharacter(std::uint32_t address);
     void resetCharacter(std::uint32_t cRef);
     int doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target);
     bool testSkillFlags(int skillNo, uint32_t flags);
@@ -143,10 +138,8 @@ public:
     uint32_t pop();
 
     void addData(std::uint32_t ident, List *list);
-    void addData(std::uint32_t ident, Character *character);
     RuntimeData::Type dataType(std::uint32_t ident);
     std::shared_ptr<List> getDataAsList(std::uint32_t ident);
-    std::shared_ptr<Character> getDataAsCharacter(std::uint32_t ident);
     void freeData(std::uint32_t ident);
 
     bool isRunning;
@@ -164,6 +157,7 @@ private:
     std::vector<uint32_t> stack;
     uint32_t nextDataItem;
     std::map<std::uint32_t, RuntimeData> runtimeData;
+    std::map<std::uint32_t, Character*> characters;
     std::string outputBuffer;
 };
 #endif

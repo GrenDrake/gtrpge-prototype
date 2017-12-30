@@ -262,16 +262,16 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
 
-            case opMakeCharacter:
-                push(makeCharacter(operands[0]));
+            case opResetCharacter:
+                resetCharacter(operands[0]);
                 break;
             case opGetSex: {
-                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                Character *c = getCharacter(operands[0]);
                 push(c->sex);
                 break;
             }
             case opGetSpecies: {
-                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                Character *c = getCharacter(operands[0]);
                 push(c->species);
                 break;
             }
@@ -279,7 +279,7 @@ void Game::doNode(std::uint32_t address) {
                 if (!isType(operands[1], idSex)) {
                     throw PlayError("Tried to set character sex to non-sex.");
                 }
-                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                Character *c = getCharacter(operands[0]);
                 c->sex = operands[1];
                 break;
             }
@@ -287,7 +287,7 @@ void Game::doNode(std::uint32_t address) {
                 if (!isType(operands[1], idSpecies)) {
                     throw PlayError("Tried to set character species to non-species.");
                 }
-                std::shared_ptr<Character> c = getDataAsCharacter(operands[0]);
+                Character *c = getCharacter(operands[0]);
                 c->species = operands[1];
                 break;
             }
