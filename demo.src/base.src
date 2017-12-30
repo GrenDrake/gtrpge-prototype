@@ -126,6 +126,7 @@ NODE start {
 NODE do-chargen {
     make-character the-player;
     store player stack;
+    add-to-party #player;
 
     push #xtra;
     jump-eq "male" do-male;

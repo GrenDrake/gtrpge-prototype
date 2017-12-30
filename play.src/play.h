@@ -112,6 +112,7 @@ public:
 
     std::uint32_t getProperty(std::uint32_t address, int propId) const;
     std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
+    std::string getNameOf(std::uint32_t address);
     void sayAddress(std::uint32_t address);
     bool addItems(int qty, std::uint32_t itemIdent);
     bool removeItems(int qty, std::uint32_t itemIdent);
@@ -152,7 +153,7 @@ public:
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
-
+    std::vector<std::uint32_t> party;
 private:
     std::map<std::uint32_t, std::uint32_t> storage;
     std::uint32_t location;

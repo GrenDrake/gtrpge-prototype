@@ -60,7 +60,10 @@ Command commands[] = {
     { "power",              opPower,            0 },
     { "increment",          opIncrement,        0 },
     { "decrement",          opDecrement,        0 },
-    };
+    { "add-to-party",       opAddToParty,       1 },
+    { "is-in-party",        opIsInParty,        1 },
+    { "remove-from-party",  opRemoveFromParty,  1 },
+};
 
 const Command* getCommand(const std::string name) {
     for (Command &cmd : commands) {

@@ -338,6 +338,31 @@ void Game::doNode(std::uint32_t address) {
                 push(pop()-1);
                 break;
 
+            case opAddToParty:
+                party.push_back(operands[0]);
+                break;
+            case opIsInParty: {
+                bool found = false;
+                for (int i = 0; i < party.size(); ++i) {
+                    if (party[i] == operands[0]) {
+                        found = true;
+                    }
+                }
+                push(found);
+                break;
+            }
+            case opRemoveFromParty: {
+                auto i = party.begin();
+                while (i != party.end()) {
+                    if (*i == operands[0]) {
+                        i = party.erase(i);
+                    } else {
+                        ++i;
+                    }
+                }
+                break;
+            }
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;

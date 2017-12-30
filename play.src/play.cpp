@@ -86,6 +86,12 @@ static void doCharacter(Game &game, GameIO &io) {
 
     io.setWindow(GameIO::Sidebar);
     io.clear();
+    for (std::uint32_t i : game.party) {
+        io.say(game.getNameOf(i));
+        io.say(" ");
+    }
+    io.say("X\n");
+
     std::uint32_t skillTable = game.readWord(headerSkillTable);
     for (int i = 0; i < sklCount; ++i) {
         std::uint32_t nameAddr = game.readWord(skillTable + i*sklSize + sklName);
