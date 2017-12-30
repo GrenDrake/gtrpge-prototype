@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
                     if (i >= gameData.skills.size()) {
                         cd->skills[i] = 0;
                     } else {
-                        cd->skills[i] = gameData.skills[i]->defaultValue.value;
+                        cd->skills[i] = gameData.skills[i]->defaultValue;
                     }
                 }
 

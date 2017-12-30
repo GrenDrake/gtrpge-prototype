@@ -115,7 +115,7 @@ public:
     std::string subject, object, possess, adject, reflex;
 };
 
-class SkillDef : public DataType {
+class SkillDef {
 public:
     virtual size_t getSize() const {
         return sklSize;
@@ -123,9 +123,11 @@ public:
     virtual void write(std::ostream &out) {
     }
 
+    Origin origin;
+    std::string name;
     Value statSkill;
     std::string displayName;
-    Value defaultValue;
+    int defaultValue;
     std::unordered_set<Value> flags;
 };
 

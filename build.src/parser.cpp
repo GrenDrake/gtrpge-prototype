@@ -229,7 +229,9 @@ void Parser::doSkill() {
     skill->displayName = gameData.addString(cur->text);
     ++cur;
 
-    skill->defaultValue = doValue();
+    require(Token::Integer);
+    skill->defaultValue = cur->value;
+    ++cur;
 
     skill->flags = doFlags();
 
