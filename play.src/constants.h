@@ -41,6 +41,8 @@ const int sklFlags          = 8;
 const int sklSize           = 12;
 const int sklCount          = 32;
 
+const int sklX5Multiplier   = 50;
+
 const int sklVariable       = 0x01; // variable stat (like health, energy, mana, corruption, etc.)
 const int sklKOZero         = 0x02; // KO character if reaches 0
 const int sklKOFull         = 0x04; // KO character is becomes full

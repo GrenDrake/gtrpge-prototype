@@ -271,7 +271,7 @@ void Game::resetCharacter(std::uint32_t cRef) {
             } else {
                 c->skillCur[i] = readByte(c->def + chrSkillDefaults + i);
                 if (testSkillFlags(i, sklX5)) {
-                    c->skillCur[i] *= 5;
+                    c->skillCur[i] *= sklX5Multiplier;
                 }
             }
         }
@@ -322,7 +322,7 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     base += c->skillAdj[skillNo];
 
     if (testSkillFlags(skillNo, sklX5)) {
-        base *= 5;
+        base *= sklX5Multiplier;
     }
     return base;
 }
