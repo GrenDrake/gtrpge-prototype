@@ -149,7 +149,7 @@ void Lexer::doFile(const std::string &file) {
             unescape(origin, str);
             next();
             tokens.push_back(Token(origin, Token::String, str));
-        } else if (isIdentifier(here(), true)) {
+        } else if (isIdentifier(here(), true) && (here() != '-' || !isdigit(peek()))) {
             unsigned start = pos;
             ++pos;
             while (isIdentifier(here())) {
@@ -173,14 +173,23 @@ void Lexer::doFile(const std::string &file) {
                 throw BuildError(origin, "Expected whitespace.");
             }
             tokens.push_back(Token(origin, Token::Integer, value));
-        } else if (isdigit(here())) {
-            int value = here() - '0';
+        } else if (isdigit(here()) || here() == '-') {
+            int value = 0;
+            bool neg = false;
+            if (here() == '-') {
+                neg = true;
+            } else {
+                value = here() - '0';
+            }
             while (isdigit(next())) {
                 value *= 10;
                 value += here() - '0';
             }
             if (!isspace(here()) && !ispunct(here())) {
                 throw BuildError(origin, "Expected whitespace.");
+            }
+            if (neg) {
+                value = -value;
             }
             tokens.push_back(Token(origin, Token::Integer, value));
         } else {
