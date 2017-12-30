@@ -157,7 +157,6 @@ std::string Game::getNameOf(std::uint32_t address) {
                 std::shared_ptr<Character> c = getDataAsCharacter(address);
                 ss << getString(readWord(c->def+chrArticle));
                 ss << getString(readWord(c->def+chrName));
-                ss << "CHAR";
                 return ss.str();
             }
             default:
