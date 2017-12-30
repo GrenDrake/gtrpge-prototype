@@ -143,59 +143,59 @@ std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
     }
 }
 
-void Game::sayAddress(std::uint32_t address) {
+std::string Game::getNameOf(std::uint32_t address) {
+    std::stringstream ss;
+
     if (address > dataSize) {
-        std::stringstream ss;
         switch(dataType(address)) {
-            case RuntimeData::Type::NoneType:
+            case RuntimeData::NoneType:
                 ss << "[unused address#";
                 ss << std::hex << std::setw(8) << std::setfill('0');
                 ss << address << "]";
-                say(ss.str());
-                break;
-            case RuntimeData::Type::CharacterType: {
+                return ss.str();
+            case RuntimeData::CharacterType: {
                 std::shared_ptr<Character> c = getDataAsCharacter(address);
-                ss << getString(c->def+chrArticle);
-                ss << getString(c->def+chrName);
-                say(ss.str());
-                break;
+                ss << getString(readWord(c->def+chrArticle));
+                ss << getString(readWord(c->def+chrName));
+                ss << "CHAR";
+                return ss.str();
             }
             default:
                 ss << std::hex << std::setw(8) << std::setfill('0');
                 ss << "[high memory object#"<<address<<"]";
-                say(ss.str());
+                return ss.str();
         }
-        return;
     }
 
     int type = getType(address);
     int work;
     switch(type) {
         case idString:
-            say(getString(address));
-            break;
+            return getString(address);
         case idItem:
             work = address + itmArticle;
-            say(getString(readWord(work)));
+            ss << getString(readWord(work));
             work = address + itmSingular;
-            say(getString(readWord(work)));
-            break;
+            ss << getString(readWord(work));
+            return ss.str();
         case idSex:
             work = address + sexName;
-            say(getString(readWord(work)));
-            break;
+            return getString(readWord(work));
         case idSpecies:
             work = address + spcName;
-            say(getString(readWord(work)));
-            break;
+            return getString(readWord(work));
         default: {
             std::stringstream ss;
             ss << "[object#";
             ss << std::hex << std::uppercase << address;
             ss << '/' << (int) type << ']';
-            say(ss.str());
+            return ss.str();
         }
     }
+}
+
+void Game::sayAddress(std::uint32_t address) {
+    say(getNameOf(address));
 }
 
 bool Game::addItems(int qty, std::uint32_t itemIdent) {
