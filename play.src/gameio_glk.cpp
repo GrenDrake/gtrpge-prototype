@@ -61,7 +61,7 @@ void GameIO::say(int value) {
 int GameIO::getKey() {
     event_t event;
 
-    glk_request_char_event(optionsWindow);
+    glk_request_char_event(mainWindow);
     while (true) {
         glk_select(&event);
 
