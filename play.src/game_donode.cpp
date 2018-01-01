@@ -12,7 +12,6 @@ void Game::doNode(std::uint32_t address) {
         throw PlayError(ss.str());
     }
 
-    char operandTypes[4];
     std::uint32_t operands[4], a1, a2, a3;
     while (true) {
         std::uint8_t cmdCode = readByte(ip++);
@@ -20,7 +19,6 @@ void Game::doNode(std::uint32_t address) {
         for (unsigned i = 0; i < 4; ++i) {
             int type = operandTypesByte >> (i * 2);
             type &= 0x03;
-            operandTypes[i] = type;
             switch(type) {
                 case operandNone:
                     operands[i] = 0;
