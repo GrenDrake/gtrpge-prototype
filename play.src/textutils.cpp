@@ -52,7 +52,6 @@ std::vector<std::string> explodeString(const std::string &text, int onChar) {
     return results;
 }
 
-#include <iostream>
 std::vector<std::string> wrapString(const std::string &text, unsigned width) {
     std::vector<std::string> results;
 

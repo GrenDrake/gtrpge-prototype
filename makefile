@@ -19,7 +19,13 @@ $(PLAY_TARGET): $(PLAY_OBJS)
 game.bin: demo.src/*
 	./build demo.src/*
 
-clean:
-	$(RM) build.src/*.o play.src/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)
+tests: tests/text_tests
 
-.PHONY: all clean
+tests/text_tests: tests/text_tests.o play.src/textutils.o
+	$(CXX) tests/text_tests.o play.src/textutils.o -o tests/text_tests
+	tests/text_tests
+
+clean:
+	$(RM) build.src/*.o play.src/*.o tests/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)
+
+.PHONY: all clean tests
