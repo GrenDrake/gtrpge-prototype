@@ -231,7 +231,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
 
     for (int i = 0; i < sklCount; ++i) {
         std::shared_ptr<SkillDef> skill;
-        if (i < gameData.skills.size()) {
+        if (i < static_cast<int>(gameData.skills.size())) {
             skill = gameData.skills[i];
         } else {
             skill = gameData.skills[0];
@@ -258,7 +258,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
             if (cmd->code < 0) continue;
 
             uint8_t typesByte = 0;
-            for (int i = 1; i < stmt->parts.size(); ++i) {
+            for (unsigned i = 1; i < stmt->parts.size(); ++i) {
                 uint8_t value = 0;
                 if (stmt->parts[i].type == Value::Global) {
                     value = operandStorage;

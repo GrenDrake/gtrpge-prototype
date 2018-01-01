@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
         for (std::shared_ptr<DataType> i : gameData.dataItems) {
             std::shared_ptr<CharacterDef> cd = std::dynamic_pointer_cast<CharacterDef>(i);
             if (cd) {
-                for (int i = 0; i < sklCount; ++i) {
+                for (unsigned i = 0; i < sklCount; ++i) {
                     if (i >= gameData.skills.size()) {
                         cd->skills[i] = 0;
                     } else {

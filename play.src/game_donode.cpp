@@ -324,7 +324,7 @@ void Game::doNode(std::uint32_t address) {
                 a1 = pop();
                 a2 = pop();
                 a3 = 1;
-                for (int i = 0; i < a2; ++i) {
+                for (unsigned i = 0; i < a2; ++i) {
                     a3 *= a1;
                 }
                 push(a3);
@@ -341,7 +341,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             case opIsInParty: {
                 bool found = false;
-                for (int i = 0; i < party.size(); ++i) {
+                for (unsigned i = 0; i < party.size(); ++i) {
                     if (party[i] == operands[0]) {
                         found = true;
                     }
