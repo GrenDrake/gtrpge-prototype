@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 
-#include "gameio.h"
 #include "constants.h"
 
 #include "playerror.h"
@@ -161,4 +160,11 @@ private:
     std::map<std::uint32_t, Character*> characters;
     std::string outputBuffer;
 };
+
+std::string toTitleCase(std::string text);
+std::string toUpperFirst(std::string text);
+std::string trim(std::string text);
+std::vector<std::string> explodeString(const std::string &text, int onChar = '\n');
+std::vector<std::string> wrapString(const std::string &text, unsigned width);
+
 #endif

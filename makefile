@@ -1,12 +1,11 @@
-include Make.glkterm
-
 CXXFLAGS=-Wall -g -std=c++11 -pedantic
 
 BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o build.src/makebin.o build.src/data.o
 BUILD_TARGET=build
 
-PLAY_LIBS=$(GLKLIB) $(LINKLIBS)
-PLAY_OBJS=play.src/play.o play.src/game.o play.src/game_donode.o play.src/gameio_glk.o play.src/glkstart.o
+PLAY_LIBS=-lpanel -lncurses
+PLAY_NCURSES=play.src/nc_play.o play.src/nc_inv.o play.src/nc_char.o
+PLAY_OBJS=$(PLAY_NCURSES) play.src/textutils.o play.src/game.o play.src/game_donode.o
 PLAY_TARGET=play
 
 all: build play game.bin
