@@ -94,6 +94,7 @@ public:
     static int roll(int dice, int sides);
 
     void loadDataFromFile(const std::string &filename);
+    void setDataAs(uint8_t *data, size_t size);
 
     void clearOutput();
     std::string getOutput() const;

@@ -10,6 +10,8 @@ PLAY_TARGET=play
 
 all: build play game.bin
 
+
+
 $(BUILD_TARGET): $(BUILD_OBJS)
 	$(CXX) $(BUILD_OBJS) -o $(BUILD_TARGET)
 
@@ -19,11 +21,19 @@ $(PLAY_TARGET): $(PLAY_OBJS)
 game.bin: demo.src/*
 	./build demo.src/*
 
-tests: tests/text_tests
+
+
+tests: tests/text_tests tests/game_tests
 
 tests/text_tests: tests/text_tests.o play.src/textutils.o
 	$(CXX) tests/text_tests.o play.src/textutils.o -o tests/text_tests
 	tests/text_tests
+
+tests/game_tests: tests/game_tests.o play.src/game.o play.src/game_donode.o
+	$(CXX) tests/game_tests.o play.src/game.o play.src/game_donode.o -o tests/game_tests
+	tests/game_tests
+
+
 
 clean:
 	$(RM) build.src/*.o play.src/*.o tests/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)

@@ -71,6 +71,14 @@ void Game::loadDataFromFile(const std::string &filename) {
     nextDataItem = size + 32;
 }
 
+void Game::setDataAs(uint8_t *data, size_t size) {
+    uint8_t *dataCopy = static_cast<uint8_t*>(malloc(size));
+    memcpy(dataCopy, data, size);
+    this->data = dataCopy;
+    this->dataSize = size;
+}
+
+
 void Game::clearOutput() {
     outputBuffer = "";
 }
