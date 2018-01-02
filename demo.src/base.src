@@ -125,7 +125,6 @@ NODE start {
 NODE do-chargen {
     add-to-party the-player;
 
-    push #xtra;
     jump-eq "male" do-male;
     set-sex the-player sex-female;
     jump sex-set;

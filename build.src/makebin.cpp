@@ -180,7 +180,6 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     std::uint32_t pos = 32;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
-    labels.insert(std::make_pair("xtra", xtraValue));
 
     for (auto &c : gameData.constants) {
         labels.insert(std::make_pair(c.first, c.second));

@@ -115,8 +115,6 @@ const int opAddToParty      = 0xA0;
 const int opIsInParty       = 0xA1;
 const int opRemoveFromParty = 0xA2;
 
-const unsigned xtraValue        = 0xFFFFFFFE;
-
 const int operandNone           = 0;
 const int operandImmediate      = 1;
 const int operandStorage        = 2;

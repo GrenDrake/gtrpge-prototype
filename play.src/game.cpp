@@ -412,7 +412,9 @@ void Game::doOption(int optionNumber) {
     }
     say("\n\n");
 
-    storage[xtraValue] = options[optionNumber].extra;
+    if (options[optionNumber].extra) {
+        push(options[optionNumber].extra);
+    }
     newNode(dest);
 }
 
