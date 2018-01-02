@@ -389,7 +389,10 @@ void Game::newNode(std::uint32_t address) {
         sayError(e.what());
     }
     stack.clear();
-    say("\n");
+
+    for (unsigned i = 0; i < storageTempCount; ++i) {
+        storage.erase(storageFirstTemp-i);
+    }
 }
 
 void Game::doOption(int optionNumber) {

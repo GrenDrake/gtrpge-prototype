@@ -120,4 +120,7 @@ const int operandImmediate      = 1;
 const int operandStorage        = 2;
 const int operandStack          = 3;
 
+const unsigned storageFirstTemp = 0xFFFFFFFF;
+const unsigned storageTempCount = 10;
+
 #endif

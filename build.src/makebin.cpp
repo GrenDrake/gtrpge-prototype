@@ -180,6 +180,12 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     std::uint32_t pos = 32;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
+    // setup the labels for the temp storage values
+    for (unsigned i = 0; i < storageTempCount; ++i) {
+        std::stringstream ss;
+        ss << "_" << i;
+        labels.insert(std::make_pair(ss.str(), storageFirstTemp-i));
+    }
 
     for (auto &c : gameData.constants) {
         labels.insert(std::make_pair(c.first, c.second));
