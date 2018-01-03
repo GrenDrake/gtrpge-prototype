@@ -129,23 +129,32 @@ ITEM gnoll-potion {
 
 NODE start {
     say "Welcome to the game!";
-    add-option-xtra "Begin Game (male)" do-chargen "male";
-    add-option-xtra "Begin Game (female)" do-chargen "female";
+    add-option "Create a new character" chargen-sex;
 
     do-node forest-event-setup;
 }
 
-NODE do-chargen {
-    add-to-party the-player;
+NODE chargen-sex {
+    say "What sex is your character?";
+    add-option-xtra "Male" chargen-species sex-male;
+    add-option-xtra "Female" chargen-species sex-female;
+}
 
-    jump-eq "male" do-male;
-    set-sex the-player sex-female;
-    jump sex-set;
-    label do-male;
-    set-sex the-player sex-male;
-    label sex-set;
+NODE chargen-species {
+    set-sex the-player stack; // set player sex
+    say "What species is your character?";
+    add-option-xtra "Human" chargen-done spc-human;
+    add-option-xtra "Gnoll" chargen-done spc-gnoll;
+    add-option-xtra "Dragon" chargen-done spc-dragon;
+}
+
+NODE chargen-done {
+    set-species the-player stack; // set player species
+    add-to-party the-player;
 
     add-items 20 teleport-crystal;
     add-items 2 gnoll-potion;
+
+    say "Beginning the game now.\n* * * * * * * * * *\n";
     do-node forest-path;
 }
