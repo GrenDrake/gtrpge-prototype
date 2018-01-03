@@ -2,6 +2,8 @@
 build
 play
 game.bin
+tests/text_tests
+tests/game_tests
 
 dbg_labels.txt
 dbg_dump.txt
