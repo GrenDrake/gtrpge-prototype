@@ -108,6 +108,19 @@ ITEM teleport-crystal {
 
 ITEM gnoll-potion {
     "a " "potion of gnoll" "potions of gnoll"
+    onUse {
+        remove-items 1 gnoll-potion;
+        add-return;
+        get-species the-player;
+        jump-eq spc-gnoll already-gnoll;
+
+        set-species the-player spc-gnoll;
+        say "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll.";
+        end;
+
+        label already-gnoll;
+        say "Nothing happens. Perhaps you can't become any more gnoll-like then you are?";
+    }
 }
 
 /* ************************************************************************* *
@@ -133,5 +146,6 @@ NODE do-chargen {
     label sex-set;
 
     add-items 20 teleport-crystal;
+    add-items 2 gnoll-potion;
     do-node forest-path;
 }
