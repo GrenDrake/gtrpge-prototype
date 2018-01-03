@@ -73,7 +73,7 @@ static void drawOutput(Game &game) {
     for (int i = lines.size() - 1; i >= 0 && lineCount < maxLines; --i) {
         auto paragraph = wrapString(lines[i], COLS);
         for (int j = paragraph.size() - 1; j >= 0 && lineCount < maxLines; --j) {
-            mvwprintw(mainWindow, LINES-7-lineCount, 0, paragraph[j].c_str());
+            mvwprintw(mainWindow, maxLines-1-lineCount, 0, paragraph[j].c_str());
             ++lineCount;
         }
         ++lineCount;
