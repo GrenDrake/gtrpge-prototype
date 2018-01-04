@@ -85,7 +85,8 @@ public:
     };
 
     Game()
-    : isRunning(false), locationName(0), data(nullptr), nextDataItem(0)
+    : isRunning(false), gameStarted(false), locationName(0), data(nullptr),
+      nextDataItem(0), gameTime(0)
     { }
     ~Game() {
         delete[] data;
@@ -98,6 +99,7 @@ public:
 
     void clearOutput();
     std::string getOutput() const;
+    std::string getTimeString(bool exact = false);
 
     int getType(std::uint32_t address) const;
     bool isType(std::uint32_t address, uint8_t type) const;
@@ -144,6 +146,7 @@ public:
     void freeData(std::uint32_t ident);
 
     bool isRunning;
+    bool gameStarted;
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
@@ -160,6 +163,7 @@ private:
     std::map<std::uint32_t, RuntimeData> runtimeData;
     std::map<std::uint32_t, Character*> characters;
     std::string outputBuffer;
+    unsigned gameTime;
 };
 
 std::string toTitleCase(std::string text);
@@ -167,5 +171,9 @@ std::string toUpperFirst(std::string text);
 std::string trim(std::string text);
 std::vector<std::string> explodeString(const std::string &text, int onChar = '\n');
 std::vector<std::string> wrapString(const std::string &text, unsigned width);
+
+const int hoursPerDay = 24;
+const int minutesPerDay = 1440;
+const int minutesPerHour = 60;
 
 #endif

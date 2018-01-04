@@ -58,6 +58,12 @@ void Game::doNode(std::uint32_t address) {
                 a2 = operands[1];
                 push(hasFlag(a1, a2));
                 break;
+            case opStartGame: // start-game;
+                gameStarted = true;
+                break;
+            case opAddTime: // add-time [hours] [minutes];
+                gameTime += operands[0] * minutesPerHour + operands[1];
+                break;
             case opPush:
                 a1 = operands[0];
                 push(a1);

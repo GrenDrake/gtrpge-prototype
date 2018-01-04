@@ -31,11 +31,14 @@ void addToOutput(const std::string &text) {
 
 
 static void drawStatus(Game &game) {
+    if (!game.gameStarted) return;
+
     wclear(statusWindow);
-    wprintw(statusWindow, "(I)nventory   (C)haracter Sheets    (Q)uit\n");
+    wprintw(statusWindow, "  (I)nventory   (C)haracter Sheets    (Q)uit\n");
     if (game.locationName) {
-        wprintw(statusWindow, game.getString(game.locationName));
+        mvwprintw(statusWindow, 1, 2, game.getString(game.locationName));
     }
+    mvwprintw(statusWindow, 1, COLS-20, toUpperFirst(game.getTimeString()).c_str());
 }
 
 static void drawOptions(Game &game) {

@@ -87,6 +87,37 @@ std::string Game::getOutput() const {
     return outputBuffer;
 }
 
+std::string Game::getTimeString(bool exact) {
+    std::stringstream ss;
+
+    int minutes = gameTime;
+
+    int hour = minutes / minutesPerHour;
+    minutes -= hour * minutesPerHour;
+
+    int day = hour / hoursPerDay;
+    hour -= day * hoursPerDay;
+
+    if (exact) {
+        if (hour <= 12) {
+            if (hour == 0)  hour = 12;
+            ss << hour << ":" << std::setw(2) << std::setfill('0') << minutes << " AM";
+        } else {
+            ss << (hour-12) << ":" << std::setw(2) << std::setfill('0') << minutes << " PM";
+        }
+    } else {
+        if (hour <  6)      ss << "night";
+        else if (hour < 12) ss << "morning";
+        else if (hour < 13) ss << "midday";
+        else if (hour < 18) ss << "afternoon";
+        else if (hour < 22) ss << "evening";
+        else                ss << "night";
+    }
+    ss << " on Day " << (day+1);
+
+    return ss.str();
+}
+
 int Game::getType(std::uint32_t address) const {
     return readByte(address);
 }
@@ -392,6 +423,10 @@ void Game::newNode(std::uint32_t address) {
 
     for (unsigned i = 0; i < storageTempCount; ++i) {
         storage.erase(storageFirstTemp-i);
+    }
+
+    if (gameStarted && (!inLocation || newLocation)) {
+        gameTime += 2;
     }
 }
 

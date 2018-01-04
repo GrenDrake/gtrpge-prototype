@@ -156,5 +156,6 @@ NODE chargen-done {
     add-items 2 gnoll-potion;
 
     say "Beginning the game now.\n* * * * * * * * * *\n";
+    start-game;
     do-node forest-path;
 }

@@ -38,7 +38,14 @@ NODE forest-path {
     say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail.";
     add-option "Follow the path north" forest-fork;
     add-option "Follow the path south" town-gate;
+    add-option "Examine the stone wall" examine-wall;
     add-option "Take the overgrown trail" gnoll-cage;
+}
+
+NODE examine-wall {
+    say "It looks much as one might expect.";
+    add-time 1 12;
+    add-return;
 }
 
 NODE town-gate {
