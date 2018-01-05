@@ -156,7 +156,8 @@ public:
 
     std::unordered_set<Value> flags;
     std::string article, singular, plural;
-    Value onUse;
+    Value onUse, canEquip, onEquip, onRemove;
+    Value slot;
 };
 std::ostream& operator<<(std::ostream &out, const Value &type);
 

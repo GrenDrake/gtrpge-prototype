@@ -133,10 +133,22 @@ void Parser::doItemDef() {
         require(Token::Identifier);
         const std::string &pName = cur->text;
         ++cur;
-        const Value &value = doProperty(item->name);
 
         if (pName == "onUse") {
+            const Value &value = doProperty(item->name);
             item->onUse = value;
+        } else if (pName == "canEquip") {
+            const Value &value = doProperty(item->name);
+            item->canEquip = value;
+        } else if (pName == "onEquip") {
+            const Value &value = doProperty(item->name);
+            item->onEquip = value;
+        } else if (pName == "onRemove") {
+            const Value &value = doProperty(item->name);
+            item->onRemove = value;
+        } else if (pName == "slot") {
+            const Value &value = doValue();
+            item->slot = value;
         } else {
             throw BuildError(pOrigin, "Unknown item property " + pName);
         }

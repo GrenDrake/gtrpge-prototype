@@ -20,7 +20,11 @@ const int itmArticle        = 5;
 const int itmSingular       = 9;
 const int itmPlural         = 13;
 const int itmOnUse          = 17;
-const int itmSize           = 21;
+const int itmCanEquip       = 21;
+const int itmOnEquip        = 25;
+const int itmOnRemove       = 29;
+const int itmSlot           = 33;
+const int itmSize           = 37;
 
 const int sexFlags          = 1;
 const int sexName           = 5;

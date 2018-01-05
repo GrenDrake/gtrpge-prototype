@@ -95,6 +95,14 @@ CHARACTER the-player {
 
 ITEM common-sword {
     "a " "common sword" "common swords"
+    slot "weapon"
+    canEquip {
+        push true;
+    }
+    onEquip {
+    }
+    onRemove {
+    }
 }
 
 ITEM teleport-crystal {

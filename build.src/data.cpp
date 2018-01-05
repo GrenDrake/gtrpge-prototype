@@ -65,4 +65,8 @@ void ItemDef::write(std::ostream &out) {
     writeLabelValue(out, singular);
     writeLabelValue(out, plural);
     writeValue(out, origin, onUse);
+    writeValue(out, origin, canEquip);
+    writeValue(out, origin, onEquip);
+    writeValue(out, origin, onRemove);
+    writeValue(out, origin, slot);
 }
