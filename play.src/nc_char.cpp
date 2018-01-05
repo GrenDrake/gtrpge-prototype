@@ -50,6 +50,14 @@ void doCharacter(Game &game) {
         mvwprintw(subWindow, y, x, ss.str().c_str());
     }
 
+    counter = 0;
+    for (auto i : c->gear) {
+        std::stringstream ss;
+        ss << toTitleCase(game.getString(i.first)) << ": " << game.getNameOf(i.second);
+        mvwprintw(subWindow, 12+counter, 3, ss.str().c_str());
+        ++counter;
+    }
+
     update_panels();
     doupdate();
 

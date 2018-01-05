@@ -95,12 +95,11 @@ void doInventory(Game &game) {
             addToOutput(game.getOutput());
             break;
         } else if (key == 'E') {
-            if (!game.getProperty(game.inventory[curItem].itemIdent, itmSlot)) {
+            std::uint32_t slot = game.getProperty(game.inventory[curItem].itemIdent, itmSlot);
+            if (!slot) {
                 continue;
             }
-            // game.useItem(curItem);
-            // addToOutput(game.getOutput());
-            // break;
+            game.equipItem(game.party[0], curItem);
             continue;
         } else if (key == 'N' || key == KEY_DOWN) {
             if (curItem < game.inventory.size() - 1) {

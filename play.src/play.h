@@ -17,6 +17,7 @@ struct Character {
     std::uint32_t sex, species;
     std::array<std::int8_t, sklCount> skillAdj;
     std::array<std::uint8_t, sklCount> skillCur;
+    std::map<std::uint32_t, std::uint32_t> gear;
 };
 
 class Game {
@@ -128,6 +129,7 @@ public:
     void startGame();
     void doOption(int optionNumber);
     void useItem(int itemNumber);
+    void equipItem(std::uint32_t whoIdent, int itemNumber);
     void newNode(std::uint32_t address);
     void doNode(std::uint32_t address);
 

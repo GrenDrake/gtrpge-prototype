@@ -479,6 +479,39 @@ void Game::useItem(int itemNumber) {
     newNode(onUse);
 }
 
+void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
+    if (itemNumber < 0 || itemNumber >= (signed)inventory.size()) {
+        return;
+    }
+
+    Character *who = getCharacter(whoIdent);
+    if (!who) {
+        return;
+    }
+
+    uint32_t item = inventory[itemNumber].itemIdent;
+    if (!item) return;
+
+    uint32_t slot = getProperty(item, itmSlot);
+    if (!slot) return;
+
+    if (who->gear.count(slot) > 0) {
+        std::uint32_t oldItem = who->gear[slot];
+        std::uint32_t onRemove = getProperty(oldItem, itmOnRemove);
+        if (onRemove) {
+            doNode(onRemove);
+        }
+        addItems(1, oldItem);
+        who->gear.erase(slot);
+    }
+
+    removeItems(1, item);
+    std::uint32_t onEquip = getProperty(item, itmOnEquip);
+    if (onEquip) {
+        doNode(onEquip);
+    }
+    who->gear.insert(std::make_pair(slot, item));
+}
 
 bool Game::actionAllowed() const {
     return inLocation && isRunning;

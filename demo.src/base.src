@@ -106,6 +106,25 @@ ITEM common-sword {
     }
 }
 
+ITEM common-helmet {
+    "a " "common helmet" "common helmets"
+    slot "head"
+}
+ITEM loincloth {
+    "a " "loincloth" "loincloths"
+    slot "body"
+}
+ITEM plate-armour {
+    "a " "suit of plate armour" "suits of plate armour"
+    slot "body"
+    onEquip {
+        adj-skill the-player skl-strength 50;
+    }
+    onRemove {
+        adj-skill the-player skl-strength -50;
+    }
+}
+
 ITEM teleport-crystal {
     "a " "teleport crystal" "teleport crystals"
     "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic."
@@ -166,6 +185,9 @@ NODE chargen-done {
     add-items 20 teleport-crystal;
     add-items 2 gnoll-potion;
     add-items 1 common-sword;
+    add-items 1 common-helmet;
+    add-items 1 loincloth;
+    add-items 1 plate-armour;
 
     say "Beginning the game now.\n* * * * * * * * * *\n";
     start-game;
