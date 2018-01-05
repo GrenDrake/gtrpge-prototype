@@ -97,7 +97,7 @@ void gameloop() {
         update_panels();
         doupdate();
 
-        int realKey = getch();
+        int realKey = wgetch(optionsWindow);
         int key = toupper(realKey);
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
@@ -145,11 +145,13 @@ int main(int argc, char *argv[]) {
     optionsWindow = newwin(5, COLS, LINES - 5, 0);
     optionsPanel = new_panel(optionsWindow);
     wbkgd(optionsWindow, COLOR_PAIR(1));
+    keypad(optionsWindow, true);
 
     subWindow = newwin(LINES - 6, COLS - 6, 3, 3);
     subPanel = new_panel(subWindow);
     wbkgd(subWindow, COLOR_PAIR(3));
     hide_panel(subPanel);
+    keypad(subWindow, true);
 
 
     try {

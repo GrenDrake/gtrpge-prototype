@@ -155,7 +155,7 @@ public:
     virtual void write(std::ostream &out);
 
     std::unordered_set<Value> flags;
-    std::string article, singular, plural;
+    std::string article, singular, plural, description;
     Value onUse, canEquip, onEquip, onRemove;
     Value slot;
 };

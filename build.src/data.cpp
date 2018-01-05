@@ -64,6 +64,11 @@ void ItemDef::write(std::ostream &out) {
     writeLabelValue(out, article);
     writeLabelValue(out, singular);
     writeLabelValue(out, plural);
+    if (description.empty()) {
+        writeWord(out, 0);
+    } else {
+        writeLabelValue(out, description);
+    }
     writeValue(out, origin, onUse);
     writeValue(out, origin, canEquip);
     writeValue(out, origin, onEquip);

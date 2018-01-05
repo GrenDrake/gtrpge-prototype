@@ -126,6 +126,11 @@ void Parser::doItemDef() {
     item->plural = gameData.addString(cur->text);
     ++cur;
 
+    if (matches(Token::String)) {
+        item->description = gameData.addString(cur->text);
+        ++cur;
+    }
+
     item->flags = doFlags();
 
     while (!matches(Token::CloseBrace)) {

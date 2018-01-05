@@ -95,6 +95,7 @@ CHARACTER the-player {
 
 ITEM common-sword {
     "a " "common sword" "common swords"
+    "A perfectly ordinary sword."
     slot "weapon"
     canEquip {
         push true;
@@ -107,6 +108,7 @@ ITEM common-sword {
 
 ITEM teleport-crystal {
     "a " "teleport crystal" "teleport crystals"
+    "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic."
     onUse {
         remove-items 1 teleport-crystal;
         say "Light flashes and you vision goes blank. Moments later, the world returns.";
@@ -116,6 +118,7 @@ ITEM teleport-crystal {
 
 ITEM gnoll-potion {
     "a " "potion of gnoll" "potions of gnoll"
+    "A potion of transformation intended to make one more gnoll-like."
     onUse {
         remove-items 1 gnoll-potion;
         add-return;
@@ -162,6 +165,7 @@ NODE chargen-done {
 
     add-items 20 teleport-crystal;
     add-items 2 gnoll-potion;
+    add-items 1 common-sword;
 
     say "Beginning the game now.\n* * * * * * * * * *\n";
     start-game;
