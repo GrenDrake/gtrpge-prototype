@@ -185,6 +185,31 @@ std::string Parser::doList() {
     return ss.str();
 }
 
+std::string Parser::doSkillSet() {
+    const Origin &origin = cur->origin;
+    std::stringstream ss;
+    ss << "__an_skillset_" << anonymousCounter;
+    ++anonymousCounter;
+
+    require(Token::OpenParan, true);
+    std::shared_ptr<SkillSet> skillset(new SkillSet);
+    skillset->origin = origin;
+    skillset->name = ss.str();
+    while (!matches(Token::CloseParan)) {
+        require(Token::Identifier);
+        const std::string &name = cur->text;
+        ++cur;
+        const Value &v = doValue();
+        require(Token::Semicolon, true);
+        skillset->skillMap.insert(std::make_pair(name, v));
+    }
+    ++cur;
+
+    gameData.dataItems.push_back(skillset);
+    return ss.str();
+}
+
+
 void Parser::doSex() {
     const Origin &origin = cur->origin;
     require("SEX");
@@ -305,27 +330,16 @@ void Parser::doCharacter() {
 
     while (!matches(Token::CloseBrace)) {
         require(Token::Identifier);
-        if (cur->text == "faction") {
-            ++cur;
+        const std::string &identText = cur->text;
+        ++cur;
+        if (identText == "faction") {
             character->faction = doValue();
-        } else if (cur->text == "skills") {
-            ++cur;
-            require(Token::OpenParan);
-            ++cur;
-            while (!matches(Token::CloseParan)) {
-                require(Token::Identifier);
-                const std::string &name = cur->text;
-                ++cur;
-                const Value &v = doValue();
-                require(Token::Semicolon, true);
-                character->skillMap.insert(std::make_pair(name, v));
-            }
-            ++cur;
-        } else if (cur->text == "gear") {
-            ++cur;
+        } else if (identText == "skills") {
+            character->skillSet = doSkillSet();
+        } else if (identText == "gear") {
             character->gearList = doList();
         } else {
-            throw BuildError(origin, "Unknown character property " + cur->text);
+            throw BuildError(origin, "Unknown character property " + identText);
         }
     }
 

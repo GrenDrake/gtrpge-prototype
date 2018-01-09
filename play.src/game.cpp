@@ -302,6 +302,7 @@ void Game::resetCharacter(std::uint32_t cRef) {
     c->species = getProperty(cRef, chrSpecies);
     characters.insert(std::make_pair(cRef, c));
 
+    std::uint32_t skillSet = getProperty(c->def, chrSkillDefaults);
     for (int i = 0; i < sklCount; ++i) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
@@ -310,7 +311,7 @@ void Game::resetCharacter(std::uint32_t cRef) {
             if (testSkillFlags(i, sklKOFull)) {
                 c->skillCur[i] = 0;
             } else {
-                c->skillCur[i] = readByte(c->def + chrSkillDefaults + i);
+                c->skillCur[i] = readShort(skillSet + 1 + i * 2);
                 if (testSkillFlags(i, sklX5)) {
                     c->skillCur[i] *= sklX5Multiplier;
                 }
@@ -371,7 +372,8 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     Character *c = getCharacter(cRef);
     if (!c) return 0;
 
-    int base = readByte(c->def + chrSkillDefaults + skillNo);
+    std::uint32_t skillSet = getProperty(c->def, chrSkillDefaults);
+    int base = readByte(skillSet + 1 + skillNo * 2);
 
     base += c->skillAdj[skillNo];
 

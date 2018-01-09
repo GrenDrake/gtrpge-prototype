@@ -142,9 +142,7 @@ public:
     Value sex, species;
     std::unordered_set<Value> flags;
     Value faction;
-    std::unordered_map<std::string, Value> skillMap;
-    std::array<std::uint8_t, sklCount> skills;
-    std::string gearList;
+    std::string gearList, skillSet;
 };
 
 class ItemDef : public DataType {
@@ -168,6 +166,17 @@ public:
     virtual void write(std::ostream &out);
 
     std::vector<Value> values;
+};
+
+class SkillSet : public DataType {
+public:
+    virtual size_t getSize() const {
+        return sklSetSize;
+    }
+    virtual void write(std::ostream &out);
+
+    std::unordered_map<std::string, Value> skillMap;
+    std::array<std::uint8_t, sklCount> skills;
 };
 
 std::ostream& operator<<(std::ostream &out, const Value &type);

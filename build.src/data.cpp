@@ -46,11 +46,7 @@ void CharacterDef::write(std::ostream &out) {
     writeValue(out, origin, sex);
     writeValue(out, origin, species);
     writeValue(out, origin, faction);
-
-    for (std::uint8_t val : skills) {
-        writeByte(out, val);
-    }
-
+    writeLabelValue(out, skillSet);
     writeLabelValue(out, gearList);
 }
 
@@ -78,5 +74,13 @@ void DataList::write(std::ostream &out) {
     writeByte(out, values.size());
     for (const Value &value : values) {
         writeValue(out, origin, value);
+    }
+}
+
+void SkillSet::write(std::ostream &out) {
+    writeByte(out, idSkillSet);
+
+    for (std::uint8_t val : skills) {
+        writeShort(out, val);
     }
 }

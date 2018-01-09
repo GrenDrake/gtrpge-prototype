@@ -178,6 +178,7 @@ private:
     void doItemDef();
 
     std::string doList();
+    std::string doSkillSet();
     Value doProperty(const std::string &forName);
     std::unordered_set<Value> doFlags();
     std::shared_ptr<Block> doBlock();

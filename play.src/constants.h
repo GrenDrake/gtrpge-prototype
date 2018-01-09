@@ -15,6 +15,7 @@ const int idSex             = 0xFC;
 const int idSpecies         = 0xFB;
 const int idCharacter       = 0xFA;
 const int idList            = 0xF9;
+const int idSkillSet        = 0xF8;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -47,6 +48,7 @@ const int sklName           = 4;
 const int sklFlags          = 8;
 const int sklSize           = 12;
 const int sklCount          = 32;
+const int sklSetSize        = 1 + sklCount * 2;
 
 const int sklX5Multiplier   = 50;
 
@@ -63,8 +65,8 @@ const int chrSex            = 13;
 const int chrSpecies        = 17;
 const int chrFaction        = 21;
 const int chrSkillDefaults  = 25;
-const int chrGearList       = 25+sklCount;
-const int chrSize           = 29+sklCount;
+const int chrGearList       = 29;
+const int chrSize           = 33;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
