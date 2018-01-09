@@ -51,11 +51,7 @@ void CharacterDef::write(std::ostream &out) {
         writeByte(out, val);
     }
 
-    for (const auto &gearItem : gear) {
-        writeLabelValue(out, gearItem.first);
-        writeLabelValue(out, gearItem.second);
-    }
-    writeWord(out, 0);
+    writeLabelValue(out, gearList);
 }
 
 void ItemDef::write(std::ostream &out) {
@@ -74,4 +70,13 @@ void ItemDef::write(std::ostream &out) {
     writeValue(out, origin, onEquip);
     writeValue(out, origin, onRemove);
     writeValue(out, origin, slot);
+    writeLabelValue(out, actionsList);
+}
+
+void DataList::write(std::ostream &out) {
+    writeByte(out, idList);
+    writeByte(out, values.size());
+    for (const Value &value : values) {
+        writeValue(out, origin, value);
+    }
 }

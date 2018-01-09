@@ -134,7 +134,7 @@ public:
 class CharacterDef : public DataType {
 public:
     virtual size_t getSize() const {
-        return chrGearList + gear.size()*cgSize + 4;
+        return chrSize;
     }
     virtual void write(std::ostream &out);
 
@@ -144,7 +144,7 @@ public:
     Value faction;
     std::unordered_map<std::string, Value> skillMap;
     std::array<std::uint8_t, sklCount> skills;
-    std::unordered_map<std::string, std::string> gear;
+    std::string gearList;
 };
 
 class ItemDef : public DataType {
@@ -156,9 +156,20 @@ public:
 
     std::unordered_set<Value> flags;
     std::string article, singular, plural, description;
-    Value onUse, canEquip, onEquip, onRemove;
-    Value slot;
+    Value onUse, canEquip, onEquip, onRemove, slot;
+    std::string actionsList;
 };
+
+class DataList : public DataType {
+public:
+    virtual size_t getSize() const {
+        return 2 + values.size() * 4;
+    }
+    virtual void write(std::ostream &out);
+
+    std::vector<Value> values;
+};
+
 std::ostream& operator<<(std::ostream &out, const Value &type);
 
 #endif

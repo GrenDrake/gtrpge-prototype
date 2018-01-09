@@ -14,6 +14,7 @@ const int idItem            = 0xFD;
 const int idSex             = 0xFC;
 const int idSpecies         = 0xFB;
 const int idCharacter       = 0xFA;
+const int idList            = 0xF9;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -25,7 +26,8 @@ const int itmCanEquip       = 25;
 const int itmOnEquip        = 29;
 const int itmOnRemove       = 33;
 const int itmSlot           = 37;
-const int itmSize           = 41;
+const int itmActionList     = 41;
+const int itmSize           = 45;
 
 const int sexFlags          = 1;
 const int sexName           = 5;
@@ -61,10 +63,8 @@ const int chrSex            = 13;
 const int chrSpecies        = 17;
 const int chrFaction        = 21;
 const int chrSkillDefaults  = 25;
-const int chrGearList       = 25+(sklCount);
-const int cgSlot            = 0;
-const int cgItem            = 4;
-const int cgSize            = 8;
+const int chrGearList       = 25+sklCount;
+const int chrSize           = 29+sklCount;
 
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;

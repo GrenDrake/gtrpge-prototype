@@ -87,6 +87,10 @@ CHARACTER the-player {
         skl-toughness 14;
         skl-melee 4;
     )
+    gear (
+        common-helmet
+        common-sword
+    )
 }
 
 /* ************************************************************************* *
@@ -184,8 +188,6 @@ NODE chargen-done {
 
     add-items 20 teleport-crystal;
     add-items 2 gnoll-potion;
-    add-items 1 common-sword;
-    add-items 1 common-helmet;
     add-items 1 loincloth;
     add-items 1 plate-armour;
 

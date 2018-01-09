@@ -176,6 +176,8 @@ private:
     void doSkill();
     void doCharacter();
     void doItemDef();
+
+    std::string doList();
     Value doProperty(const std::string &forName);
     std::unordered_set<Value> doFlags();
     std::shared_ptr<Block> doBlock();

@@ -300,6 +300,8 @@ void Game::resetCharacter(std::uint32_t cRef) {
     c->def = cRef;
     c->sex = getProperty(cRef, chrSex);
     c->species = getProperty(cRef, chrSpecies);
+    characters.insert(std::make_pair(cRef, c));
+
     for (int i = 0; i < sklCount; ++i) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
@@ -315,7 +317,20 @@ void Game::resetCharacter(std::uint32_t cRef) {
             }
         }
     }
-    characters.insert(std::make_pair(cRef, c));
+
+    std::uint32_t gearList = getProperty(cRef, chrGearList);
+    if (gearList) {
+        int count = readByte(gearList+1);
+        for (int i = 0; i < count; ++i) {
+            std::uint32_t itemRef = readWord(gearList+2+i*4);
+            std::uint32_t slot = getProperty(itemRef, itmSlot);
+            c->gear.insert(std::make_pair(slot, itemRef));
+            std::uint32_t onEquip = getProperty(itemRef, itmOnEquip);
+            if (onEquip) {
+                doNode(onEquip);
+            }
+        }
+    }
 }
 
 int Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target) {

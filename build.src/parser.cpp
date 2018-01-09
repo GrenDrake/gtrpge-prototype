@@ -154,6 +154,8 @@ void Parser::doItemDef() {
         } else if (pName == "slot") {
             const Value &value = doValue();
             item->slot = value;
+        } else if (pName == "action-list") {
+            item->actionsList = doList();
         } else {
             throw BuildError(pOrigin, "Unknown item property " + pName);
         }
@@ -161,6 +163,26 @@ void Parser::doItemDef() {
     ++cur;
 
     gameData.dataItems.push_back(item);
+}
+
+std::string Parser::doList() {
+    const Origin &origin = cur->origin;
+    std::stringstream ss;
+    ss << "__an_list_" << anonymousCounter;
+    ++anonymousCounter;
+
+    require(Token::OpenParan, true);
+    std::shared_ptr<DataList> list(new DataList);
+    list->origin = origin;
+    list->name = ss.str();
+    while (!matches(Token::CloseParan)) {
+        Value v = doValue();
+        list->values.push_back(v);
+    }
+    ++cur;
+
+    gameData.dataItems.push_back(list);
+    return ss.str();
 }
 
 void Parser::doSex() {
@@ -301,19 +323,7 @@ void Parser::doCharacter() {
             ++cur;
         } else if (cur->text == "gear") {
             ++cur;
-            require(Token::OpenParan);
-            ++cur;
-            while (!matches(Token::CloseParan)) {
-                require(Token::String);
-                const std::string &name = gameData.addString(cur->text);
-                ++cur;
-                require(Token::Identifier);
-                const std::string &v = cur->text;
-                ++cur;
-                require(Token::Semicolon, true);
-                character->gear.insert(std::make_pair(name, v));
-            }
-            ++cur;
+            character->gearList = doList();
         } else {
             throw BuildError(origin, "Unknown character property " + cur->text);
         }
