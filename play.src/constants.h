@@ -51,7 +51,7 @@ const int sklBaseSkill      = 0;
 const int sklName           = 4;
 const int sklFlags          = 8;
 const int sklSize           = 12;
-const int sklCount          = 32;
+const int sklCount          = 20;
 const int sklSetSize        = 1 + sklCount * 2;
 
 const int sklX5Multiplier   = 50;
