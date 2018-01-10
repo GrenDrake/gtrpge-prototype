@@ -1,6 +1,5 @@
 #include <cctype>
 #include <ncurses.h>
-#include <panel.h>
 #include <sstream>
 
 #include "nc_play.h"
@@ -10,8 +9,7 @@ const int modeGear  = 1;
 
 void doCharacter(Game &game) {
     if (game.party.empty()) return;
-    wclear(subWindow);
-    show_panel(subPanel);
+    int maxX = 0, maxY = 0;
 
     unsigned curParty = 0;
     int curChar = game.party[curParty];
@@ -20,25 +18,34 @@ void doCharacter(Game &game) {
     uint32_t curGear = 0;
 
     while(true) {
-        wclear(subWindow);
-        box(subWindow, 0, 0);
-        mvwprintw(subWindow, 16, 3, "<G>ear   <S>tats   <P>rev Char   <N>ext Char   <Z> Close");
+        getmaxyx(stdscr, maxY, maxX);
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        clear();
+        drawStatus(game);
+
+        std::stringstream helpLine;
+        helpLine << "<G>ear   <S>tats   <P>rev Char   <N>ext Char   <Z> Close";
         std::stringstream infoLine;
         Character *c = game.getCharacter(curChar);
         infoLine << toTitleCase(game.getNameOf(curChar)) << " (" << toTitleCase(game.getNameOf(c->sex)) << ' ';
         infoLine << toTitleCase(game.getNameOf(c->species)) << ")";
-        mvwprintw(subWindow, 1, 2, infoLine.str().c_str());
         switch(mode) {
             case modeStats:
-                mvwprintw(subWindow, 1, 60, "Stats");
+                infoLine << "   - Statisitics";
                 break;
             case modeGear:
-                mvwprintw(subWindow, 15, 3, "<U>nequip");
-                mvwprintw(subWindow, 1, 60, "Gear");
+                helpLine << "   <U>nequip";
+                infoLine << "   - Equipped Gear";
                 break;
             default:
-                mvwprintw(subWindow, 1, 60, "Unknown");
+                infoLine << "   - Unknown Display Mode";
         }
+        bkgdset(A_NORMAL | COLOR_PAIR(colorStatus));
+        move(maxY-1, 0);
+        clrtoeol();
+        mvprintw(maxY - 1, 1, helpLine.str().c_str());
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        mvprintw(2, 0, infoLine.str().c_str());
 
         if (mode == modeStats) {
             int counter = 0;
@@ -59,53 +66,44 @@ void doCharacter(Game &game) {
                 int x = 0, y = 0;
                 if (counter < 8) {
                     x = 2;
-                    y = 3+counter;
+                    y = 4+counter;
                 } else {
                     x = (COLS-8) / 2;
-                    y = counter - 5;
+                    y = counter - 4;
                 }
                 ++counter;
-                mvwprintw(subWindow, y, x, ss.str().c_str());
+                mvprintw(y, x, ss.str().c_str());
             }
 
         } else if (mode == modeGear) {
             if (c->gear.empty()) {
                 curGear = 0;
-                mvwprintw(subWindow, 3, 3, "Nothing equipped.");
+                mvprintw(3, 3, "Nothing equipped.");
             } else {
                 unsigned counter = 0;
                 for (auto i : c->gear) {
                     std::stringstream ss;
                     ss << (counter+1) << ") " << toTitleCase(game.getString(i.first)) << ": " << game.getNameOf(i.second);
+                    int y = 4+counter;
                     if (selection == counter) {
-                        wattrset(subWindow, A_REVERSE);
+                        bkgdset(A_REVERSE);
                         curGear = i.first;
                     }
-                    int x = 0, y = 0;
-                    if (counter < 6) {
-                        x = 3;
-                        y = 3+counter;
-                    } else {
-                        x = (COLS-8) / 2;
-                        y = counter - 3;
-                    }
-                    mvwprintw(subWindow, y, x, ss.str().c_str());
-                    wattrset(subWindow, A_NORMAL);
+                    move(y, 0);
+                    clrtoeol();
+                    mvprintw(y, 1, ss.str().c_str());
+                    // mvprintw(y, 40, "Equipment Stats");
+                    bkgdset(A_NORMAL);
                     ++counter;
                 }
             }
         }
 
+        refresh();
 
-        update_panels();
-        doupdate();
-
-        int key = toupper(wgetch(subWindow));
+        int key = toupper(getch());
         switch(key) {
             case 'Z':
-                hide_panel(subPanel);
-                update_panels();
-                doupdate();
                 return;
             case 'S':
                 mode = modeStats;
@@ -116,6 +114,7 @@ void doCharacter(Game &game) {
                     selection = 0;
                 }
                 break;
+            case KEY_NPAGE:
             case 'N':
                 ++curParty;
                 if (curParty >= game.party.size()) {
@@ -123,6 +122,7 @@ void doCharacter(Game &game) {
                 }
                 curChar = game.party[curParty];
                 break;
+            case KEY_PPAGE:
             case 'P':
                 if (curParty == 0) {
                     curParty = game.party.size() - 1;

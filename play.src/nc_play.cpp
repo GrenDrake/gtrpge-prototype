@@ -1,7 +1,6 @@
 #include <cctype>
 #include <iostream>
 #include <ncurses.h>
-#include <panel.h>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -10,15 +9,6 @@
 
 const int maxOutputBuffer = 4096;
 char gamefile[64] = "game.bin";
-
-WINDOW *statusWindow = nullptr;
-PANEL *statusPanel = nullptr;
-WINDOW *mainWindow = nullptr;
-PANEL *mainPanel = nullptr;
-WINDOW *optionsWindow = nullptr;
-PANEL *optionsPanel = nullptr;
-WINDOW *subWindow = nullptr;
-PANEL *subPanel = nullptr;
 
 std::string outputBuffer;
 
@@ -30,19 +20,29 @@ void addToOutput(const std::string &text) {
 }
 
 
-static void drawStatus(Game &game) {
+void drawStatus(Game &game) {
+    int maxX = getmaxx(stdscr);
+    bkgdset(A_NORMAL | COLOR_PAIR(colorStatus));
+    move(0, 0); clrtoeol();
+
     if (!game.gameStarted) return;
 
-    wclear(statusWindow);
-    wprintw(statusWindow, "  (I)nventory   (C)haracter Sheets    (Q)uit\n");
     if (game.locationName) {
-        mvwprintw(statusWindow, 1, 2, game.getString(game.locationName));
+        mvprintw(0, 3, game.getString(game.locationName));
     }
-    mvwprintw(statusWindow, 1, COLS-20, toUpperFirst(game.getTimeString()).c_str());
+    mvprintw(0, maxX-20, toUpperFirst(game.getTimeString()).c_str());
 }
 
 static void drawOptions(Game &game) {
-    wclear(optionsWindow);
+    int maxX = 0, maxY = 0;
+    getmaxyx(stdscr, maxY, maxX);
+    bkgdset(A_NORMAL | COLOR_PAIR(colorOptions));
+
+    for (int i = 0; i < 5; ++i) {
+        move(maxY-1-i, 0);
+        clrtoeol();
+    }
+
     int num = 1, counter = 0;
     for (auto &option : game.options) {
         std::stringstream ss;
@@ -55,28 +55,29 @@ static void drawOptions(Game &game) {
         int x, y = 0;
         if (counter < 5) {
             x = 0;
-            y = counter;
+            y = maxY - 5 + counter;
         } else {
-            x = COLS / 2;
-            y = counter - 5;
+            x = maxX / 2;
+            y = maxY - 5 + (counter - 5);
         }
         ++counter;
-        mvwprintw(optionsWindow, y, x, ss.str().c_str());
+        mvprintw(y, x, ss.str().c_str());
     }
 }
 
 static void drawOutput(Game &game) {
-    wclear(mainWindow);
-
+    int maxX = 0, maxY = 0;
+    getmaxyx(stdscr, maxY, maxX);
+    bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
     auto lines = explodeString(outputBuffer);
 
-    const int maxLines = LINES-7;
+    const int maxLines = maxY-6;
     int lineCount = 0;
 
     for (int i = lines.size() - 1; i >= 0 && lineCount < maxLines; --i) {
-        auto paragraph = wrapString(lines[i], COLS);
+        auto paragraph = wrapString(lines[i], maxX);
         for (int j = paragraph.size() - 1; j >= 0 && lineCount < maxLines; --j) {
-            mvwprintw(mainWindow, maxLines-1-lineCount, 0, paragraph[j].c_str());
+            mvprintw(maxLines-lineCount, 0, paragraph[j].c_str());
             ++lineCount;
         }
         ++lineCount;
@@ -91,13 +92,14 @@ void gameloop() {
     addToOutput(game.getOutput());
 
     while (true) {
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        clear();
         drawStatus(game);
         drawOutput(game);
         drawOptions(game);
-        update_panels();
-        doupdate();
+        refresh();
 
-        int realKey = wgetch(optionsWindow);
+        int realKey = getch();
         int key = toupper(realKey);
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
@@ -128,30 +130,13 @@ int main(int argc, char *argv[]) {
     initscr();
     cbreak();
     noecho();
+    keypad(stdscr, true);
     start_color();
-	init_pair(1, COLOR_WHITE, COLOR_BLUE);  // for options window
-	init_pair(2, COLOR_WHITE, COLOR_BLACK); // for main window
-	init_pair(3, COLOR_BLACK, COLOR_WHITE); // for sub window
-	init_pair(4, COLOR_BLACK, COLOR_WHITE); // for status window
-
-    statusWindow = newwin(2, COLS, 0, 0);
-    statusPanel = new_panel(statusWindow);
-    wbkgd(statusWindow, COLOR_PAIR(4));
-
-    mainWindow = newwin(LINES - 7, COLS, 2, 0);
-    mainPanel = new_panel(mainWindow);
-    wbkgd(mainWindow, COLOR_PAIR(2));
-
-    optionsWindow = newwin(5, COLS, LINES - 5, 0);
-    optionsPanel = new_panel(optionsWindow);
-    wbkgd(optionsWindow, COLOR_PAIR(1));
-    keypad(optionsWindow, true);
-
-    subWindow = newwin(LINES - 6, COLS - 6, 3, 3);
-    subPanel = new_panel(subWindow);
-    wbkgd(subWindow, COLOR_PAIR(3));
-    hide_panel(subPanel);
-    keypad(subWindow, true);
+    curs_set(0);
+	init_pair(colorOptions, COLOR_WHITE, COLOR_BLUE);  // for options window
+	init_pair(colorMain,    COLOR_WHITE, COLOR_BLACK); // for main window
+	init_pair(colorDialog,  COLOR_BLACK, COLOR_WHITE); // for sub window
+	init_pair(colorStatus,  COLOR_BLACK, COLOR_WHITE); // for status window
 
 
     try {

@@ -4,18 +4,15 @@
 #include <string>
 #include "play.h"
 
+void drawStatus(Game &game);
 void doCharacter(Game &game);
 void doInventory(Game &game);
 
 void addToOutput(const std::string &text);
 
-extern WINDOW *statusWindow;
-extern PANEL *statusPanel;
-extern WINDOW *mainWindow;
-extern PANEL *mainPanel;
-extern WINDOW *optionsWindow;
-extern PANEL *optionsPanel;
-extern WINDOW *subWindow;
-extern PANEL *subPanel;
+const int colorOptions = 1;
+const int colorMain = 2;
+const int colorDialog = 3;
+const int colorStatus = 4;
 
 #endif

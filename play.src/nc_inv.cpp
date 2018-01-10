@@ -1,5 +1,4 @@
 #include <ncurses.h>
-#include <panel.h>
 #include <sstream>
 
 #include "nc_play.h"
@@ -7,83 +6,95 @@
 const int invPerPage = 9;
 
 void doInventory(Game &game) {
-    wclear(subWindow);
-    show_panel(subPanel);
+    int maxX = 0, maxY = 0;
 
     if (game.inventory.empty()) {
-        mvwprintw(subWindow, 1, 3, "You are carrying:");
-        mvwprintw(subWindow, 3, 3, "Nothing");
-        mvwprintw(subWindow, 16, COLS-31, "Press any key to return");
-        box(subWindow, 0, 0);
-        update_panels();
-        doupdate();
-        wgetch(subWindow);
-        hide_panel(subPanel);
-        update_panels();
-        doupdate();
+        maxY = getmaxy(stdscr);
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        clear();
+        drawStatus(game);
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        mvprintw(1, 0, "You are carrying:");
+        mvprintw(3, 0, "Nothing");
+        bkgdset(A_NORMAL | COLOR_PAIR(colorStatus));
+        move(maxY-1, 0);
+        clrtoeol();
+        mvprintw(maxY-1, 0, "Press any key to return");
+        refresh();
+        getch();
         return;
     }
 
 
     unsigned curItem = 0;
     while (true) {
-        wclear(subWindow);
-        box(subWindow, 0, 0);
-        mvwprintw(subWindow, 1, 3, "You are carrying:");
-        mvwprintw(subWindow, 16, 3, "SPACE to use     E to Equip     Z to cancel");
+        getmaxyx(stdscr, maxY, maxX);
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        clear();
+        drawStatus(game);
+        bkgdset(A_NORMAL | COLOR_PAIR(colorStatus));
+        move(maxY-1, 0);
+        clrtoeol();
+        mvprintw(maxY-1, 0, "<SPACE> Use   <E>quip   <Z> Cancel");
+        bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
+        mvprintw(1, 0, "You are carrying:");
 
         unsigned curPage = curItem / invPerPage;
+        if (curPage > 0) {
+            attrset(A_REVERSE);
+            mvprintw(2, maxX-10, "(MORE)");
+            attrset(A_NORMAL);
+        }
+        if (curPage + invPerPage < game.inventory.size()) {
+            attrset(A_REVERSE);
+            mvprintw(12, maxX-10, "(MORE)");
+            attrset(A_NORMAL);
+        }
+
         for (unsigned i = 0; i < invPerPage && i + curPage * invPerPage < game.inventory.size(); ++i) {
             auto item = game.inventory[i + curPage * invPerPage];
 
-            std::stringstream ss;
-            ss << (char)('1' + i) << ") ";
+            std::stringstream itemName, itemTraits;
 
             if (item.qty == 1) {
-                ss << toUpperFirst(game.getString(game.getProperty(item.itemIdent, itmArticle)));
-                ss << game.getString(game.getProperty(item.itemIdent, itmSingular));
+                itemName << toUpperFirst(game.getString(game.getProperty(item.itemIdent, itmArticle)));
+                itemName << game.getString(game.getProperty(item.itemIdent, itmSingular));
             } else {
-                ss << item.qty << ' ';
-                ss << game.getString(game.getProperty(item.itemIdent, itmPlural));
-            }
-
-            int paddingLength = 30 - ss.tellp();
-            for (int j = 0; j < paddingLength; ++j) {
-                ss << ' ';
+                itemName << item.qty << ' ';
+                itemName << game.getString(game.getProperty(item.itemIdent, itmPlural));
             }
 
             if (game.getProperty(item.itemIdent, itmOnUse)) {
-                ss << "   Usable";
-            } else {
-                ss << "         ";
+                itemTraits << "Usable  ";
             }
 
             if (game.getProperty(item.itemIdent, itmSlot)) {
-                ss << "   " << toTitleCase(game.getString(game.getProperty(item.itemIdent, itmSlot)));
+                itemTraits << "Equip as: " << toTitleCase(game.getString(game.getProperty(item.itemIdent, itmSlot)));
             }
 
-            paddingLength = COLS-12 - ss.tellp();
-            for (int j = 0; j < paddingLength; ++j) {
-                ss << ' ';
+            if (curItem == i + curPage * invPerPage) {
+                bkgdset(A_REVERSE | COLOR_PAIR(colorMain));
             }
-            if (curItem == i + curPage * invPerPage) wattrset(subWindow, A_REVERSE);
-            mvwprintw(subWindow, i + 3, 3, ss.str().c_str());
-            wattrset(subWindow, A_NORMAL);
+            move(i + 3, 0);
+            clrtoeol();
+            mvprintw(i + 3, 1, "%c)", '1' + i);
+            mvprintw(i + 3, 5, itemName.str().c_str());
+            mvprintw(i + 3, maxX/2, itemTraits.str().c_str());
+            bkgdset(A_NORMAL | COLOR_PAIR(colorMain));
 
         }
 
         std::uint32_t descString = game.getProperty(game.inventory[curItem].itemIdent, itmDescription);
         if (descString) {
             auto i = wrapString(game.getString(descString), COLS-12);
-            mvwprintw(subWindow, 13, 3, i[0].c_str());
+            mvprintw(13, 3, i[0].c_str());
             if (i.size() > 1) {
-                mvwprintw(subWindow, 14, 3, i[1].c_str());
+                mvprintw(14, 3, i[1].c_str());
             }
         }
 
-        update_panels();
-        doupdate();
-        int key = toupper(wgetch(subWindow));
+        refresh();
+        int key = toupper(getch());
 
         if (key == 'Z') {
             break;
@@ -124,8 +135,4 @@ void doInventory(Game &game) {
             curItem = key - '1';
         }
     }
-
-    hide_panel(subPanel);
-    update_panels();
-    doupdate();
 }
