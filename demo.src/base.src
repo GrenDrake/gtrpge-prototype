@@ -121,12 +121,10 @@ ITEM loincloth {
 ITEM plate-armour {
     "a " "suit of plate armour" "suits of plate armour"
     slot "body"
-    onEquip {
-        adj-skill the-player skl-strength 50;
-    }
-    onRemove {
-        adj-skill the-player skl-strength -50;
-    }
+    skills (
+        skl-strength 50;
+        skl-dexterity -3;
+    )
 }
 
 ITEM teleport-crystal {

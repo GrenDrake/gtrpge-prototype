@@ -377,7 +377,14 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     std::uint32_t skillSet = getProperty(c->def, chrSkillDefaults);
     int base = 0;
     if (skillSet != 0) {
-        base = readByte(skillSet + 1 + skillNo * 2);
+        base = readShort(skillSet + 1 + skillNo * 2);
+    }
+
+    for (auto item : c->gear) {
+        std::uint32_t itemSkills = getProperty(item.second, itmSkillSet);
+        if (itemSkills) {
+            base += static_cast<short>(readShort(itemSkills + 1 + skillNo * 2));
+        }
     }
 
     base += c->skillAdj[skillNo];

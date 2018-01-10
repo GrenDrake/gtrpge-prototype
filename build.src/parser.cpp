@@ -156,6 +156,8 @@ void Parser::doItemDef() {
             item->slot = value;
         } else if (pName == "action-list") {
             item->actionsList = doList();
+        } else if (pName == "skills") {
+            item->skillSet = doSkillSet();
         } else {
             throw BuildError(pOrigin, "Unknown item property " + pName);
         }
@@ -185,7 +187,7 @@ std::string Parser::doList() {
     return ss.str();
 }
 
-std::string Parser::doSkillSet() {
+std::string Parser::doSkillSet(bool setDefaults) {
     const Origin &origin = cur->origin;
     std::stringstream ss;
     ss << "__an_skillset_" << anonymousCounter;
@@ -195,6 +197,7 @@ std::string Parser::doSkillSet() {
     std::shared_ptr<SkillSet> skillset(new SkillSet);
     skillset->origin = origin;
     skillset->name = ss.str();
+    skillset->setDefaults = setDefaults;
     while (!matches(Token::CloseParan)) {
         require(Token::Identifier);
         const std::string &name = cur->text;
@@ -335,7 +338,7 @@ void Parser::doCharacter() {
         if (identText == "faction") {
             character->faction = doValue();
         } else if (identText == "skills") {
-            character->skillSet = doSkillSet();
+            character->skillSet = doSkillSet(true);
         } else if (identText == "gear") {
             character->gearList = doList();
         } else {

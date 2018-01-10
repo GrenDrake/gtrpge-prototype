@@ -155,7 +155,7 @@ public:
     std::unordered_set<Value> flags;
     std::string article, singular, plural, description;
     Value onUse, canEquip, onEquip, onRemove, slot;
-    std::string actionsList;
+    std::string actionsList, skillSet;
 };
 
 class DataList : public DataType {
@@ -170,13 +170,17 @@ public:
 
 class SkillSet : public DataType {
 public:
+    SkillSet()
+    : setDefaults(false)
+    { }
     virtual size_t getSize() const {
         return sklSetSize;
     }
     virtual void write(std::ostream &out);
 
     std::unordered_map<std::string, Value> skillMap;
-    std::array<std::uint8_t, sklCount> skills;
+    std::array<std::uint16_t, sklCount> skills;
+    bool setDefaults;
 };
 
 std::ostream& operator<<(std::ostream &out, const Value &type);

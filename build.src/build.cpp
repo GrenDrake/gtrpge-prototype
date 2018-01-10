@@ -122,10 +122,14 @@ int main(int argc, char *argv[]) {
             std::shared_ptr<SkillSet> cd = std::dynamic_pointer_cast<SkillSet>(i);
             if (cd) {
                 for (unsigned i = 0; i < sklCount; ++i) {
-                    if (i >= gameData.skills.size()) {
-                        cd->skills[i] = 0;
+                    if (cd->setDefaults) {
+                        if (i >= gameData.skills.size()) {
+                            cd->skills[i] = 0;
+                        } else {
+                            cd->skills[i] = gameData.skills[i]->defaultValue;
+                        }
                     } else {
-                        cd->skills[i] = gameData.skills[i]->defaultValue;
+                        cd->skills[i] = 0;
                     }
                 }
 

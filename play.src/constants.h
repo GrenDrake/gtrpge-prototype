@@ -28,7 +28,8 @@ const int itmOnEquip        = 29;
 const int itmOnRemove       = 33;
 const int itmSlot           = 37;
 const int itmActionList     = 41;
-const int itmSize           = 45;
+const int itmSkillSet       = 45;
+const int itmSize           = 49;
 
 const int sexFlags          = 1;
 const int sexName           = 5;

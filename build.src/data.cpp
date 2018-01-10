@@ -67,6 +67,7 @@ void ItemDef::write(std::ostream &out) {
     writeValue(out, origin, onRemove);
     writeValue(out, origin, slot);
     writeLabelValue(out, actionsList);
+    writeLabelValue(out, skillSet);
 }
 
 void DataList::write(std::ostream &out) {
@@ -80,7 +81,7 @@ void DataList::write(std::ostream &out) {
 void SkillSet::write(std::ostream &out) {
     writeByte(out, idSkillSet);
 
-    for (std::uint8_t val : skills) {
+    for (std::uint16_t val : skills) {
         writeShort(out, val);
     }
 }
