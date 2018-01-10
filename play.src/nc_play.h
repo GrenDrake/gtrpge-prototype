@@ -10,6 +10,7 @@ void doInventory(Game &game);
 
 void addToOutput(const std::string &text);
 bool getYesNo(const std::string &prompt, bool defaultAnswer);
+std::string getString(const std::string &prompt, unsigned maxlen, const std::string &initialText = "");
 
 const int colorOptions = 1;
 const int colorMain = 2;

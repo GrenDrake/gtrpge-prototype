@@ -114,7 +114,8 @@ void gameloop() {
                 delete transcript;
                 transcript = nullptr;
             } else {
-                transcript = new std::ofstream("transcript.txt");
+                std::string filename = getString("Transcript file name:", 32, "transcript.txt");
+                transcript = new std::ofstream(filename);
                 addToOutput("\n[Transcript on.]");
             }
         } else if (key == ' ') {
