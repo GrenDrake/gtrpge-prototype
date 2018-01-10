@@ -22,7 +22,7 @@ CHARACTER the-gnoll {
     skills (
         skl-strength 12;
         skl-toughness 14;
-        skl-one-handed 4;
+        skl-void-magic 4;
     )
     gear (
         common-sword

@@ -542,6 +542,21 @@ void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
     who->gear.insert(std::make_pair(slot, item));
 }
 
+void Game::unequipItem(std::uint32_t whoIdent, std::uint32_t slotIdent) {
+    Character *who = getCharacter(whoIdent);
+    if (!who) {
+        return;
+    }
+
+    auto gearIter = who->gear.find(slotIdent);
+    if (gearIter == who->gear.end()) {
+        return;
+    }
+
+    addItems(1, gearIter->second);
+    who->gear.erase(slotIdent);
+}
+
 bool Game::actionAllowed() const {
     return inLocation && isRunning;
 }

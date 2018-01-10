@@ -130,6 +130,7 @@ public:
     void doOption(int optionNumber);
     void useItem(int itemNumber);
     void equipItem(std::uint32_t whoIdent, int itemNumber);
+    void unequipItem(std::uint32_t whoIdent, std::uint32_t slotIdent);
     void newNode(std::uint32_t address);
     void doNode(std::uint32_t address);
 
