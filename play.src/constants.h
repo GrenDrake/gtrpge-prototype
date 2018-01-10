@@ -117,6 +117,7 @@ const int opAdjSkill        = 0x86;
 const int opGetSkillCur     = 0x87;
 const int opAdjSkillCur     = 0x88;
 const int opSkillCheck      = 0x89;
+const int opDoDamage        = 0x8A;
 const int opAdd             = 0x90;
 const int opSubtract        = 0x91;
 const int opMultiply        = 0x92;

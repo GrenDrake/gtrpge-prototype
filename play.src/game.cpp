@@ -336,6 +336,10 @@ void Game::resetCharacter(std::uint32_t cRef) {
     }
 }
 
+void Game::doDamage(std::uint32_t cRef, int amount, int to, int type) {
+    adjSkillCur(cRef, to, -amount);
+}
+
 int Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target) {
     std::uint32_t baseSkill = readByte(readWord(headerSkillTable)+sklSize*skill+sklBaseSkill);
     int dieResult = roll(3,6);

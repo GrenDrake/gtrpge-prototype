@@ -119,6 +119,7 @@ public:
 
     Character* getCharacter(std::uint32_t address);
     void resetCharacter(std::uint32_t cRef);
+    void doDamage(std::uint32_t cRef, int amount, int to, int type);
     int doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target);
     bool testSkillFlags(int skillNo, uint32_t flags);
     int getSkillMax(std::uint32_t cRef, int skillNo);

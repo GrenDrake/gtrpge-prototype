@@ -310,6 +310,9 @@ void Game::doNode(std::uint32_t address) {
             case opSkillCheck:
                 push(doSkillCheck(operands[0], operands[1], operands[2], operands[3]));
                 break;
+            case opDoDamage:
+                doDamage(operands[0], operands[1], operands[2], operands[3]);
+                break;
 
             case opAdd:
                 push(pop()+pop());

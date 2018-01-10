@@ -54,6 +54,7 @@ Command commands[] = {
     { "get-skill-cur",      opGetSkillCur,      2 },
     { "adj-skill-cur",      opAdjSkillCur,      3 },
     { "skill-check",        opSkillCheck,       4 },
+    { "do-damage",          opDoDamage,         4 },
     { "add",                opAdd,              0 },
     { "subtract",           opSubtract,         0 },
     { "multiply",           opMultiply,         0 },
