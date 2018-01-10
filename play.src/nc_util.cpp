@@ -92,3 +92,35 @@ std::string getString(const std::string &prompt, unsigned maxlen, const std::str
         }
     }
 }
+
+const std::string pressKeyToContinue = "Press a key to continue.";
+void showMessageBox(const std::string &message) {
+    int maxX = 0, maxY = 0;
+    getmaxyx(stdscr, maxY, maxX);
+
+    unsigned windowWidth = message.size() + 6;
+    if (windowWidth < pressKeyToContinue.size()+6) {
+        windowWidth = pressKeyToContinue.size() + 6;
+    }
+    unsigned windowHeight = 5;
+    unsigned top  = (maxY - windowHeight) / 2;
+    unsigned left = (maxX - windowWidth)  / 2;
+
+    bkgdset(A_NORMAL | COLOR_PAIR(colorDialog));
+    for (unsigned y = 0; y < windowHeight; ++y) {
+        for (unsigned x = 0; x < windowWidth; ++x) {
+            mvaddch(y+top, x+left, ' ');
+        }
+        mvaddch(y+top, left, ACS_VLINE);
+        mvaddch(y+top, left+windowWidth-1, ACS_VLINE);
+    }
+    mvaddch(top, left, ACS_ULCORNER);
+    mvaddch(top, left+windowWidth-1, ACS_URCORNER);
+    mvaddch(top+windowHeight-1, left, ACS_LLCORNER);
+    mvaddch(top+windowHeight-1, left+windowWidth-1, ACS_LRCORNER);
+    mvprintw(top+1, left+3, message.c_str());
+    mvprintw(top+3, left+3, pressKeyToContinue.c_str());
+
+    refresh();
+    getch();
+}
