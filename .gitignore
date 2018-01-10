@@ -7,6 +7,7 @@ tests/game_tests
 
 dbg_labels.txt
 dbg_dump.txt
+transcript.txt
 
 Make.glkterm
 Make.gtkglk

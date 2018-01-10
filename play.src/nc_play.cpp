@@ -1,4 +1,5 @@
 #include <cctype>
+#include <fstream>
 #include <iostream>
 #include <ncurses.h>
 #include <string>
@@ -11,8 +12,12 @@ const int maxOutputBuffer = 4096;
 char gamefile[64] = "game.bin";
 
 std::string outputBuffer;
+std::ofstream *transcript = nullptr;
 
 void addToOutput(const std::string &text) {
+    if (transcript) {
+        *transcript << text;
+    }
     outputBuffer += text;
     if (outputBuffer.size() > maxOutputBuffer) {
         outputBuffer.erase(0, outputBuffer.size() - maxOutputBuffer);
@@ -103,12 +108,15 @@ void gameloop() {
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
             addToOutput(game.getOutput());
-    //     } else if (key == 'L') {
-    //         if (io.hasTranscript()) {
-    //             io.stopTranscript();
-    //         } else {
-    //             io.startTranscript();
-    //         }
+        } else if (key == 'L') {
+            if (transcript) {
+                addToOutput("\n[Transcript off.]");
+                delete transcript;
+                transcript = nullptr;
+            } else {
+                transcript = new std::ofstream("transcript.txt");
+                addToOutput("\n[Transcript on.]");
+            }
         } else if (key == ' ') {
             if (game.options.size() == 1) {
                 game.doOption(0);
@@ -147,6 +155,9 @@ int main(int argc, char *argv[]) {
         std::cerr << "Fatal error occured: ";
         std::cerr << e.what() << "\n";
         return 1;
+    }
+    if (transcript) {
+        delete transcript;
     }
     endwin();
     return 0;
