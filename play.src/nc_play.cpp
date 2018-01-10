@@ -99,8 +99,7 @@ void gameloop() {
         drawOptions(game);
         refresh();
 
-        int realKey = getch();
-        int key = toupper(realKey);
+        int key = toupper(getch());
         if (key >= '1' && key <= '9') {
             game.doOption(key - '1');
             addToOutput(game.getOutput());
@@ -119,8 +118,10 @@ void gameloop() {
             doInventory(game);
         } else if (key == 'C' && game.isRunning && game.actionAllowed()) {
             doCharacter(game);
-        } else if (realKey == 'Q') {
-            return;
+        } else if (key == 'Q') {
+            if (getYesNo("Are you sure you want to quit?", false)) {
+                return;
+            }
         }
     }
 }
@@ -135,7 +136,7 @@ int main(int argc, char *argv[]) {
     curs_set(0);
 	init_pair(colorOptions, COLOR_WHITE, COLOR_BLUE);  // for options window
 	init_pair(colorMain,    COLOR_WHITE, COLOR_BLACK); // for main window
-	init_pair(colorDialog,  COLOR_BLACK, COLOR_WHITE); // for sub window
+	init_pair(colorDialog,  COLOR_WHITE, COLOR_RED);  // for dialog window
 	init_pair(colorStatus,  COLOR_BLACK, COLOR_WHITE); // for status window
 
 

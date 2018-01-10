@@ -9,6 +9,7 @@ void doCharacter(Game &game);
 void doInventory(Game &game);
 
 void addToOutput(const std::string &text);
+bool getYesNo(const std::string &prompt, bool defaultAnswer);
 
 const int colorOptions = 1;
 const int colorMain = 2;
