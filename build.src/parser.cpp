@@ -40,6 +40,8 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doSkill();
         } else if (matches("CHARACTER")) {
             doCharacter();
+        } else if (matches("DAMAGE-TYPES")) {
+            doDamageTypes();
         } else {
             std::stringstream ss;
             throw BuildError(cur->origin, "Expected top level construct");
@@ -166,6 +168,27 @@ void Parser::doItemDef() {
 
     gameData.dataItems.push_back(item);
 }
+
+void Parser::doDamageTypes() {
+    const Origin &origin = cur->origin;
+    require("DAMAGE-TYPES");
+    require(Token::OpenBrace, true);
+    unsigned typeNumber = 0;
+    while (!matches(Token::CloseBrace)) {
+        require(Token::Identifier);
+        const std::string &typeName = cur->text;
+        ++cur;
+        require(Token::String);
+        std::string typeRef = gameData.addString(cur->text);
+        ++cur;
+
+        checkSymbol(origin, typeName, SymbolDef::DamageType);
+        gameData.constants.insert(std::make_pair(typeName, typeNumber++));
+        gameData.damageTypes.push_back(typeRef);
+    }
+    ++cur;
+}
+
 
 std::string Parser::doList() {
     const Origin &origin = cur->origin;

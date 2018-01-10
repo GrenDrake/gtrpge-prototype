@@ -1,12 +1,15 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+const int headerFileID      = 0x00;
+const int headerFileVersion = 0x04;
 const int headerStartNode   = 0x08;
 const int headerTitle       = 0x0C;
 const int headerByline      = 0x10;
 const int headerVersion     = 0x14;
 const int headerSkillTable  = 0x18;
-const int headerBuildNumber = 0x22;
+const int headerDamageTypes = 0x1C;
+const int headerBuildNumber = 0x20;
 
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
@@ -69,6 +72,7 @@ const int chrSkillDefaults  = 25;
 const int chrGearList       = 29;
 const int chrSize           = 33;
 
+const int damageTypeCount   = 8;
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
 const int opSetLocation     = 0x02;

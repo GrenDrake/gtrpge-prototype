@@ -50,6 +50,7 @@ public:
     std::vector<std::shared_ptr<SkillDef> > skills;
     std::vector<std::shared_ptr<DataType> > dataItems;
     std::string title, byline, version;
+    std::vector<std::string> damageTypes;
 private:
     int nextString;
 };
@@ -147,7 +148,7 @@ private:
 class SymbolDef {
 public:
     enum Type {
-        Node, Constant, Item, Sex, Species, Skill, Character
+        Node, Constant, Item, Sex, Species, Skill, Character, DamageType
     };
 
     SymbolDef(const Origin &origin, const std::string &name, Type type)
@@ -176,6 +177,7 @@ private:
     void doSkill();
     void doCharacter();
     void doItemDef();
+    void doDamageTypes();
 
     std::string doList();
     std::string doSkillSet(bool setDefaults = false);

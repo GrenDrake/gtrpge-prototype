@@ -74,6 +74,17 @@ SKILL skl-health        0               "health"         5   ( skl-variable skl-
 SKILL skl-energy        0               "energy"         2   ( skl-variable skl-reset-on-rest skl-x5 );
 SKILL skl-void          0               "void-touched"   0   ( skl-variable skl-ko-full );
 
+DAMAGE-TYPES {
+    dt-blunt   "blunt"
+    dt-cutting "cutting"
+    dt-piercing "piercing"
+    dt-fire "fire"
+    dt-air "air"
+    dt-earth "earth"
+    dt-water "water"
+    dt-void "void"
+}
+
 /* ************************************************************************* *
  * GENERAL CHARACTER DEFINITIONS                                             *
  * ************************************************************************* */

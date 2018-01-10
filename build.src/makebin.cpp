@@ -174,12 +174,12 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     out.put('P');   out.put('G');
     out.put(0);     out.put(0);
     out.put(1);     out.put(0);
-    for (int i = 0; i < 24; ++i) {
+    for (int i = 0; i < 56; ++i) {
         out.put(0);
     }
 
     // setup the initial, default labels as well as the ones created by constants
-    std::uint32_t pos = 32;
+    std::uint32_t pos = 64;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
     // setup the labels for the temp storage values
@@ -203,9 +203,15 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         out.put(0);
     }
 
+    // reserve space for the skill table
     labels.insert(std::make_pair("__skill_table", pos));
     pos += sklSize * sklCount;
 
+    // reserve space for the damage types list
+    labels.insert(std::make_pair("__damage_types", pos));
+    pos += damageTypeCount * 4;
+
+    // position remaining game data
     doPositioning(labels, pos, gameData.dataItems);
 
     for (auto &node : gameData.nodes) {
@@ -236,6 +242,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         }
     }
 
+    // write skill table
     for (int i = 0; i < sklCount; ++i) {
         std::shared_ptr<SkillDef> skill;
         if (i < static_cast<int>(gameData.skills.size())) {
@@ -248,6 +255,16 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         writeFlags(out, skill->origin, skill->flags);
     }
 
+    // write damage type list
+    for (unsigned i = 0; i < damageTypeCount; ++i) {
+        if (i < gameData.damageTypes.size()) {
+            writeLabelValue(out, gameData.damageTypes[i]);
+        } else {
+            writeWord(out, 0);
+        }
+    }
+
+    // write remaining game data
     for (auto &dataItem : gameData.dataItems) {
         dataItem->write(out);
     }
@@ -297,6 +314,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     writeLabelValue(out, gameData.byline);
     writeLabelValue(out, gameData.version);
     writeLabelValue(out, "__skill_table");
+    writeLabelValue(out, "__damage_types");
 
     time_t theTime = time(nullptr);
     struct tm *aTime = localtime(&theTime);
