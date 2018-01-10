@@ -115,8 +115,14 @@ void gameloop() {
                 transcript = nullptr;
             } else {
                 std::string filename = getString("Transcript file name:", 32, "transcript.txt");
-                transcript = new std::ofstream(filename);
-                addToOutput("\n[Transcript on.]");
+                if (filename.find_first_of("/\\:") != std::string::npos) {
+                    std::stringstream ss;
+                    ss << "\n[\"" << filename << "\" is not a valid filename.]";
+                    addToOutput(ss.str());
+                } else {
+                    transcript = new std::ofstream(filename);
+                    addToOutput("\n[Transcript on.]");
+                }
             }
         } else if (key == ' ') {
             if (game.options.size() == 1) {
