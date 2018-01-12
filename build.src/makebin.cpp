@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <unordered_map>
+#include <map>
 
 #include "build.h"
 #include "../play.src/constants.h"
@@ -82,7 +82,7 @@ static std::string mangleLabel(const std::string &nodeName, const std::string &o
     return labelName;
 }
 
-static std::unordered_map<std::string, unsigned> labels;
+static std::map<std::string, unsigned> labels;
 
 unsigned getLabel(const std::string &name) {
     const auto &v = labels.find(name);
@@ -92,7 +92,7 @@ unsigned getLabel(const std::string &name) {
     return 0;
 }
 
-static uint32_t processValue(const Origin &origin, const std::unordered_map<std::string, unsigned> &labels, const Value &value, const std::string &nodeName) {
+static uint32_t processValue(const Origin &origin, const std::map<std::string, unsigned> &labels, const Value &value, const std::string &nodeName) {
     switch(value.type) {
         case Value::Integer:
             return value.value;
@@ -152,7 +152,7 @@ void writeLabelValue(std::ostream &out, const std::string &labelName) {
 }
 
 template<class T>
-static void doPositioning(std::unordered_map<std::string, unsigned> &labels, std::uint32_t &position, std::vector<std::shared_ptr<T> > data) {
+static void doPositioning(std::map<std::string, unsigned> &labels, std::uint32_t &position, std::vector<std::shared_ptr<T> > data) {
     for (std::shared_ptr<T> &c : data) {
         labels.insert(std::make_pair(c->name, position));
         c->pos = position;

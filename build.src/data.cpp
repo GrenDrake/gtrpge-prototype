@@ -1,4 +1,5 @@
 #include <array>
+#include <iomanip>
 #include <ostream>
 
 #include "build.h"
@@ -11,6 +12,9 @@ void writeValue(std::ostream &out, const Origin &origin, const Value &value);
 void writeFlags(std::ostream &out, const Origin &origin, const std::unordered_set<Value> &flags);
 void writeLabelValue(std::ostream &out, const std::string &labelName);
 
+/* ************************************************************************
+ * OPERATOR OVERLOADS FOR DATA TYPES                                      */
+
 bool Value::operator==(const Value &rhs) const {
     if (rhs.type != type) {
         return false;
@@ -21,11 +25,39 @@ bool Value::operator==(const Value &rhs) const {
     return rhs.text == text;
 }
 
+std::ostream& operator<<(std::ostream &out, const Value &type) {
+    if (type.type == Value::Identifier) {
+        out << type.text;
+    } else {
+        out << type.value;
+    }
+    return out;
+}
+
+std::ostream& operator<<(std::ostream &out, const DataType &data) {
+    data.prettyPrint(out);
+    return out;
+}
+
+
+/* ************************************************************************
+ * DATA TYPE OUTPUT METHODS                                               */
+
+void DataType::prettyPrint(std::ostream &out) const {
+    out << std::left;
+    out << std::setw(32) << name << "   ";
+    out << std::setw(10) << getTypeName() << "   ";
+    out << origin;
+}
+
+
+
 void SpeciesDef::write(std::ostream &out) {
     writeByte(out, idSpecies);
     writeFlags(out, origin, flags);
     writeLabelValue(out, displayName);
 }
+
 
 void SexDef::write(std::ostream &out) {
     writeByte(out, idSex);
@@ -38,6 +70,7 @@ void SexDef::write(std::ostream &out) {
     writeLabelValue(out, reflex);
 }
 
+
 void CharacterDef::write(std::ostream &out) {
     writeByte(out, idCharacter);
     writeFlags(out, origin, flags);
@@ -49,6 +82,7 @@ void CharacterDef::write(std::ostream &out) {
     writeLabelValue(out, skillSet);
     writeLabelValue(out, gearList);
 }
+
 
 void ItemDef::write(std::ostream &out) {
     writeByte(out, idItem);
@@ -70,6 +104,7 @@ void ItemDef::write(std::ostream &out) {
     writeLabelValue(out, skillSet);
 }
 
+
 void DataList::write(std::ostream &out) {
     writeByte(out, idList);
     writeByte(out, values.size());
@@ -77,6 +112,7 @@ void DataList::write(std::ostream &out) {
         writeValue(out, origin, value);
     }
 }
+
 
 void SkillSet::write(std::ostream &out) {
     writeByte(out, idSkillSet);

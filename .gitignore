@@ -6,7 +6,8 @@ tests/text_tests
 tests/game_tests
 
 dbg_labels.txt
-dbg_dump.txt
+dbg_nodes.txt
+dbg_defs.txt
 transcript.txt
 
 Make.glkterm

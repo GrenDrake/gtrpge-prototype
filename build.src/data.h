@@ -72,6 +72,22 @@ public:
     std::vector<std::shared_ptr<Statement> > statements;
 };
 
+class SkillDef {
+public:
+    virtual size_t getSize() const {
+        return sklSize;
+    }
+    virtual void write(std::ostream &out) {
+    }
+
+    Origin origin;
+    std::string name;
+    Value statSkill;
+    std::string displayName;
+    int defaultValue;
+    std::unordered_set<Value> flags;
+};
+
 class DataType {
 public:
     virtual ~DataType() {
@@ -79,6 +95,8 @@ public:
     }
     virtual size_t getSize() const = 0;
     virtual void write(std::ostream &out) = 0;
+    virtual std::string getTypeName() const = 0;
+    void prettyPrint(std::ostream &out) const;
 
     Origin origin;
     std::string name;
@@ -98,6 +116,9 @@ public:
         return spcSize;
     }
     virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "SPECIES";
+    }
 
     std::string displayName;
     std::unordered_set<Value> flags;
@@ -109,26 +130,13 @@ public:
         return sexSize;
     }
     virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "SEX";
+    }
 
     std::string displayName;
     std::unordered_set<Value> flags;
     std::string subject, object, possess, adject, reflex;
-};
-
-class SkillDef {
-public:
-    virtual size_t getSize() const {
-        return sklSize;
-    }
-    virtual void write(std::ostream &out) {
-    }
-
-    Origin origin;
-    std::string name;
-    Value statSkill;
-    std::string displayName;
-    int defaultValue;
-    std::unordered_set<Value> flags;
 };
 
 class CharacterDef : public DataType {
@@ -137,6 +145,9 @@ public:
         return chrSize;
     }
     virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "CHARACTER";
+    }
 
     std::string article, displayName;
     Value sex, species;
@@ -151,6 +162,9 @@ public:
         return itmSize;
     }
     virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "ITEM";
+    }
 
     std::unordered_set<Value> flags;
     std::string article, singular, plural, description;
@@ -164,6 +178,9 @@ public:
         return 2 + values.size() * 4;
     }
     virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "LIST";
+    }
 
     std::vector<Value> values;
 };
@@ -177,6 +194,9 @@ public:
         return sklSetSize;
     }
     virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "SKILLSET";
+    }
 
     std::unordered_map<std::string, Value> skillMap;
     std::array<std::uint16_t, sklCount> skills;
@@ -184,5 +204,6 @@ public:
 };
 
 std::ostream& operator<<(std::ostream &out, const Value &type);
+std::ostream& operator<<(std::ostream &out, const DataType &data);
 
 #endif

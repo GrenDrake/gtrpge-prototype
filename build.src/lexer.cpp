@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -39,7 +40,7 @@ std::ostream& operator<<(std::ostream &out, const Token::Type &type) {
     return out;
 }
 std::ostream& operator<<(std::ostream &out, const Origin &origin) {
-    out << origin.file << ':' << origin.line << ':' << origin.column;
+    out << origin.file << ':' << std::dec << origin.line << ':' << origin.column;
     return out;
 }
 std::ostream& operator<<(std::ostream &out, const Token &token) {

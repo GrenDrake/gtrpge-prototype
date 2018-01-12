@@ -525,13 +525,3 @@ bool Parser::matches(Token::Type type) {
 bool Parser::matches(const std::string &text) {
     return (cur->type == Token::Identifier && cur->text == text);
 }
-
-
-std::ostream& operator<<(std::ostream &out, const Value &type) {
-    if (type.type == Value::Identifier) {
-        out << "T:" << type.text;
-    } else {
-        out << "I:" << type.value;
-    }
-    return out;
-}

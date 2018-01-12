@@ -115,8 +115,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::ofstream out("dbg_dump.txt");
-
     try {
         for (std::shared_ptr<DataType> i : gameData.dataItems) {
             std::shared_ptr<SkillSet> cd = std::dynamic_pointer_cast<SkillSet>(i);
@@ -148,35 +146,61 @@ int main(int argc, char *argv[]) {
         std::cerr << e.what() << "\n";
     }
 
-    out << "FOUND " << gameData.constants.size() << " CONSTANTS:\n";
-    for (auto &constant : gameData.constants) {
-        out << std::setw(8) << constant.first << ": ";
-        out << constant.second;
-        out << "\n";
-    }
 
-    out << "\nFOUND " << gameData.strings.size() << " STRINGS:\n";
-    for (auto &str : gameData.strings) {
-        out << std::setw(8) << str.second << "  ~";
-        out << formatForDump(str.first, 50);
-        out << "~\n";
-    }
+    /* ************************************************************************
+     * DUMP GLOBAL SYMBOLS TO FILE                                            */
+    std::ofstream out_defs("dbg_defs.txt");
 
-    out << "\nFOUND " << std::dec << gameData.dataItems.size() << " DATA ITEMS\n" << std::hex << std::uppercase;
+    out_defs << "FOUND " << std::dec << gameData.dataItems.size() << " DATA ITEMS\n" << std::hex << std::uppercase;
     for (auto &item : gameData.dataItems) {
-        out << std::setfill(' ') << std::left << std::setw(20) << item->name << " : " << std::right << std::setfill('0') << std::setw(8) << item->pos << " : " << item->origin << '\n';
+        out_defs << "    " << *item << '\n';
     }
 
-    out << "\n\nFOUND " << gameData.skills.size() << " SKILLS\n";
-    for (auto &skill : gameData.skills) {
-        out << skill->name << ' ';
-    }
-
-    out << "\n\nFOUND " << gameData.nodes.size() << " NODES\n";
+    out_defs << "\nFOUND " << gameData.nodes.size() << " NODES\n";
     for (auto &node : gameData.nodes) {
-        out << "    " << node->name << '\n';
+        out_defs << "    " << std::setw(32) << node->name << ' ' << node->origin << '\n';
+    }
+
+    out_defs << "\nFOUND " << gameData.skills.size() << " SKILLS\n" << std::left;
+    for (auto &skill : gameData.skills) {
+        out_defs << std::left << "    " << std::setw(32);
+        if (skill->name.empty()) {
+            out_defs << "(unnamed)";
+        } else {
+            out_defs << skill->name;
+        }
+        out_defs << "   " << skill->origin << '\n';
+    }
+
+    out_defs << "\nFOUND " << gameData.constants.size() << " CONSTANTS:\n" << std::left;
+    for (auto &constant : gameData.constants) {
+        out_defs << "    " << std::setw(32) << constant.first << "   ";
+        out_defs << std::setw(13) << constant.second;
+        // << origin
+        out_defs << '\n';
+    }
+
+    out_defs << "\nFOUND " << gameData.strings.size() << " STRINGS:\n";
+    for (auto &str : gameData.strings) {
+        out_defs << "    " << std::setw(8) << str.second << "  ";
+        std::stringstream ss;
+        ss << "~" << formatForDump(str.first, 35) << "~";
+        out_defs << std::setw(37) << ss.str();
+        // << origin
+        out_defs << " \n";
+    }
+
+    out_defs.close();
+
+    /* ************************************************************************
+     * DUMP DATA ITEMS TO FILE                                                */
+    std::ofstream out("dbg_nodes.txt");
+
+    out << "FOUND " << gameData.nodes.size() << " NODES\n";
+    for (auto &node : gameData.nodes) {
+        out << '\n' << node->name << '\n';
         for (auto &stmt : node->block->statements) {
-            out << "       ";
+            out << "   ";
             for (auto &text : stmt->parts) {
                 out << ' ' << text;
             }
@@ -184,5 +208,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    /* ********************************************************************** */
     return 0;
 }
