@@ -9,7 +9,9 @@ const int headerByline      = 0x10;
 const int headerVersion     = 0x14;
 const int headerSkillTable  = 0x18;
 const int headerDamageTypes = 0x1C;
-const int headerBuildNumber = 0x20;
+const int headerWeaponSlot  = 0x20;
+const int headerBuildNumber = 0x24;
+const int headerChecksum    = 0x28;
 
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
@@ -70,7 +72,9 @@ const int chrSpecies        = 17;
 const int chrFaction        = 21;
 const int chrSkillDefaults  = 25;
 const int chrGearList       = 29;
-const int chrSize           = 33;
+const int chrBaseAbilities  = 33;
+const int chrExtraAbilities = 37;
+const int chrSize           = 41;
 
 const int damageTypeCount   = 8;
 const int opEnd             = 0x00;

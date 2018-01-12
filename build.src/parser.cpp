@@ -156,7 +156,7 @@ void Parser::doItemDef() {
         } else if (pName == "slot") {
             const Value &value = doValue();
             item->slot = value;
-        } else if (pName == "action-list") {
+        } else if (pName == "actionList") {
             item->actionsList = doList();
         } else if (pName == "skills") {
             item->skillSet = doSkillSet();
@@ -364,6 +364,10 @@ void Parser::doCharacter() {
             character->skillSet = doSkillSet(true);
         } else if (identText == "gear") {
             character->gearList = doList();
+        } else if (identText == "baseAbilities") {
+            character->baseAbilities = doList();
+        } else if (identText == "extraAbilities") {
+            character->extraAbilities = doList();
         } else {
             throw BuildError(origin, "Unknown character property " + identText);
         }

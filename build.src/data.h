@@ -153,6 +153,7 @@ public:
     Value sex, species;
     std::unordered_set<Value> flags;
     Value faction;
+    std::string baseAbilities, extraAbilities;
     std::string gearList, skillSet;
 };
 

@@ -316,6 +316,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     writeLabelValue(out, gameData.version);
     writeLabelValue(out, "__skill_table");
     writeLabelValue(out, "__damage_types");
+    writeLabelValue(out, gameData.addString("weapon"));
 
     time_t theTime = time(nullptr);
     struct tm *aTime = localtime(&theTime);

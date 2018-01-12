@@ -8,7 +8,6 @@
 
 #include "play.h"
 
-
 void Game::List::add(std::uint32_t value, std::uint32_t chance) {
     for (ListItem &item : items) {
         if (item.value == value) {
@@ -428,6 +427,44 @@ void Game::adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment) {
     if (cur > max)  cur = max;
 
     c->skillCur[skillNo] = cur;
+}
+
+std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {
+    std::uint32_t list;
+    std::vector<std::uint32_t> actions;
+    Character *c = getCharacter(cRef);
+    if (!c) return actions;
+
+    const std::uint32_t weaponSlot = readWord(headerWeaponSlot);
+    if (c->gear.count(weaponSlot) == 0) {
+        list = getProperty(cRef, chrBaseAbilities);
+        if (list) {
+            unsigned count = readByte(list+1);
+            for (unsigned int i = 0; i < count; ++i) {
+                actions.push_back(readWord(list+2+i*4));
+            }
+        }
+    }
+
+    list = getProperty(cRef, chrExtraAbilities);
+    if (list) {
+        unsigned count = readByte(list+1);
+        for (unsigned int i = 0; i < count; ++i) {
+            actions.push_back(readWord(list+2+i*4));
+        }
+    }
+
+    for (const auto &item : c->gear) {
+        list = getProperty(item.second, itmActionList);
+        if (list) {
+            unsigned count = readByte(list+1);
+            for (unsigned int i = 0; i < count; ++i) {
+                actions.push_back(readWord(list+2+i*4));
+            }
+        }
+    }
+
+    return actions;
 }
 
 void Game::startGame() {

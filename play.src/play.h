@@ -126,6 +126,7 @@ public:
     void adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment);
     int getSkillCur(std::uint32_t cRef, int skillNo);
     void adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment);
+    std::vector<std::uint32_t> getActions(std::uint32_t cRef);
 
     void startGame();
     void doOption(int optionNumber);

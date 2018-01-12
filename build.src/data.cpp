@@ -81,6 +81,8 @@ void CharacterDef::write(std::ostream &out) {
     writeValue(out, origin, faction);
     writeLabelValue(out, skillSet);
     writeLabelValue(out, gearList);
+    writeLabelValue(out, baseAbilities);
+    writeLabelValue(out, extraAbilities);
 }
 
 
