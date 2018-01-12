@@ -90,9 +90,9 @@ int main(int argc, char *argv[]) {
     try {
         std::vector<SymbolDef> symbols;
 
+        Parser parser(gameData, symbols);
         for (const std::string &file : sourceFiles) {
             lexer.doFile(file);
-            Parser parser(gameData, symbols);
             parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
         }
 
