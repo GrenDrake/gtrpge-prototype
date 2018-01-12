@@ -123,3 +123,12 @@ void SkillSet::write(std::ostream &out) {
         writeShort(out, val);
     }
 }
+
+void ActionDef::write(std::ostream &out) {
+    writeByte(out, idAction);
+    writeLabelValue(out, energyStat);
+    writeWord(out, energyCost);
+    writeLabelValue(out, displayName);
+    writeValue(out, origin, combatNode);
+    writeValue(out, origin, peaceNode);
+}

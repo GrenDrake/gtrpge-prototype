@@ -40,6 +40,8 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doSkill();
         } else if (matches("CHARACTER")) {
             doCharacter();
+        } else if (matches("ACTION")) {
+            doAction();
         } else if (matches("DAMAGE-TYPES")) {
             doDamageTypes();
         } else {
@@ -167,6 +169,51 @@ void Parser::doItemDef() {
     ++cur;
 
     gameData.dataItems.push_back(item);
+}
+
+void Parser::doAction() {
+    const Origin &origin = cur->origin;
+    require("ACTION");
+
+    require(Token::Identifier);
+    const std::string &name = cur->text;
+    checkSymbol(origin, name, SymbolDef::Item);
+    ++cur;
+
+    require(Token::OpenBrace, true);
+
+    std::shared_ptr<ActionDef> action(new ActionDef);
+    action->origin = origin;
+    action->name = name;
+
+    require(Token::String);
+    action->displayName = gameData.addString(cur->text);
+    ++cur;
+
+    while (!matches(Token::CloseBrace)) {
+        require(Token::Identifier);
+        const std::string &pName = cur->text;
+        ++cur;
+
+        if (pName == "cost") {
+            require(Token::Identifier);
+            action->energyStat = cur->text;
+            ++cur;
+
+            require(Token::Integer);
+            action->energyCost = cur->value;
+            ++cur;
+        } else if (pName == "inCombat") {
+            action->combatNode = doProperty(action->name);
+        } else if (pName == "outOfCombat") {
+            action->peaceNode = doProperty(action->name);
+        } else {
+            throw BuildError(origin, "Unknown action property " + pName);
+        }
+    }
+    ++cur;
+
+    gameData.dataItems.push_back(action);
 }
 
 void Parser::doDamageTypes() {

@@ -103,6 +103,12 @@ CHARACTER the-player {
         common-sword
         loincloth
     )
+    baseAbilities (
+        act-punch
+    )
+    extraAbilities (
+        act-fireball
+    )
 }
 
 /* ************************************************************************* *
@@ -120,6 +126,10 @@ ITEM common-sword {
     }
     onRemove {
     }
+    actionList (
+        act-swing
+        act-thrust
+    )
 }
 
 ITEM common-helmet {
@@ -165,6 +175,31 @@ ITEM gnoll-potion {
         label already-gnoll;
         say "Nothing happens. Perhaps you can't become any more gnoll-like then you are?";
     }
+}
+
+/* ************************************************************************* *
+ * GENERAL SKILL DEFINITIONS                                                  *
+ * ************************************************************************* */
+
+ACTION act-punch {
+    "punch"
+    inCombat { }
+}
+
+ACTION act-fireball {
+    "fireball"
+    cost skl-energy 2
+}
+
+ACTION act-swing {
+    "swing"
+    inCombat { }
+    outOfCombat { }
+}
+
+ACTION act-thrust {
+    "thrust"
+    outOfCombat { }
 }
 
 /* ************************************************************************* *

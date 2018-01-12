@@ -204,6 +204,22 @@ public:
     bool setDefaults;
 };
 
+class ActionDef : public DataType {
+public:
+    virtual size_t getSize() const {
+        return actSize;
+    }
+    virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "ACTION";
+    }
+
+    std::string energyStat;
+    std::uint32_t energyCost;
+    std::string displayName;
+    Value combatNode, peaceNode;
+};
+
 std::ostream& operator<<(std::ostream &out, const Value &type);
 std::ostream& operator<<(std::ostream &out, const DataType &data);
 

@@ -177,6 +177,7 @@ private:
     void doSkill();
     void doCharacter();
     void doItemDef();
+    void doAction();
     void doDamageTypes();
 
     std::string doList();

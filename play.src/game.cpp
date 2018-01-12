@@ -220,6 +220,9 @@ std::string Game::getNameOf(std::uint32_t address) {
         case idSpecies:
             work = address + spcName;
             return getString(readWord(work));
+        case idAction:
+            work = address + actName;
+            return getString(readWord(work));
         default: {
             std::stringstream ss;
             ss << "[object#";

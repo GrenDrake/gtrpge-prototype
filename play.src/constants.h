@@ -21,6 +21,7 @@ const int idSpecies         = 0xFB;
 const int idCharacter       = 0xFA;
 const int idList            = 0xF9;
 const int idSkillSet        = 0xF8;
+const int idAction          = 0xF7;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -75,6 +76,13 @@ const int chrGearList       = 29;
 const int chrBaseAbilities  = 33;
 const int chrExtraAbilities = 37;
 const int chrSize           = 41;
+
+const int actSkill          = 1;
+const int actCost           = 5;
+const int actName           = 9;
+const int actCombatNode     = 13;
+const int actPeaceNode      = 17;
+const int actSize           = 21;
 
 const int damageTypeCount   = 8;
 const int opEnd             = 0x00;

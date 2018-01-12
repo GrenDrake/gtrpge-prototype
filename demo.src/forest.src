@@ -24,6 +24,9 @@ CHARACTER the-gnoll {
         skl-toughness 14;
         skl-void-magic 4;
     )
+    baseAbilities (
+        act-punch
+    )
     gear (
         common-sword
     )
