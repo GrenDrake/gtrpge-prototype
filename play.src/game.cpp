@@ -601,6 +601,25 @@ void Game::unequipItem(std::uint32_t whoIdent, std::uint32_t slotIdent) {
     who->gear.erase(slotIdent);
 }
 
+void Game::doAction(std::uint32_t cRef, std::uint32_t action) {
+    if (cRef == 0 || action == 0) {
+        return;
+    }
+    uint32_t peaceNode = getProperty(action, actPeaceNode);
+    if (!peaceNode) {
+        return;
+    }
+
+    clearOutput();
+    say("\n> ");
+    say(toUpperFirst(getNameOf(cRef)));
+    say (" uses their ");
+    say(getNameOf(action));
+    say(" ability\n\n");
+
+    newNode(peaceNode);
+}
+
 bool Game::actionAllowed() const {
     return inLocation && isRunning;
 }

@@ -4,15 +4,18 @@
 
 #include "nc_play.h"
 
-const int modeStats = 0;
-const int modeGear  = 1;
+const int modeStats   = 0;
+const int modeGear    = 1;
+const int modeActions = 2;
 
 void doCharacter(Game &game) {
     if (game.party.empty()) return;
     int maxX = 0, maxY = 0;
+    const std::uint32_t skillTable = game.readWord(headerSkillTable);
 
     unsigned curParty = 0;
     int curChar = game.party[curParty];
+    auto actions = game.getActions(curChar);
     int mode = modeStats;
     unsigned selection = 0;
     uint32_t curGear = 0;
@@ -37,6 +40,9 @@ void doCharacter(Game &game) {
                 helpLine << "   <U>nequip";
                 infoLine << "   - Equipped Gear";
                 break;
+            case modeActions:
+                infoLine << "   - Actions";
+                break;
             default:
                 infoLine << "   - Unknown Display Mode";
         }
@@ -49,7 +55,6 @@ void doCharacter(Game &game) {
 
         if (mode == modeStats) {
             int counter = 0;
-            std::uint32_t skillTable = game.readWord(headerSkillTable);
             for (int i = 0; i < sklCount; ++i) {
                 std::uint32_t nameAddr = game.readWord(skillTable + i*sklSize + sklName);
                 if (!nameAddr) continue;
@@ -97,6 +102,32 @@ void doCharacter(Game &game) {
                     ++counter;
                 }
             }
+
+        } else if (mode == modeActions) {
+            for (unsigned i = 0; i < actions.size(); ++i) {
+                int y = 4 + i;
+                if (selection == i) {
+                    bkgdset(A_REVERSE);
+                }
+                move(y, 0);
+                clrtoeol();
+
+                mvprintw(y, 0, "%c) %s", i+'1', toUpperFirst(game.getNameOf(actions[i])).c_str());
+
+                int cost = game.getProperty(actions[i], actCost);
+                if (cost != 0) {
+                    std::uint32_t sklIndex = game.getProperty(actions[i], actSkill);
+                    std::uint32_t nameAddr = game.readWord(skillTable + sklIndex*sklSize + sklName);
+                    mvprintw(y, 35, "%d %s", cost, toUpperFirst(game.getString(nameAddr)).c_str());
+                }
+
+                int node = game.getProperty(actions[i], actCombatNode);
+                if (node) mvprintw(y, 45, "Combat");
+                node = game.getProperty(actions[i], actPeaceNode);
+                if (node) mvprintw(y, 55, "General");
+
+                bkgdset(A_NORMAL);
+            }
         }
 
         refresh();
@@ -114,6 +145,12 @@ void doCharacter(Game &game) {
                     selection = 0;
                 }
                 break;
+            case 'A':
+                if (mode != modeActions) {
+                    mode = modeActions;
+                    selection = 0;
+                }
+                break;
             case KEY_NPAGE:
             case 'N':
                 ++curParty;
@@ -121,6 +158,7 @@ void doCharacter(Game &game) {
                     curParty = 0;
                 }
                 curChar = game.party[curParty];
+                actions = game.getActions(curChar);
                 break;
             case KEY_PPAGE:
             case 'P':
@@ -130,6 +168,7 @@ void doCharacter(Game &game) {
                     --curParty;
                 }
                 curChar = game.party[curParty];
+                actions = game.getActions(curChar);
                 break;
             case 'U':
                 if (mode == modeGear) {
@@ -140,13 +179,27 @@ void doCharacter(Game &game) {
                 }
                 break;
             case KEY_DOWN:
-                if (mode == modeGear && selection < c->gear.size() - 1) {
+                if ( (mode == modeGear && selection < c->gear.size() - 1) ||
+                     (mode == modeActions && selection < actions.size() - 1)) {
                     ++selection;
                 }
                 break;
             case KEY_UP:
                 if (selection > 0) {
                     --selection;
+                }
+                break;
+            case KEY_ENTER:
+            case ' ':
+            case '\n':
+            case '\r':
+                if (mode == modeActions) {
+                    std::uint32_t node = game.getProperty(actions[selection], actPeaceNode);
+                    if (node) {
+                        game.doAction(curChar, actions[selection]);
+                        addToOutput(game.getOutput());
+                        return;
+                    }
                 }
                 break;
             case '1':
@@ -161,6 +214,11 @@ void doCharacter(Game &game) {
                 if (mode == modeGear) {
                     unsigned newSel = key - '1';
                     if (newSel < c->gear.size()) {
+                        selection = newSel;
+                    }
+                } else if (mode == modeActions) {
+                    unsigned newSel = key - '1';
+                    if (newSel < actions.size()) {
                         selection = newSel;
                     }
                 }

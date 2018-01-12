@@ -194,12 +194,18 @@ ACTION act-fireball {
 ACTION act-swing {
     "swing"
     inCombat { }
-    outOfCombat { }
+    outOfCombat {
+        say "You brandish the sword wildly.";
+        add-return;
+    }
 }
 
 ACTION act-thrust {
     "thrust"
-    outOfCombat { }
+    outOfCombat {
+        say "You brandish the sword wildly.";
+        add-return;
+    }
 }
 
 /* ************************************************************************* *
