@@ -27,7 +27,7 @@ void doCharacter(Game &game) {
         drawStatus(game);
 
         std::stringstream helpLine;
-        helpLine << "<G>ear   <S>tats   <P>rev Char   <N>ext Char   <Z> Close";
+        helpLine << "<G>ear  <S>tats  <A>bilities   <P>rev Char  <N>ext Char  <Z> Close";
         std::stringstream infoLine;
         Character *c = game.getCharacter(curChar);
         infoLine << toTitleCase(game.getNameOf(curChar)) << " (" << toTitleCase(game.getNameOf(c->sex)) << ' ';
@@ -37,7 +37,7 @@ void doCharacter(Game &game) {
                 infoLine << "   - Statisitics";
                 break;
             case modeGear:
-                helpLine << "   <U>nequip";
+                helpLine << "  <U>nequip";
                 infoLine << "   - Equipped Gear";
                 break;
             case modeActions:
