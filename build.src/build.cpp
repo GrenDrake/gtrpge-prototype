@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "project.h"
 #include "build.h"
 
 
@@ -66,23 +67,13 @@ int main(int argc, char *argv[]) {
     GameData gameData;
     Lexer lexer;
 
-    std::vector<std::string> sourceFiles;
-    std::string outputFile = "game.bin";
-
-    for (int i = 1; i < argc; ++i) {
-        if (strcmp(argv[i], "-o") == 0) {
-            ++i;
-            if (i >= argc) {
-                std::cerr << "-o options requires output filename\n";
-                return 1;
-            }
-            outputFile = argv[i];
-        } else {
-            sourceFiles.push_back(argv[i]);
-        }
+    if (argc != 2) {
+        std::cerr << "USAGE: build <project-file>\n";
+        return 1;
     }
+    ProjectFile *project = load_project(argv[1]);
 
-    if (sourceFiles.empty()) {
+    if (project->sourceFiles.empty()) {
         std::cerr << "No source files provided!\n";
         return 1;
     }
@@ -91,7 +82,7 @@ int main(int argc, char *argv[]) {
         std::vector<SymbolDef> symbols;
 
         Parser parser(gameData, symbols);
-        for (const std::string &file : sourceFiles) {
+        for (const std::string &file : project->sourceFiles) {
             lexer.doFile(file);
             parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
         }
@@ -108,10 +99,12 @@ int main(int argc, char *argv[]) {
         }
         if (!hasStartSymbol) {
             std::cerr << "FATAL: No start node defined.\n";
+            delete project;
             return 1;
         }
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
+        delete project;
         return 1;
     }
 
@@ -141,7 +134,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        make_bin(gameData, outputFile);
+        make_bin(gameData, project->outputFile);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
     }
@@ -209,5 +202,6 @@ int main(int argc, char *argv[]) {
     }
 
     /* ********************************************************************** */
+    delete project;
     return 0;
 }

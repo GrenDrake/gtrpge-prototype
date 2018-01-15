@@ -1,0 +1,2 @@
+files demo.src/base.src demo.src/forest.src
+output game.bin

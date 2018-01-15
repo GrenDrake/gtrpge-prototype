@@ -1,6 +1,7 @@
 CXXFLAGS=-Wall -g -std=c++11 -pedantic
 
-BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o build.src/makebin.o build.src/data.o
+BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o \
+           build.src/makebin.o build.src/data.o build.src/project.o
 BUILD_TARGET=build
 
 PLAY_LIBS=-lncurses
@@ -18,8 +19,8 @@ $(BUILD_TARGET): $(BUILD_OBJS)
 $(PLAY_TARGET): $(PLAY_OBJS)
 	$(CXX) $(PLAY_OBJS) $(PLAY_LIBS) -o $(PLAY_TARGET)
 
-game.bin: demo.src/*
-	./build demo.src/*
+game.bin: demo.prj demo.src/*
+	./build demo.prj
 
 
 
