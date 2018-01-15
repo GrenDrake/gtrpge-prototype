@@ -20,40 +20,44 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
 
     while (cur != end) {
 
-        if (matches("NODE")) {
+        if (matches("node")) {
             doNode();
-        } else if (matches("TITLE")) {
+        } else if (matches("title")) {
             doTitle();
-        } else if (matches("BYLINE")) {
+        } else if (matches("byline")) {
             doByline();
-        } else if (matches("VERSION")) {
+        } else if (matches("version")) {
             doVersion();
-        } else if (matches("CONSTANT")) {
+        } else if (matches("constant")) {
             doConstant();
-        } else if (matches("ITEM")) {
+        } else if (matches("item")) {
             doItemDef();
-        } else if (matches("SEX")) {
+        } else if (matches("sex")) {
             doSex();
-        } else if (matches("SPECIES")) {
+        } else if (matches("species")) {
             doSpecies();
-        } else if (matches("SKILL")) {
+        } else if (matches("skill")) {
             doSkill();
-        } else if (matches("CHARACTER")) {
+        } else if (matches("character")) {
             doCharacter();
-        } else if (matches("ACTION")) {
+        } else if (matches("action")) {
             doAction();
-        } else if (matches("DAMAGE-TYPES")) {
+        } else if (matches("damage-types")) {
             doDamageTypes();
         } else {
             std::stringstream ss;
-            throw BuildError(cur->origin, "Expected top level construct");
+            ss << "Expected top level construct, but found " << cur->type;
+            if (cur->type == Token::Identifier) {
+                ss << " ~" << cur->text << '~';
+            }
+            throw BuildError(cur->origin, ss.str());
         }
     }
 
 }
 
 void Parser::doTitle() {
-    require("TITLE");
+    require("title");
     require(Token::String);
     gameData.title = gameData.addString(cur->text);
     ++cur;
@@ -61,7 +65,7 @@ void Parser::doTitle() {
 }
 
 void Parser::doByline() {
-    require("BYLINE");
+    require("byline");
     require(Token::String);
     gameData.byline = gameData.addString(cur->text);
     ++cur;
@@ -69,7 +73,7 @@ void Parser::doByline() {
 }
 
 void Parser::doVersion() {
-    require("VERSION");
+    require("version");
     require(Token::String);
     gameData.version = gameData.addString(cur->text);
     ++cur;
@@ -78,7 +82,7 @@ void Parser::doVersion() {
 
 void Parser::doConstant() {
     const Origin &origin = cur->origin;
-    require("CONSTANT");
+    require("constant");
     require(Token::Identifier);
     const std::string &name = cur->text;
     checkSymbol(origin, name, SymbolDef::Constant);
@@ -92,7 +96,7 @@ void Parser::doConstant() {
 
 void Parser::doNode() {
     const Origin &origin = cur->origin;
-    require("NODE");
+    require("node");
     require(Token::Identifier);
 
     std::string nodeName = cur->text;
@@ -110,7 +114,7 @@ void Parser::doNode() {
 
 void Parser::doItemDef() {
     const Origin &origin = cur->origin;
-    require("ITEM");
+    require("item");
     require(Token::Identifier);
     const std::string &name = cur->text;
     checkSymbol(origin, name, SymbolDef::Item);
@@ -143,22 +147,22 @@ void Parser::doItemDef() {
         const std::string &pName = cur->text;
         ++cur;
 
-        if (pName == "onUse") {
+        if (pName == "onuse") {
             const Value &value = doProperty(item->name);
             item->onUse = value;
-        } else if (pName == "canEquip") {
+        } else if (pName == "canequip") {
             const Value &value = doProperty(item->name);
             item->canEquip = value;
-        } else if (pName == "onEquip") {
+        } else if (pName == "onequip") {
             const Value &value = doProperty(item->name);
             item->onEquip = value;
-        } else if (pName == "onRemove") {
+        } else if (pName == "onremove") {
             const Value &value = doProperty(item->name);
             item->onRemove = value;
         } else if (pName == "slot") {
             const Value &value = doValue();
             item->slot = value;
-        } else if (pName == "actionList") {
+        } else if (pName == "actionlist") {
             item->actionsList = doList();
         } else if (pName == "skills") {
             item->skillSet = doSkillSet();
@@ -173,7 +177,7 @@ void Parser::doItemDef() {
 
 void Parser::doAction() {
     const Origin &origin = cur->origin;
-    require("ACTION");
+    require("action");
 
     require(Token::Identifier);
     const std::string &name = cur->text;
@@ -203,9 +207,9 @@ void Parser::doAction() {
             require(Token::Integer);
             action->energyCost = cur->value;
             ++cur;
-        } else if (pName == "inCombat") {
+        } else if (pName == "incombat") {
             action->combatNode = doProperty(action->name);
-        } else if (pName == "outOfCombat") {
+        } else if (pName == "outofcombat") {
             action->peaceNode = doProperty(action->name);
         } else {
             throw BuildError(origin, "Unknown action property " + pName);
@@ -218,7 +222,7 @@ void Parser::doAction() {
 
 void Parser::doDamageTypes() {
     const Origin &origin = cur->origin;
-    require("DAMAGE-TYPES");
+    require("damage-types");
     require(Token::OpenBrace, true);
     unsigned typeNumber = 0;
     while (!matches(Token::CloseBrace)) {
@@ -285,7 +289,7 @@ std::string Parser::doSkillSet(bool setDefaults) {
 
 void Parser::doSex() {
     const Origin &origin = cur->origin;
-    require("SEX");
+    require("sex");
     require(Token::Identifier);
     const std::string &name = cur->text;
     checkSymbol(origin, name, SymbolDef::Sex);
@@ -324,7 +328,7 @@ void Parser::doSex() {
 
 void Parser::doSpecies() {
     const Origin &origin = cur->origin;
-    require("SPECIES");
+    require("species");
     require(Token::Identifier);
     const std::string &name = cur->text;
     checkSymbol(origin, name, SymbolDef::Species);
@@ -347,7 +351,7 @@ void Parser::doSpecies() {
 
 void Parser::doSkill() {
     const Origin &origin = cur->origin;
-    require("SKILL");
+    require("skill");
     require(Token::Identifier);
     const std::string &name = cur->text;
     checkSymbol(origin, name, SymbolDef::Skill);
@@ -378,7 +382,7 @@ void Parser::doSkill() {
 
 void Parser::doCharacter() {
     const Origin &origin = cur->origin;
-    require("CHARACTER");
+    require("character");
     require(Token::Identifier);
     const std::string &name = cur->text;
     checkSymbol(origin, name, SymbolDef::Character);
@@ -411,9 +415,9 @@ void Parser::doCharacter() {
             character->skillSet = doSkillSet(true);
         } else if (identText == "gear") {
             character->gearList = doList();
-        } else if (identText == "baseAbilities") {
+        } else if (identText == "baseabilities") {
             character->baseAbilities = doList();
-        } else if (identText == "extraAbilities") {
+        } else if (identText == "extraabilities") {
             character->extraAbilities = doList();
         } else {
             throw BuildError(origin, "Unknown character property " + identText);

@@ -210,4 +210,6 @@ std::ostream& operator<<(std::ostream &out, const Token &token);
 const Command* getCommand(const std::string name);
 void make_bin(GameData &gameData, const std::string &outputFile);
 
+std::string toLowercase(std::string text);
+
 #endif

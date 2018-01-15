@@ -4,6 +4,12 @@
 
 #include "build.h"
 
+std::string toLowercase(std::string text) {
+    for (auto &c : text) {
+        c = tolower(c);
+    }
+    return text;
+}
 
 std::ostream& operator<<(std::ostream &out, const Token::Type &type) {
     switch(type) {
@@ -157,7 +163,7 @@ void Lexer::doFile(const std::string &file) {
                 next();
             }
             std::string str = text.substr(start, pos-start);
-            tokens.push_back(Token(origin, Token::Identifier, str));
+            tokens.push_back(Token(origin, Token::Identifier, toLowercase(str)));
         } else if (here() == '0' && tolower(peek()) == 'x') {
             ++pos; ++pos;
             int value = 0;
