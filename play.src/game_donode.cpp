@@ -196,7 +196,7 @@ void Game::doNode(std::uint32_t address) {
             case opAddToList: {
                 a1 = operands[0]; // item to add
                 a2 = operands[1]; // list ident
-                std::shared_ptr<List> list = getDataAsList(a2);
+                std::shared_ptr<List> list = getList(a2);
                 if (list) {
                     list->add(a1, 1);
                 } else {
@@ -209,7 +209,7 @@ void Game::doNode(std::uint32_t address) {
             case opRemoveFromList: {
                 a1 = operands[0]; // item to remove
                 a2 = operands[1]; // list ident
-                std::shared_ptr<List> list = getDataAsList(a2);
+                std::shared_ptr<List> list = getList(a2);
                 if (list) {
                     list->remove(a1);
                 } else {
@@ -222,7 +222,7 @@ void Game::doNode(std::uint32_t address) {
             case opIsInList: {
                 a1 = operands[0]; // item to check for
                 a2 = operands[1]; // list ident
-                std::shared_ptr<List> list = getDataAsList(a3);
+                std::shared_ptr<List> list = getList(a3);
                 if (!list) {
                     push(false);
                 } else {
@@ -232,7 +232,7 @@ void Game::doNode(std::uint32_t address) {
             }
             case opRandomFromList: {
                 a1 = operands[0]; // list ident
-                std::shared_ptr<List> list = getDataAsList(a1);
+                std::shared_ptr<List> list = getList(a1);
                 if (list) {
                     push(list->random());
                 } else {
@@ -245,8 +245,8 @@ void Game::doNode(std::uint32_t address) {
             case opCreateList: {
                 a1 = operands[0]; // location to store list
                 List *list = new List;
-                std::uint32_t ident = nextDataItem++;
-                addData(ident, list);
+                std::uint32_t ident = nextListIdent++;
+                addList(ident, std::shared_ptr<List>(list));
                 storage[a1] = ident;
                 break;
             }
@@ -254,7 +254,7 @@ void Game::doNode(std::uint32_t address) {
                 a1 = operands[0]; // item to add
                 a2 = operands[1]; // item chance
                 a3 = operands[2]; // list ident
-                std::shared_ptr<List> list = getDataAsList(a3);
+                std::shared_ptr<List> list = getList(a3);
                 if (list) {
                     list->add(a1, a2);
                 } else {

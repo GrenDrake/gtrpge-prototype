@@ -39,25 +39,6 @@ public:
         std::vector<ListItem> items;
     };
 
-    struct RuntimeData {
-        enum Type {
-            NoneType, ListType
-        };
-        RuntimeData()
-        : list(nullptr)
-        { }
-        RuntimeData(List *list)
-        : list(list)
-        { }
-
-        Type getType() const {
-            if (list) return ListType;
-            return NoneType;
-        }
-
-        std::shared_ptr<List> list;
-    };
-
     class Option {
     public:
         Option()
@@ -87,7 +68,7 @@ public:
 
     Game()
     : gameStarted(false), locationName(0), isRunning(false), data(nullptr),
-      nextDataItem(0), gameTime(0)
+      nextListIdent(1), gameTime(0)
     { }
     ~Game() {
         delete[] data;
@@ -174,10 +155,9 @@ private:
 
     // ////////////////////////////////////////////////////////////////////////
     // dynamic list management                                               //
-    void addData(std::uint32_t ident, List *list);
-    RuntimeData::Type dataType(std::uint32_t ident);
-    std::shared_ptr<List> getDataAsList(std::uint32_t ident);
-    void freeData(std::uint32_t ident);
+    void addList(std::uint32_t ident, std::shared_ptr<List> list);
+    std::shared_ptr<List> getList(std::uint32_t ident);
+    void freeList(std::uint32_t ident);
 
     // ////////////////////////////////////////////////////////////////////////
     // stack and stored data management                                      //
@@ -196,8 +176,8 @@ private:
     uint8_t *data;
     size_t dataSize;
     std::vector<uint32_t> stack;
-    uint32_t nextDataItem;
-    std::map<std::uint32_t, RuntimeData> runtimeData;
+    uint32_t nextListIdent;
+    std::map<std::uint32_t, std::shared_ptr<List> > dynamicLists;
     std::map<std::uint32_t, Character*> characters;
     std::string outputBuffer;
     unsigned gameTime;

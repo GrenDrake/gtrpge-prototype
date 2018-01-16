@@ -67,7 +67,6 @@ void Game::loadDataFromFile(const std::string &filename) {
     }
 
     dataSize = size;
-    nextDataItem = size + 32;
 
     doGameSetup();
 }
@@ -187,20 +186,6 @@ std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
 
 std::string Game::getNameOf(std::uint32_t address) {
     std::stringstream ss;
-
-    if (address > dataSize) {
-        switch(dataType(address)) {
-            case RuntimeData::NoneType:
-                ss << "[unused address#";
-                ss << std::hex << std::setw(8) << std::setfill('0');
-                ss << address << "]";
-                return ss.str();
-            default:
-                ss << std::hex << std::setw(8) << std::setfill('0');
-                ss << "[high memory object#"<<address<<"]";
-                return ss.str();
-        }
-    }
 
     int type = getType(address);
     int work;
@@ -657,30 +642,21 @@ uint32_t Game::pop() {
     return value;
 }
 
-void Game::addData(std::uint32_t ident, List *list) {
-    RuntimeData data(list);
-    runtimeData.insert(std::make_pair(ident, data));
+void Game::addList(std::uint32_t ident, std::shared_ptr<List> list) {
+    dynamicLists.insert(std::make_pair(ident, std::shared_ptr<List>(list)));
 }
 
-Game::RuntimeData::Type Game::dataType(std::uint32_t ident) {
-    auto i = runtimeData.find(ident);
-    if (i == runtimeData.end()) {
-        return RuntimeData::Type::NoneType;
-    }
-    return i->second.getType();
-}
-
-std::shared_ptr<Game::List> Game::getDataAsList(std::uint32_t ident) {
-    auto i = runtimeData.find(ident);
-    if (i != runtimeData.end()) {
-        return i->second.list;
+std::shared_ptr<Game::List> Game::getList(std::uint32_t ident) {
+    auto i = dynamicLists.find(ident);
+    if (i != dynamicLists.end()) {
+        return i->second;
     }
     return nullptr;
 }
 
-void Game::freeData(std::uint32_t ident) {
-    auto i = runtimeData.find(ident);
-    if (i != runtimeData.end()) {
-        runtimeData.erase(i);
+void Game::freeList(std::uint32_t ident) {
+    auto i = dynamicLists.find(ident);
+    if (i != dynamicLists.end()) {
+        dynamicLists.erase(i);
     }
 }
