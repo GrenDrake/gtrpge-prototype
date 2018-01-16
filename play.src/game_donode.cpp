@@ -92,8 +92,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opSay:
-                a1 = operands[0];
-                sayAddress(a1);
+                say(getNameOf(operands[0]));
                 break;
             case opSayNumber:
                 say(operands[0]);

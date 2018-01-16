@@ -57,11 +57,11 @@ void doInventory(Game &game) {
             std::stringstream itemName, itemTraits;
 
             if (item.qty == 1) {
-                itemName << toUpperFirst(game.getString(game.getProperty(item.itemIdent, itmArticle)));
-                itemName << game.getString(game.getProperty(item.itemIdent, itmSingular));
+                itemName << toUpperFirst(game.getNameOf(game.getProperty(item.itemIdent, itmArticle)));
+                itemName << game.getNameOf(game.getProperty(item.itemIdent, itmSingular));
             } else {
                 itemName << item.qty << ' ';
-                itemName << game.getString(game.getProperty(item.itemIdent, itmPlural));
+                itemName << game.getNameOf(game.getProperty(item.itemIdent, itmPlural));
             }
 
             if (game.getProperty(item.itemIdent, itmOnUse)) {
@@ -69,7 +69,7 @@ void doInventory(Game &game) {
             }
 
             if (game.getProperty(item.itemIdent, itmSlot)) {
-                itemTraits << "Equip as: " << toTitleCase(game.getString(game.getProperty(item.itemIdent, itmSlot)));
+                itemTraits << "Equip as: " << toTitleCase(game.getNameOf(game.getProperty(item.itemIdent, itmSlot)));
             }
 
             if (curItem == i + curPage * invPerPage) {
@@ -86,7 +86,7 @@ void doInventory(Game &game) {
 
         std::uint32_t descString = game.getProperty(game.inventory[curItem].itemIdent, itmDescription);
         if (descString) {
-            auto i = wrapString(game.getString(descString), COLS-12);
+            auto i = wrapString(game.getNameOf(descString), COLS-12);
             mvprintw(13, 3, i[0].c_str());
             if (i.size() > 1) {
                 mvprintw(14, 3, i[1].c_str());

@@ -29,7 +29,7 @@ void doCharacter(Game &game) {
         std::stringstream helpLine;
         helpLine << "<G>ear  <S>tats  <A>bilities   <P>rev Char  <N>ext Char  <Z> Close";
         std::stringstream infoLine;
-        Character *c = game.getCharacter(curChar);
+        Game::Character *c = game.getCharacter(curChar);
         infoLine << toTitleCase(game.getNameOf(curChar)) << " (" << toTitleCase(game.getNameOf(c->sex)) << ' ';
         infoLine << toTitleCase(game.getNameOf(c->species)) << ")";
         switch(mode) {
@@ -60,7 +60,7 @@ void doCharacter(Game &game) {
                 if (!nameAddr) continue;
 
                 std::stringstream ss;
-                const char *name = game.getString(nameAddr);
+                std::string name = game.getNameOf(nameAddr);
                 ss << toTitleCase(name) << ": ";
                 if (game.testSkillFlags(i, sklVariable)) {
                     ss << game.getSkillCur(curChar, i);
@@ -88,7 +88,7 @@ void doCharacter(Game &game) {
                 unsigned counter = 0;
                 for (auto i : c->gear) {
                     std::stringstream ss;
-                    ss << (counter+1) << ") " << toTitleCase(game.getString(i.first)) << ": " << game.getNameOf(i.second);
+                    ss << (counter+1) << ") " << toTitleCase(game.getNameOf(i.first)) << ": " << game.getNameOf(i.second);
                     int y = 4+counter;
                     if (selection == counter) {
                         bkgdset(A_REVERSE);
@@ -118,7 +118,7 @@ void doCharacter(Game &game) {
                 if (cost != 0) {
                     std::uint32_t sklIndex = game.getProperty(actions[i], actSkill);
                     std::uint32_t nameAddr = game.readWord(skillTable + sklIndex*sklSize + sklName);
-                    mvprintw(y, 35, "%d %s", cost, toUpperFirst(game.getString(nameAddr)).c_str());
+                    mvprintw(y, 35, "%d %s", cost, toUpperFirst(game.getNameOf(nameAddr)).c_str());
                 }
 
                 int node = game.getProperty(actions[i], actCombatNode);

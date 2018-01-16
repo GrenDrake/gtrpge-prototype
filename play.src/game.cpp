@@ -68,6 +68,8 @@ void Game::loadDataFromFile(const std::string &filename) {
 
     dataSize = size;
     nextDataItem = size + 32;
+
+    doGameSetup();
 }
 
 void Game::setDataAs(uint8_t *data, size_t size) {
@@ -75,6 +77,8 @@ void Game::setDataAs(uint8_t *data, size_t size) {
     memcpy(dataCopy, data, size);
     this->data = dataCopy;
     this->dataSize = size;
+
+    doGameSetup();
 }
 
 
@@ -233,10 +237,6 @@ std::string Game::getNameOf(std::uint32_t address) {
     }
 }
 
-void Game::sayAddress(std::uint32_t address) {
-    say(getNameOf(address));
-}
-
 bool Game::addItems(int qty, std::uint32_t itemIdent) {
     for (unsigned i = 0; i < inventory.size(); ++i) {
         if (inventory[i].itemIdent == itemIdent) {
@@ -277,7 +277,7 @@ bool Game::itemQty(std::uint32_t itemIdent) {
     return 0;
 }
 
-Character* Game::getCharacter(std::uint32_t address) {
+Game::Character* Game::getCharacter(std::uint32_t address) {
     auto theChar = characters.find(address);
     if (theChar != characters.end()) {
         return theChar->second;
@@ -470,7 +470,7 @@ std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {
     return actions;
 }
 
-void Game::startGame() {
+void Game::doGameSetup() {
     location = 0;
     isRunning = true;
     say(getString(readWord(headerTitle)));
@@ -624,7 +624,7 @@ bool Game::actionAllowed() const {
     return inLocation && isRunning;
 }
 
-void Game::say(const std::string text) {
+void Game::say(const std::string &text) {
     outputBuffer += text;
 }
 

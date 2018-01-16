@@ -33,7 +33,7 @@ void drawStatus(Game &game) {
     if (!game.gameStarted) return;
 
     if (game.locationName) {
-        mvprintw(0, 3, game.getString(game.locationName));
+        mvprintw(0, 3, game.getNameOf(game.locationName).c_str());
     }
     mvprintw(0, maxX-20, toUpperFirst(game.getTimeString()).c_str());
 }
@@ -55,7 +55,7 @@ static void drawOptions(Game &game) {
         if (option.name == 1) {
             ss << "Continue";
         } else {
-            ss << game.getString(option.name);
+            ss << game.getNameOf(option.name);
         }
         int x, y = 0;
         if (counter < 5) {
@@ -93,7 +93,6 @@ void gameloop() {
     Game game;
 
     game.loadDataFromFile(gamefile);
-    game.startGame();
     addToOutput(game.getOutput());
 
     while (true) {
@@ -129,9 +128,9 @@ void gameloop() {
                 game.doOption(0);
                 addToOutput(game.getOutput());
             }
-        } else if (key == 'I' && game.isRunning && game.actionAllowed()) {
+        } else if (key == 'I' && game.actionAllowed()) {
             doInventory(game);
-        } else if (key == 'C' && game.isRunning && game.actionAllowed()) {
+        } else if (key == 'C' && game.actionAllowed()) {
             doCharacter(game);
         } else if (key == 'Q') {
             if (getYesNo("Are you sure you want to quit?", false)) {

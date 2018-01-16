@@ -12,16 +12,16 @@
 
 #include "playerror.h"
 
-struct Character {
-    std::uint32_t def;
-    std::uint32_t sex, species;
-    std::array<std::int8_t, sklCount> skillAdj;
-    std::array<std::uint8_t, sklCount> skillCur;
-    std::map<std::uint32_t, std::uint32_t> gear;
-};
-
 class Game {
 public:
+    struct Character {
+        std::uint32_t def;
+        std::uint32_t sex, species;
+        std::array<std::int8_t, sklCount> skillAdj;
+        std::array<std::uint8_t, sklCount> skillCur;
+        std::map<std::uint32_t, std::uint32_t> gear;
+    };
+
     struct ListItem {
         ListItem(std::uint32_t value, std::uint32_t chance)
         : value(value), chance(chance)
@@ -86,78 +86,109 @@ public:
     };
 
     Game()
-    : isRunning(false), gameStarted(false), locationName(0), data(nullptr),
+    : gameStarted(false), locationName(0), isRunning(false), data(nullptr),
       nextDataItem(0), gameTime(0)
     { }
     ~Game() {
         delete[] data;
     }
 
-    static int roll(int dice, int sides);
-
+    // ////////////////////////////////////////////////////////////////////////
+    // Game Engine Startup                                                   //
     void loadDataFromFile(const std::string &filename);
     void setDataAs(uint8_t *data, size_t size);
 
-    void clearOutput();
-    std::string getOutput() const;
+    // ////////////////////////////////////////////////////////////////////////
+    // Fetching game state                                                   //
     std::string getTimeString(bool exact = false);
-
-    int getType(std::uint32_t address) const;
-    bool isType(std::uint32_t address, uint8_t type) const;
-    std::uint8_t readByte(std::uint32_t pos) const;
-    std::uint16_t readShort(std::uint32_t pos) const;
-    std::uint32_t readWord(std::uint32_t pos) const;
-    const char *getString(std::uint32_t address) const;
+    std::string getOutput() const;
 
     std::uint32_t getProperty(std::uint32_t address, int propId) const;
     std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
     std::string getNameOf(std::uint32_t address);
-    void sayAddress(std::uint32_t address);
-    bool addItems(int qty, std::uint32_t itemIdent);
-    bool removeItems(int qty, std::uint32_t itemIdent);
-    bool itemQty(std::uint32_t itemIdent);
 
     Character* getCharacter(std::uint32_t address);
-    void resetCharacter(std::uint32_t cRef);
-    void doDamage(std::uint32_t cRef, int amount, int to, int type);
-    int doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target);
     bool testSkillFlags(int skillNo, uint32_t flags);
     int getSkillMax(std::uint32_t cRef, int skillNo);
-    void adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment);
     int getSkillCur(std::uint32_t cRef, int skillNo);
-    void adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment);
     std::vector<std::uint32_t> getActions(std::uint32_t cRef);
 
-    void startGame();
+    std::uint8_t readByte(std::uint32_t pos) const;
+    std::uint16_t readShort(std::uint32_t pos) const;
+    std::uint32_t readWord(std::uint32_t pos) const;
+
+    // ////////////////////////////////////////////////////////////////////////
+    // Player action commands                                                //
+    bool actionAllowed() const;
     void doOption(int optionNumber);
     void useItem(int itemNumber);
     void equipItem(std::uint32_t whoIdent, int itemNumber);
     void unequipItem(std::uint32_t whoIdent, std::uint32_t slotIdent);
     void doAction(std::uint32_t cRef, std::uint32_t action);
-    void newNode(std::uint32_t address);
-    void doNode(std::uint32_t address);
 
-    bool actionAllowed() const;
-    void say(const std::string text);
-    void say(int number);
-    void sayError(const std::string &errorMessage);
 
-    uint32_t fetch(uint32_t key) const;
-    void push(uint32_t value);
-    uint32_t pop();
-
-    void addData(std::uint32_t ident, List *list);
-    RuntimeData::Type dataType(std::uint32_t ident);
-    std::shared_ptr<List> getDataAsList(std::uint32_t ident);
-    void freeData(std::uint32_t ident);
-
-    bool isRunning;
+    // ////////////////////////////////////////////////////////////////////////
+    // Public game state data                                                //
     bool gameStarted;
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
     std::vector<std::uint32_t> party;
 private:
+    // ////////////////////////////////////////////////////////////////////////
+    // Game Engine Startup                                                   //
+    void doGameSetup();
+    static int roll(int dice, int sides);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // Raw Data Management                                                   //
+    int getType(std::uint32_t address) const;
+    bool isType(std::uint32_t address, uint8_t type) const;
+    const char *getString(std::uint32_t address) const;
+
+    // ////////////////////////////////////////////////////////////////////////
+    // Character Management                                                  //
+    void resetCharacter(std::uint32_t cRef);
+    void doDamage(std::uint32_t cRef, int amount, int to, int type);
+    int doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target);
+    void adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment);
+    void adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // node execution                                                        //
+    void newNode(std::uint32_t address);
+    void doNode(std::uint32_t address);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // Output manipulation                                                   //
+    void clearOutput();
+    void say(const std::string &text);
+    void say(int number);
+    void sayError(const std::string &errorMessage);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // inventory management                                                  //
+    bool addItems(int qty, std::uint32_t itemIdent);
+    bool removeItems(int qty, std::uint32_t itemIdent);
+    bool itemQty(std::uint32_t itemIdent);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // dynamic list management                                               //
+    void addData(std::uint32_t ident, List *list);
+    RuntimeData::Type dataType(std::uint32_t ident);
+    std::shared_ptr<List> getDataAsList(std::uint32_t ident);
+    void freeData(std::uint32_t ident);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // stack and stored data management                                      //
+    uint32_t fetch(uint32_t key) const;
+    void push(uint32_t value);
+    uint32_t pop();
+
+
+    // ////////////////////////////////////////////////////////////////////////
+    // Private data storage                                                  //
+    bool isRunning;
     std::map<std::uint32_t, std::uint32_t> storage;
     std::uint32_t location;
     bool inLocation;
