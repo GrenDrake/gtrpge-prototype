@@ -46,6 +46,9 @@ void doCharacter(Game &game) {
             default:
                 infoLine << "   - Unknown Display Mode";
         }
+        if (game.isKOed(curChar)) {
+            infoLine << " (KO)";
+        }
         bkgdset(A_NORMAL | COLOR_PAIR(colorStatus));
         move(maxY-1, 0);
         clrtoeol();

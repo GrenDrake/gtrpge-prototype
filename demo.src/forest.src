@@ -43,6 +43,20 @@ NODE forest-path {
     add-option "Follow the path south" town-gate;
     add-option "Examine the stone wall" examine-wall;
     add-option "Take the overgrown trail" gnoll-cage;
+    add-option "Hurt yourself" hurt-self-health;
+    add-option "Inflict void on yourself" hurt-self-void;
+}
+
+NODE hurt-self-health {
+    do-damage the-player 56 skl-health dt-blunt;
+    say "You hurt yourself.";
+    add-return;
+}
+
+NODE hurt-self-void {
+    do-damage the-player -6 skl-void dt-blunt;
+    say "You hurt yourself.";
+    add-return;
 }
 
 NODE examine-wall {

@@ -276,6 +276,29 @@ Game::Character* Game::getCharacter(std::uint32_t address) {
     return nullptr;
 }
 
+const Game::Character* Game::getCharacter(std::uint32_t address) const {
+    auto theChar = characters.find(address);
+    if (theChar != characters.end()) {
+        return theChar->second;
+    }
+    return nullptr;
+}
+
+bool Game::isKOed(std::uint32_t cRef) {
+    for (unsigned i = 0; i < sklCount; ++i) {
+        if (!testSkillFlags(i, sklVariable)) {
+            continue;
+        }
+        if (testSkillFlags(i, sklKOFull) && getSkillCur(cRef, i) == getSkillMax(cRef, i)) {
+            return true;
+        }
+        if (testSkillFlags(i, sklKOZero) && getSkillCur(cRef, i) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Game::resetCharacter(std::uint32_t cRef) {
     auto oldChar = characters.find(cRef);
     if (oldChar != characters.end()) {
