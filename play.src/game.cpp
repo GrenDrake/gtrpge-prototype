@@ -263,6 +263,10 @@ bool Game::itemQty(std::uint32_t itemIdent) {
 }
 
 Game::Character* Game::getCharacter(std::uint32_t address) {
+    if (address < party.size()) {
+        address = party[address];
+    }
+
     auto theChar = characters.find(address);
     if (theChar != characters.end()) {
         return theChar->second;
@@ -277,6 +281,10 @@ Game::Character* Game::getCharacter(std::uint32_t address) {
 }
 
 const Game::Character* Game::getCharacter(std::uint32_t address) const {
+    if (address < party.size()) {
+        address = party[address];
+    }
+
     auto theChar = characters.find(address);
     if (theChar != characters.end()) {
         return theChar->second;

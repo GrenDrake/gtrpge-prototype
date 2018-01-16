@@ -48,7 +48,7 @@ NODE forest-path {
 }
 
 NODE hurt-self-health {
-    do-damage the-player 56 skl-health dt-blunt;
+    do-damage 0 56 skl-health dt-blunt;
     say "You hurt yourself.";
     add-return;
 }
