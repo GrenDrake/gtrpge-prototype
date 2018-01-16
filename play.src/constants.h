@@ -12,6 +12,7 @@ const int headerDamageTypes = 0x1C;
 const int headerWeaponSlot  = 0x20;
 const int headerBuildNumber = 0x24;
 const int headerChecksum    = 0x28;
+const int headerSize        = 64;
 
 const int idString          = 0xFF;
 const int idNode            = 0xFE;

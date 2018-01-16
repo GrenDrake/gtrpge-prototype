@@ -175,12 +175,12 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     out.put('P');   out.put('G');
     out.put(0);     out.put(0);
     out.put(1);     out.put(0);
-    for (int i = 0; i < 56; ++i) {
+    for (int i = 0; i < headerSize - 8; ++i) {
         out.put(0);
     }
 
     // setup the initial, default labels as well as the ones created by constants
-    std::uint32_t pos = 64;
+    std::uint32_t pos = headerSize;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
     // setup the labels for the temp storage values
