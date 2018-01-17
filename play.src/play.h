@@ -171,6 +171,7 @@ private:
     uint32_t fetch(uint32_t key) const;
     void push(uint32_t value);
     uint32_t pop();
+    void setTemp(unsigned tempNo, std::uint32_t value);
 
 
     // ////////////////////////////////////////////////////////////////////////

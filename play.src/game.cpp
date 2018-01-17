@@ -568,17 +568,12 @@ void Game::doOption(int optionNumber) {
     clearOutput();
 
     if (inCombat) {
-        say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+        options.clear();
         if (dest == 0) {
+            say(toUpperFirst(getNameOf(combatants[currentCombatant])));
             say(" does nothing.\n");
         } else {
-            say(" uses ");
-            say(getString(nameAddr));
-            say("\n");
-        }
-
-        options.clear();
-        if (dest) {
+            setTemp(0, combatants[currentCombatant]);
             newNode(dest);
         }
         advanceCombatant();
@@ -730,6 +725,13 @@ uint32_t Game::pop() {
     uint32_t value = stack.back();
     stack.pop_back();
     return value;
+}
+
+void Game::setTemp(unsigned tempNo, std::uint32_t value) {
+    if (tempNo >= storageTempCount) {
+        throw PlayError("Tried to update bad temp storage position");
+    }
+    storage[storageFirstTemp - tempNo] = value;
 }
 
 void Game::addList(std::uint32_t ident, std::shared_ptr<List> list) {
