@@ -94,6 +94,12 @@ void Game::doNode(std::uint32_t address) {
             case opSay:
                 say(getNameOf(operands[0]));
                 break;
+            case opSayUF:
+                say(toUpperFirst(getNameOf(operands[0])));
+                break;
+            case opSayTC:
+                say(toTitleCase(getNameOf(operands[0])));
+                break;
             case opSayNumber:
                 say(operands[0]);
                 break;

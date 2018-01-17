@@ -23,6 +23,8 @@ Command commands[] = {
     { "add-continue",    opAddContinue,     1 },
     { "add-return",      opAddReturn,       0 },
     { "say",             opSay,             1 },
+    { "say-uf",          opSayUF,           1 },
+    { "say-tc",          opSayTC,           1 },
     { "say-number",      opSayNumber,       1 },
     { "jump",            opJump,            1 },
     { "jump-true",       opJumpTrue,        1 },

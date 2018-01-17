@@ -190,7 +190,7 @@ ACTION act-fireball {
     "fireball"
     cost skl-energy 2
     inCombat {
-        say #_0;
+        say-uf #_0;
         say " uses fireball! KABOOM!\n";
     }
 }
@@ -198,7 +198,7 @@ ACTION act-fireball {
 ACTION act-swing {
     "swing"
     inCombat {
-        say #_0;
+        say-uf #_0;
         say " swings a sword! Swish!\n";
     }
     outOfCombat {
