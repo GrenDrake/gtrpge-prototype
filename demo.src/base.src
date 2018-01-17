@@ -199,7 +199,9 @@ ACTION act-swing {
     "swing"
     inCombat {
         say-uf #_0;
-        say " swings a sword! Swish!\n";
+        say " swings ";
+        say-pronoun #_0 pro-adject;
+        say " sword! Swish!\n";
     }
     outOfCombat {
         say "You brandish the sword wildly.";

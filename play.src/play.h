@@ -87,6 +87,7 @@ public:
     std::uint32_t getProperty(std::uint32_t address, int propId) const;
     std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
     std::string getNameOf(std::uint32_t address);
+    std::string getPronoun(std::uint32_t cRef, int pronounType);
 
     Character* getCharacter(std::uint32_t address);
     const Character* getCharacter(std::uint32_t address) const;

@@ -85,6 +85,12 @@ const int actCombatNode     = 13;
 const int actPeaceNode      = 17;
 const int actSize           = 21;
 
+const int proSubject        = 0;
+const int proObject         = 1;
+const int proAdjective      = 2;
+const int proPossessive     = 3;
+const int proReflexive      = 4;
+
 const int damageTypeCount   = 8;
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
@@ -102,6 +108,8 @@ const int opSay             = 0x20;
 const int opSayNumber       = 0x21;
 const int opSayUF           = 0x22;
 const int opSayTC           = 0x23;
+const int opSayPronoun      = 0x24;
+const int opSayPronounUF    = 0x25;
 const int opJump            = 0x30;
 const int opJumpTrue        = 0x31;
 const int opJumpFalse       = 0x32;

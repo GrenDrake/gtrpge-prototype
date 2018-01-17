@@ -222,6 +222,27 @@ std::string Game::getNameOf(std::uint32_t address) {
     }
 }
 
+std::string Game::getPronoun(std::uint32_t cRef, int pronounType) {
+    if (!isType(cRef, idCharacter)) {
+        throw PlayError("Tried to get pronoun for non-character");
+    }
+    std::uint32_t sex = getProperty(cRef, chrSex);
+    switch(pronounType) {
+        case proSubject:
+            return getString(getProperty(sex, sexSubject));
+        case proObject:
+            return getString(getProperty(sex, sexObject));
+        case proAdjective:
+            return getString(getProperty(sex, sexAdjective));
+        case proPossessive:
+            return getString(getProperty(sex, sexPossessive));
+        case proReflexive:
+            return getString(getProperty(sex, sexReflexive));
+        default:
+            throw PlayError("Tried to use unknown pronoun");
+    }
+}
+
 bool Game::addItems(int qty, std::uint32_t itemIdent) {
     for (unsigned i = 0; i < inventory.size(); ++i) {
         if (inventory[i].itemIdent == itemIdent) {

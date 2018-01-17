@@ -100,6 +100,12 @@ void Game::doNode(std::uint32_t address) {
             case opSayTC:
                 say(toTitleCase(getNameOf(operands[0])));
                 break;
+            case opSayPronoun:
+                say(getPronoun(operands[0], operands[1]));
+                break;
+            case opSayPronounUF:
+                say(toUpperFirst(getPronoun(operands[0], operands[1])));
+                break;
             case opSayNumber:
                 say(operands[0]);
                 break;
