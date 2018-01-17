@@ -32,6 +32,25 @@ CHARACTER the-gnoll {
     )
 }
 
+CHARACTER imp-1 {
+    "a " "tall male imp"
+    sex-male spc-human
+    ()
+    faction 1
+}
+CHARACTER imp-2 {
+    "a " "fat male imp"
+    sex-male spc-human
+    ()
+    faction 1
+}
+CHARACTER imp-3 {
+    "a " "female imp"
+    sex-female spc-human
+    ()
+    faction 1
+}
+
 /* ************************************************************************* *
  * FOREST NODES                                                              *
  * ************************************************************************* */
@@ -45,6 +64,7 @@ NODE forest-path {
     add-option "Take the overgrown trail" gnoll-cage;
     add-option "Hurt yourself" hurt-self-health;
     add-option "Inflict void on yourself" hurt-self-void;
+    add-option "Fight some immps" imp-fight;
 }
 
 NODE hurt-self-health {
@@ -65,6 +85,15 @@ NODE examine-wall {
     do-damage the-player 5 skl-health dt-blunt;
     add-return;
 }
+
+NODE imp-fight {
+    say "Three imps are gathered around a campfire, cackling and conversing.";
+    reset-combat;
+    add-to-combat imp-1;
+    add-to-combat imp-2;
+    add-to-combat imp-3;
+}
+
 
 NODE town-gate {
     set-location "Outside the Town Gates";

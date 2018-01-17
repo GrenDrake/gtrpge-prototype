@@ -514,8 +514,47 @@ void Game::newNode(std::uint32_t address) {
         storage.erase(storageFirstTemp-i);
     }
 
-    if (gameStarted && (!inLocation || newLocation)) {
+    if (gameStarted && (!inLocation || newLocation) && !inCombat) {
         gameTime += 2;
+    }
+
+    if (startedCombat) {
+        startedCombat = false;
+        random_shuffle(combatants.begin(), combatants.end());
+        say("\n");
+        doCombatLoop();
+    }
+}
+
+void Game::doCombatLoop() {
+    while (getProperty(combatants[currentCombatant], chrFaction) != 0) {
+        say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+        say(" takes a turn.\n");
+        advanceCombatant();
+    }
+
+    auto actionList = getActions(combatants[currentCombatant]);
+    for (auto action : actionList) {
+        std::uint32_t node = getProperty(action, actCombatNode);
+        if (node) {
+            options.push_back(Option(getProperty(action, actName), node));
+        }
+    }
+    options.push_back(Option(readWord(headerWeaponSlot), 0));
+
+    say("What does ");
+    say(getNameOf(combatants[currentCombatant]));
+    say(" do?\n");
+}
+
+void Game::advanceCombatant() {
+    ++currentCombatant;
+    if (currentCombatant >= combatants.size()) {
+        say("Combat round ");
+        say(++combatRound);
+        say(" begins.\n");
+        currentCombatant = 0;
+        gameTime += 1;
     }
 }
 
@@ -525,24 +564,44 @@ void Game::doOption(int optionNumber) {
     }
 
     std::uint32_t dest = options[optionNumber].dest;
-    if (dest == 0) {
-        dest = location;
-    }
-
-    clearOutput();
-    say("\n> ");
     uint32_t nameAddr = options[optionNumber].name;
-    if (nameAddr == 1) {
-        say("Continue");
-    } else {
-        say(getString(nameAddr));
-    }
-    say("\n\n");
+    clearOutput();
 
-    if (options[optionNumber].extra) {
-        push(options[optionNumber].extra);
+    if (inCombat) {
+        say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+        if (dest == 0) {
+            say(" does nothing.\n");
+        } else {
+            say(" uses ");
+            say(getString(nameAddr));
+            say("\n");
+        }
+
+        options.clear();
+        if (dest) {
+            newNode(dest);
+        }
+        advanceCombatant();
+        doCombatLoop();
+
+    } else {
+        if (dest == 0) {
+            dest = location;
+        }
+
+        say("\n> ");
+        if (nameAddr == 1) {
+            say("Continue");
+        } else {
+            say(getString(nameAddr));
+        }
+        say("\n\n");
+
+        if (options[optionNumber].extra) {
+            push(options[optionNumber].extra);
+        }
+        newNode(dest);
     }
-    newNode(dest);
 }
 
 void Game::useItem(int itemNumber) {

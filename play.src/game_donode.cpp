@@ -369,6 +369,19 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
 
+            case opResetCombat:
+                inCombat = startedCombat = true;
+                combatants.clear();
+                currentCombatant = 0;
+                combatRound = 1;
+                for (const auto &partyMember : party) {
+                    combatants.push_back(partyMember);
+                }
+                break;
+            case opAddToCombat:
+                combatants.push_back(operands[0]);
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;

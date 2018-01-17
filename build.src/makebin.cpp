@@ -66,6 +66,8 @@ Command commands[] = {
     { "add-to-party",       opAddToParty,       1 },
     { "is-in-party",        opIsInParty,        1 },
     { "remove-from-party",  opRemoveFromParty,  1 },
+    { "reset-combat",       opResetCombat,      0 },
+    { "add-to-combat",      opAddToCombat,      1 },
 };
 
 const Command* getCommand(const std::string name) {

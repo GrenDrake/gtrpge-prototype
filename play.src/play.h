@@ -68,7 +68,7 @@ public:
 
     Game()
     : gameStarted(false), locationName(0), isRunning(false), data(nullptr),
-      nextListIdent(1), gameTime(0)
+      nextListIdent(1), gameTime(0), inCombat(false), startedCombat(false)
     { }
     ~Game() {
         delete[] data;
@@ -138,6 +138,11 @@ private:
     void adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment);
 
     // ////////////////////////////////////////////////////////////////////////
+    // combat methods                                                        //
+    void doCombatLoop();
+    void advanceCombatant();
+
+    // ////////////////////////////////////////////////////////////////////////
     // node execution                                                        //
     void newNode(std::uint32_t address);
     void doNode(std::uint32_t address);
@@ -183,6 +188,9 @@ private:
     std::map<std::uint32_t, Character*> characters;
     std::string outputBuffer;
     unsigned gameTime;
+    bool inCombat, startedCombat;
+    unsigned currentCombatant, combatRound;
+    std::vector<std::uint32_t> combatants;
 };
 
 std::string toTitleCase(std::string text);

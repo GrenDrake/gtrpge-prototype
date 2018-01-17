@@ -142,6 +142,8 @@ const int opDecrement       = 0x97;
 const int opAddToParty      = 0xA0;
 const int opIsInParty       = 0xA1;
 const int opRemoveFromParty = 0xA2;
+const int opResetCombat     = 0xB0;
+const int opAddToCombat     = 0xB1;
 
 const int operandNone           = 0;
 const int operandImmediate      = 1;

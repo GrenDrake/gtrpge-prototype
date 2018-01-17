@@ -189,11 +189,16 @@ ACTION act-punch {
 ACTION act-fireball {
     "fireball"
     cost skl-energy 2
+    inCombat {
+        say "Fireball! KABOOM!\n";
+    }
 }
 
 ACTION act-swing {
     "swing"
-    inCombat { }
+    inCombat {
+        say "Swish!\n";
+    }
     outOfCombat {
         say "You brandish the sword wildly.";
         add-return;
