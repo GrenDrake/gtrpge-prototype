@@ -118,6 +118,9 @@ public:
         return "OBJECT";
     }
 
+    bool hasProperty(const std::string &propName);
+    bool hasProperty(std::uint16_t propId);
+
     std::uint32_t ident;
     std::unordered_map<std::uint16_t, Value> properties;
 };

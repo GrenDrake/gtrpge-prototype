@@ -12,6 +12,9 @@ void writeValue(std::ostream &out, const Origin &origin, const Value &value);
 void writeFlags(std::ostream &out, const Origin &origin, const std::unordered_set<Value> &flags);
 void writeLabelValue(std::ostream &out, const std::string &labelName);
 
+/* ************************************************************************
+ * OBJECT DEF STUFF                                                       */
+
 std::unordered_map<std::string, std::uint16_t> ObjectDef::propertyNames;
 std::uint16_t ObjectDef::nextProperty = 1;
 std::uint16_t ObjectDef::getPropertyIdent(const std::string &propertyName) {
@@ -22,6 +25,15 @@ std::uint16_t ObjectDef::getPropertyIdent(const std::string &propertyName) {
     std::uint16_t myId = nextProperty++;
     propertyNames.insert(std::make_pair(propertyName, myId));
     return myId;
+}
+
+bool ObjectDef::hasProperty(const std::string &propName) {
+    return hasProperty(getPropertyIdent(propName));
+}
+
+bool ObjectDef::hasProperty(std::uint16_t propId) {
+    auto iter = properties.find(propId);
+    return iter != properties.end();
 }
 
 /* ************************************************************************
@@ -153,3 +165,4 @@ void ObjectDef::write(std::ostream &out) {
         writeValue(out, origin, prop.second);
     }
 }
+
