@@ -15,6 +15,17 @@ void Parser::checkSymbol(const Origin &origin, const std::string &name, SymbolDe
     symbols.push_back(SymbolDef(origin, name, type));
 }
 
+void Parser::requireProperties(std::shared_ptr<ObjectDef> objDef, const char **properties) {
+    for (int i = 0; properties[i] != nullptr; ++i) {
+        const char *name = properties[i];
+        if (!objDef->hasProperty(name)) {
+            std::stringstream ss;
+            ss << "Object " << objDef->name << " requires property " << name;
+            throw BuildError(objDef->origin, ss.str());
+        }
+    }
+}
+
 void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end) {
     cur = start;
 
@@ -368,6 +379,12 @@ void Parser::doSpecies() {
 
     std::shared_ptr<ObjectDef> newSpecies = doObjectCore(origin);
     newSpecies->properties[propClass] = Value(ocSpecies);
+
+    const char *requiredProperties[] = {
+        "name",
+        nullptr
+    };
+    requireProperties(newSpecies, requiredProperties);
 
     gameData.dataItems.push_back(newSpecies);
 }

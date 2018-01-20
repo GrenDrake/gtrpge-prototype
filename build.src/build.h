@@ -1,6 +1,7 @@
 #ifndef BUILD_H
 #define BUILD_H
 
+#include <array>
 #include <cstdint>
 #include <fstream>
 #include <list>
@@ -197,6 +198,7 @@ private:
     bool matches(const std::string &text);
 
     void checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type);
+    void requireProperties(std::shared_ptr<ObjectDef> objDef, const char **properties);
 
     std::vector<SymbolDef> &symbols;
     std::list<Token>::iterator cur;
