@@ -168,6 +168,24 @@ std::uint32_t Game::getProperty(std::uint32_t address, int propId) const {
     return readWord(address + propId);
 }
 
+std::uint32_t Game::getObjectProperty(std::uint32_t objRef, std::uint16_t propId) {
+    if (!isType(objRef, idObject)) {
+        throw PlayError("Tried to get property of non-object");
+    }
+
+    const std::uint16_t propCount = readShort(objRef + 1);
+    std::uint32_t propValue = 0;
+    for (std::uint16_t i = 0; i < propCount; ++i) {
+        std::uint16_t idHere = readShort(objRef + 3 + i * 6);
+        if (idHere == propId) {
+            propValue = readWord(objRef + 5 + i * 6);
+            break;
+        }
+    }
+    return propValue;
+}
+
+
 std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
     std::uint32_t curFlags = 0;
     flags = 1 << flags;
@@ -212,6 +230,18 @@ std::string Game::getNameOf(std::uint32_t address) {
         case idAction:
             work = address + actName;
             return getString(readWord(work));
+        case idObject: {
+            std::uint32_t name = getObjectProperty(address, propName);
+            if (name == 0) {
+                ss << "[ObjectDef@" << std::hex << std::uppercase << address << "]";
+            } else {
+                std::uint32_t article = getObjectProperty(address, propArticle);
+                if (article) {
+                    ss << getString(article);
+                }
+                ss << getString(name);
+            }
+            return ss.str(); }
         default: {
             std::stringstream ss;
             ss << "[object#";
