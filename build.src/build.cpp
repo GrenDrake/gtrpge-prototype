@@ -83,6 +83,11 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("article", propArticle);
     ObjectDef::setPropertyIdent("plural", propPlural);
     ObjectDef::setPropertyIdent("class", propClass);
+    ObjectDef::setPropertyIdent("subject", propSubject);
+    ObjectDef::setPropertyIdent("object", propObject);
+    ObjectDef::setPropertyIdent("possessive", propPossessive);
+    ObjectDef::setPropertyIdent("adjective", propAdjective);
+    ObjectDef::setPropertyIdent("reflexive", propReflexive);
 
     try {
         std::vector<SymbolDef> symbols;

@@ -86,18 +86,18 @@ const int actCombatNode     = 13;
 const int actPeaceNode      = 17;
 const int actSize           = 21;
 
-const int proSubject        = 0;
-const int proObject         = 1;
-const int proAdjective      = 2;
-const int proPossessive     = 3;
-const int proReflexive      = 4;
-
 const int propName          = 1;
 const int propArticle       = 2;
 const int propPlural        = 3;
 const int propClass         = 4;
+const int propSubject       = 5;
+const int propObject        = 6;
+const int propAdjective     = 7;
+const int propPossessive    = 8;
+const int propReflexive     = 9;
 
 const int ocSpecies         = 1;
+const int ocSex             = 2;
 
 const int damageTypeCount   = 8;
 const int opEnd             = 0x00;

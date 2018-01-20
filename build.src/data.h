@@ -133,21 +133,6 @@ public:
     std::shared_ptr<Block> block;
 };
 
-class SexDef : public DataType {
-public:
-    virtual size_t getSize() const {
-        return sexSize;
-    }
-    virtual void write(std::ostream &out);
-    virtual std::string getTypeName() const {
-        return "SEX";
-    }
-
-    std::string displayName;
-    std::unordered_set<Value> flags;
-    std::string subject, object, possess, adject, reflex;
-};
-
 class CharacterDef : public DataType {
 public:
     virtual size_t getSize() const {

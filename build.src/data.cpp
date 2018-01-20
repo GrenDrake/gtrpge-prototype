@@ -85,18 +85,6 @@ void DataType::prettyPrint(std::ostream &out) const {
 
 
 
-void SexDef::write(std::ostream &out) {
-    writeByte(out, idSex);
-    writeFlags(out, origin, flags);
-    writeLabelValue(out, displayName);
-    writeLabelValue(out, subject);
-    writeLabelValue(out, object);
-    writeLabelValue(out, possess);
-    writeLabelValue(out, adject);
-    writeLabelValue(out, reflex);
-}
-
-
 void CharacterDef::write(std::ostream &out) {
     writeByte(out, idCharacter);
     writeFlags(out, origin, flags);

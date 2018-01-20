@@ -33,22 +33,30 @@ SPECIES spc-dragon {
 }
 
 SEX sex-male {
-    "male" ( /* sflg-male */ )
-    "he"      // subject  : _he_ ate dinner
-    "him"     // object   : dinner ate _him_
-    "his"     // possess  : the dinner was _his_
-    "his"     // adject   : it's _his_ dinner
-    "himself" // reflex   : he ate _himself_
+    name "male";
+    subject "he";        // subject  : _he_ ate dinner
+    object "him";        // object   : dinner ate _him_
+    possessive "his";    // possess  : the dinner was _his_
+    adjective "his";     // adject   : it's _his_ dinner
+    reflexive "himself"; // reflex   : he ate _himself_
 }
 
 SEX sex-female {
-    "female"
-    "she" "her" "hers" "her" "herself"
+    name "female";
+    subject "she";
+    object "her";
+    possessive "hers";
+    adjective "her";
+    reflexive "herself";
 }
 
 SEX sex-neuter {
-    "neuter"
-    "it" "it" "its" "its" "itself"
+    name "neuter";
+    subject "it";
+    object "it";
+    possessive "its";
+    adjective "its";
+    reflexive "itself";
 }
 
 CONSTANT skl-variable       0x01; // variable stat (like health, energy, mana, corruption, etc.)

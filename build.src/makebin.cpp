@@ -114,11 +114,11 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     std::uint32_t pos = headerSize;
     labels.insert(std::make_pair("true", 1));
     labels.insert(std::make_pair("false", 0));
-    labels.insert(std::make_pair("pro-subject", proSubject));
-    labels.insert(std::make_pair("pro-object", proObject));
-    labels.insert(std::make_pair("pro-possess", proPossessive));
-    labels.insert(std::make_pair("pro-adject", proAdjective));
-    labels.insert(std::make_pair("pro-reflex", proReflexive));
+    labels.insert(std::make_pair("pro-subject", propSubject));
+    labels.insert(std::make_pair("pro-object", propObject));
+    labels.insert(std::make_pair("pro-possess", propPossessive));
+    labels.insert(std::make_pair("pro-adject", propAdjective));
+    labels.insert(std::make_pair("pro-reflex", propReflexive));
     // setup the labels for the temp storage values
     for (unsigned i = 0; i < storageTempCount; ++i) {
         std::stringstream ss;

@@ -291,7 +291,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opSetSex: {
-                if (!isType(operands[1], idSex)) {
+                if (getObjectProperty(operands[1], propClass) != ocSex) {
                     throw PlayError("Tried to set character sex to non-sex.");
                 }
                 Character *c = getCharacter(operands[0]);
@@ -300,7 +300,6 @@ void Game::doNode(std::uint32_t address) {
             }
             case opSetSpecies: {
                 if (getObjectProperty(operands[1], propClass) != ocSpecies) {
-                // if (!isType(operands[1], idSpecies)) {
                     throw PlayError("Tried to set character species to non-species.");
                 }
                 Character *c = getCharacter(operands[0]);

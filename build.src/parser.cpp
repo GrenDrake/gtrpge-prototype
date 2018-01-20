@@ -337,40 +337,18 @@ std::string Parser::doSkillSet(bool setDefaults) {
 void Parser::doSex() {
     const Origin &origin = cur->origin;
     require("sex");
-    require(Token::Identifier);
-    const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Sex);
-    ++cur;
 
-    std::shared_ptr<SexDef> sex(new SexDef);
-    sex->origin = origin;
-    sex->name = name;
-    require(Token::OpenBrace, true);
+    std::shared_ptr<ObjectDef> newSex = doObjectCore(origin);
+    newSex->properties[propClass] = Value(ocSex);
 
-    require(Token::String);
-    sex->displayName = gameData.addString(cur->text);
-    ++cur;
+    const char *requiredProperties[] = {
+        "name",
+        "subject", "object", "reflexive", "adjective", "possessive",
+        nullptr
+    };
+    requireProperties(newSex, requiredProperties);
 
-    sex->flags = doFlags();
-
-    require(Token::String);
-    sex->subject = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    sex->object = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    sex->possess = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    sex->adject = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    sex->reflex = gameData.addString(cur->text);
-    ++cur;
-
-    require(Token::CloseBrace, true);
-    gameData.dataItems.push_back(sex);
+    gameData.dataItems.push_back(newSex);
 }
 
 void Parser::doSpecies() {
