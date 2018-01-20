@@ -245,6 +245,12 @@ void Parser::doDamageTypes() {
 void Parser::doObject() {
     const Origin &origin = cur->origin;
     require("object");
+    std::shared_ptr<ObjectDef> obj = doObjectCore(origin);
+
+    gameData.dataItems.push_back(obj);
+}
+
+std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
     require(Token::Identifier);
     std::shared_ptr<ObjectDef> obj(new ObjectDef);
     obj->origin = origin;
@@ -267,8 +273,7 @@ void Parser::doObject() {
         }
     }
     ++cur;
-
-    gameData.dataItems.push_back(obj);
+    return obj;
 }
 
 
