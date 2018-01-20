@@ -1,7 +1,8 @@
 CXXFLAGS=-Wall -g -std=c++11 -pedantic
 
 BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o \
-           build.src/makebin.o build.src/data.o build.src/project.o
+           build.src/makebin.o build.src/data.o build.src/project.o \
+		   build.src/opcodes.o
 BUILD_TARGET=build
 
 PLAY_LIBS=-lncurses
