@@ -44,6 +44,8 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doAction();
         } else if (matches("damage-types")) {
             doDamageTypes();
+        } else if (matches("object")) {
+            doObject();
         } else {
             std::stringstream ss;
             ss << "Expected top level construct, but found " << cur->type;
@@ -240,6 +242,35 @@ void Parser::doDamageTypes() {
     ++cur;
 }
 
+void Parser::doObject() {
+    const Origin &origin = cur->origin;
+    require("object");
+    require(Token::Identifier);
+    std::shared_ptr<ObjectDef> obj(new ObjectDef);
+    obj->origin = origin;
+    obj->name = cur->text;
+    ++cur;
+    require(Token::OpenBrace, true);
+    while (!matches(Token::CloseBrace)) {
+        require(Token::Identifier);
+        const std::string &propName = cur->text;
+        ++cur;
+
+        Value value = doProperty(obj->name);
+
+        std::uint32_t propId = ObjectDef::getPropertyIdent(propName);
+        auto iter = obj->properties.find(propId);
+        if (iter != obj->properties.end()) {
+            throw BuildError(origin, "Duplicate property " + propName);
+        } else {
+            obj->properties.insert(std::make_pair(propId, value));
+        }
+    }
+    ++cur;
+
+    gameData.dataItems.push_back(obj);
+}
+
 
 std::string Parser::doList() {
     const Origin &origin = cur->origin;
@@ -430,7 +461,11 @@ void Parser::doCharacter() {
 
 Value Parser::doProperty(const std::string &forName) {
     const Origin &origin = cur->origin;
-    if (matches(Token::Identifier)) {
+    if (matches(Token::String)) {
+        std::string label = gameData.addString(cur->text);
+        ++cur;
+        return Value(label);
+    } else if (matches(Token::Identifier)) {
         const std::string &name = cur->text;
         ++cur;
         require(Token::Semicolon, true);

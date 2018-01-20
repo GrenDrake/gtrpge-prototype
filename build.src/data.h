@@ -103,6 +103,25 @@ public:
     std::uint32_t pos;
 };
 
+class ObjectDef : public DataType {
+public:
+    static std::unordered_map<std::string, std::uint16_t> propertyNames;
+    static std::uint16_t nextProperty;
+    static std::uint16_t getPropertyIdent(const std::string &propertyName);
+
+    virtual size_t getSize() const {
+        // idObject + propCount + (properties * 6)
+        return 3 + properties.size() * 6;
+    }
+    virtual void write(std::ostream &out);
+    virtual std::string getTypeName() const {
+        return "OBJECT";
+    }
+
+    std::uint32_t ident;
+    std::unordered_map<std::uint16_t, Value> properties;
+};
+
 class Node {
 public:
     Origin origin;

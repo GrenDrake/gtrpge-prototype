@@ -144,7 +144,12 @@ int main(int argc, char *argv[]) {
      * DUMP GLOBAL SYMBOLS TO FILE                                            */
     std::ofstream out_defs("dbg_defs.txt");
 
-    out_defs << "FOUND " << std::dec << gameData.dataItems.size() << " DATA ITEMS\n" << std::hex << std::uppercase;
+    out_defs << ObjectDef::propertyNames.size() << " Object Properties\n";
+    for (auto &propName : ObjectDef::propertyNames) {
+        out_defs << "    " << propName.first << ": " << propName.second << '\n';
+    }
+
+    out_defs << "\nFOUND " << std::dec << gameData.dataItems.size() << " DATA ITEMS\n" << std::hex << std::uppercase;
     for (auto &item : gameData.dataItems) {
         out_defs << "    " << *item << '\n';
     }

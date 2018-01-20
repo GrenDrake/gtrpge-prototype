@@ -179,6 +179,7 @@ private:
     void doItemDef();
     void doAction();
     void doDamageTypes();
+    void doObject();
 
     std::string doList();
     std::string doSkillSet(bool setDefaults = false);

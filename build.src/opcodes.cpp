@@ -72,6 +72,7 @@ Command commands[] = {
     { "remove-from-party",  opRemoveFromParty,  1 },
     { "reset-combat",       opResetCombat,      0 },
     { "add-to-combat",      opAddToCombat,      1 },
+    { "get-property",       opGetProperty,      2 },
 };
 
 const Command* getCommand(const std::string name) {

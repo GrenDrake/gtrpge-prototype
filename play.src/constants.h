@@ -23,6 +23,7 @@ const int idCharacter       = 0xFA;
 const int idList            = 0xF9;
 const int idSkillSet        = 0xF8;
 const int idAction          = 0xF7;
+const int idObject          = 0xF6;
 
 const int itmFlags          = 1;
 const int itmArticle        = 5;
@@ -154,6 +155,7 @@ const int opIsInParty       = 0xA1;
 const int opRemoveFromParty = 0xA2;
 const int opResetCombat     = 0xB0;
 const int opAddToCombat     = 0xB1;
+const int opGetProperty     = 0xC0;
 
 const int operandNone           = 0;
 const int operandImmediate      = 1;

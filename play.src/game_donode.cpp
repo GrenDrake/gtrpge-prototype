@@ -394,6 +394,23 @@ void Game::doNode(std::uint32_t address) {
                 combatants.push_back(operands[0]);
                 break;
 
+            case opGetProperty: {
+                if (!isType(operands[0], idObject)) {
+                    throw PlayError("Tried to get property of non-object");
+                }
+
+                const std::uint16_t propCount = readShort(operands[0] + 1);
+                std::uint32_t propValue = 0;
+                for (std::uint16_t i = 0; i < propCount; ++i) {
+                    std::uint16_t idHere = readShort(operands[0] + 3 + i * 6);
+                    if (idHere == operands[1]) {
+                        propValue = readWord(operands[0] + 5 + i * 6);
+                        break;
+                    }
+                }
+                push(propValue);
+                break; }
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;
