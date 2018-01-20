@@ -92,6 +92,10 @@ const int proAdjective      = 2;
 const int proPossessive     = 3;
 const int proReflexive      = 4;
 
+const int propName          = 1;
+const int propArticle       = 2;
+const int propPlural        = 3;
+
 const int damageTypeCount   = 8;
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;

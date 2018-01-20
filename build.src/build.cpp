@@ -79,6 +79,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    ObjectDef::setPropertyIdent("name", propName);
+    ObjectDef::setPropertyIdent("article", propArticle);
+    ObjectDef::setPropertyIdent("plural", propPlural);
+
     try {
         std::vector<SymbolDef> symbols;
 
