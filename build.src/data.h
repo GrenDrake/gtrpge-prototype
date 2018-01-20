@@ -107,6 +107,7 @@ class ObjectDef : public DataType {
 public:
     static std::unordered_map<std::string, std::uint16_t> propertyNames;
     static std::uint16_t nextProperty;
+    static void setPropertyIdent(const std::string &name, std::uint16_t id);
     static std::uint16_t getPropertyIdent(const std::string &propertyName);
 
     virtual size_t getSize() const {

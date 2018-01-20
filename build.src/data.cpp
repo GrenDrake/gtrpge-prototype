@@ -16,7 +16,16 @@ void writeLabelValue(std::ostream &out, const std::string &labelName);
  * OBJECT DEF STUFF                                                       */
 
 std::unordered_map<std::string, std::uint16_t> ObjectDef::propertyNames;
-std::uint16_t ObjectDef::nextProperty = 1;
+std::uint16_t ObjectDef::nextProperty = 200;
+
+void ObjectDef::setPropertyIdent(const std::string &name, std::uint16_t id) {
+    auto iter = propertyNames.find(name);
+    if (iter != propertyNames.end()) {
+        throw BuildError(Origin(), "Built-in property ID has name conflict");
+    }
+    propertyNames.insert(std::make_pair(name, id));
+}
+
 std::uint16_t ObjectDef::getPropertyIdent(const std::string &propertyName) {
     auto iter = propertyNames.find(propertyName);
     if (iter != propertyNames.end()) {

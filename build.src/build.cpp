@@ -8,6 +8,7 @@
 
 #include "project.h"
 #include "build.h"
+#include "data.h"
 
 
 BuildError::BuildError(const std::string &msg)
