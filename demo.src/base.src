@@ -15,20 +15,21 @@ CONSTANT forest-events 77;
  * ************************************************************************* */
 
 // constants for species flag definitions
-CONSTANT sflg-biped 0x01;
-CONSTANT sflg-quad  0x02;
-CONSTANT sflg-snout 0x04;
-
 SPECIES spc-human {
-    "human" ( sflg-biped )
+    name "human";
+    is-biped true;
 }
 
 SPECIES spc-gnoll {
-    "gnoll" ( sflg-biped sflg-snout )
+    name "gnoll";
+    is-biped true;
+    has-snout true;
 }
 
 SPECIES spc-dragon {
-    "dragon" ( sflg-quad sflg-snout )
+    name "dragon";
+    is-quad true;
+    has-snout true;
 }
 
 SEX sex-male {

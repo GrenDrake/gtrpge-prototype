@@ -365,24 +365,11 @@ void Parser::doSex() {
 void Parser::doSpecies() {
     const Origin &origin = cur->origin;
     require("species");
-    require(Token::Identifier);
-    const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Species);
-    ++cur;
 
-    std::shared_ptr<SpeciesDef> species(new SpeciesDef);
-    species->origin = origin;
-    species->name = name;
-    require(Token::OpenBrace, true);
+    std::shared_ptr<ObjectDef> newSpecies = doObjectCore(origin);
+    newSpecies->properties[propClass] = Value(ocSpecies);
 
-    require(Token::String);
-    species->displayName = gameData.addString(cur->text);
-    ++cur;
-
-    species->flags = doFlags();
-
-    require(Token::CloseBrace, true);
-    gameData.dataItems.push_back(species);
+    gameData.dataItems.push_back(newSpecies);
 }
 
 void Parser::doSkill() {
@@ -469,6 +456,7 @@ Value Parser::doProperty(const std::string &forName) {
     if (matches(Token::String)) {
         std::string label = gameData.addString(cur->text);
         ++cur;
+        require(Token::Semicolon, true);
         return Value(label);
     } else if (matches(Token::Identifier)) {
         const std::string &name = cur->text;

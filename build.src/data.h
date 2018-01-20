@@ -133,20 +133,6 @@ public:
     std::shared_ptr<Block> block;
 };
 
-class SpeciesDef : public DataType {
-public:
-    virtual size_t getSize() const {
-        return spcSize;
-    }
-    virtual void write(std::ostream &out);
-    virtual std::string getTypeName() const {
-        return "SPECIES";
-    }
-
-    std::string displayName;
-    std::unordered_set<Value> flags;
-};
-
 class SexDef : public DataType {
 public:
     virtual size_t getSize() const {
