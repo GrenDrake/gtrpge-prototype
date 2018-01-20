@@ -488,6 +488,10 @@ std::shared_ptr<Block> Parser::doBlock() {
 }
 
 std::shared_ptr<Statement> Parser::doStatement() {
+    if (matches(Token::String)) {
+        return doImpliedSay();
+    }
+
     const Origin &origin = cur->origin;
     std::shared_ptr<Statement> statement(new Statement);
     statement->origin = origin;
@@ -517,6 +521,17 @@ std::shared_ptr<Statement> Parser::doStatement() {
     }
 
 
+    return statement;
+}
+
+std::shared_ptr<Statement> Parser::doImpliedSay() {
+    const Origin &origin = cur->origin;
+    std::shared_ptr<Statement> statement(new Statement);
+    statement->origin = origin;
+
+    statement->parts.push_back(Value("say"));
+    statement->parts.push_back(doValue());
+    require(Token::Semicolon, true);
     return statement;
 }
 

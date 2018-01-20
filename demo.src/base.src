@@ -222,7 +222,7 @@ ACTION act-thrust {
  * ************************************************************************* */
 
 NODE start {
-    say "Welcome to the game!";
+    "Welcome to the game!";
     add-option "Create a new character" chargen-sex;
 
     do-node forest-event-setup;
