@@ -467,8 +467,21 @@ Value Parser::doProperty(const std::string &forName) {
         require(Token::Semicolon, true);
         return Value(label);
     } else if (matches(Token::Identifier)) {
-        const std::string &name = cur->text;
+        std::string &name = cur->text;
         ++cur;
+        if (matches(Token::OpenParan)) {
+            if (name == "list") {
+                name = doList();
+            } else if (name == "skillset") {
+                name = doSkillSet();
+            } else {
+                throw BuildError(origin, "Unknown property type name " + name + ".");
+            }
+        } else if (name[0] == '$') {
+            std::uint16_t ident = ObjectDef::getPropertyIdent(name.substr(1));
+            require(Token::Semicolon, true);
+            return Value(ident);
+        }
         require(Token::Semicolon, true);
         return Value(name);
     } else if (matches(Token::OpenBrace)) {
@@ -582,6 +595,10 @@ Value Parser::doValue() {
             std::string label = cur->text.substr(1);
             ++cur;
             return Value(Value::Global, label);
+        } else if (cur->text[0] == '$') {
+            std::uint16_t ident = ObjectDef::getPropertyIdent(cur->text.substr(1));
+            ++cur;
+            return Value(ident);
         } else {
             std::string label = cur->text;
             ++cur;

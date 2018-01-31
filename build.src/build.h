@@ -131,7 +131,7 @@ private:
         if (!initial && isdigit(c)) {
             return true;
         }
-        if (initial && c == '#') {
+        if (initial && (c == '#' || c == '$')) {
             return true;
         }
         if (isalpha(c) || c == '-' || c == '_') {
