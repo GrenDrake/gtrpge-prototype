@@ -15,31 +15,27 @@ void Parser::checkSymbol(const Origin &origin, const std::string &name, SymbolDe
     symbols.push_back(SymbolDef(origin, name, type));
 }
 
-void Parser::requireProperties(std::shared_ptr<ObjectDef> objDef, const char **properties) {
-    for (int i = 0; properties[i] != nullptr; ++i) {
-        const char *name = properties[i];
-        if (!objDef->hasProperty(name)) {
-            std::stringstream ss;
-            ss << "Object " << objDef->name << " requires property " << name;
-            throw BuildError(objDef->origin, ss.str());
-        }
-    }
-}
+struct ObjectDefSpecialization {
+    std::string name;
+    int classId;
+    const char *requiredProperties[10];
+};
 
 void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end) {
     cur = start;
-    const char *requiredSexProperties[] = {
-        "name",
-        "subject", "object", "reflexive", "adjective", "possessive",
-        nullptr
-    };
-    const char *requiredSpeciesProperties[] = {
-        "name",
-        nullptr
+    ObjectDefSpecialization objectTypes[] = {
+        { "sex",     ocSex,     { "name", "object", "reflexive", "adjective", "possessive" } },
+        { "species", ocSpecies, { "name" } },
     };
 
     while (cur != end) {
         const Origin &origin = cur->origin;
+
+        if (!matches(Token::Identifier)) {
+            std::stringstream ss;
+            ss << "Expected identifier at top level, but found " << cur->type << ".";
+            throw BuildError(origin, ss.str());
+        }
 
         if (matches("node")) {
             doNode();
@@ -53,12 +49,6 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doConstant();
         } else if (matches("item")) {
             doItemDef();
-        } else if (matches("sex")) {
-            ++cur;
-            doObjectClass(origin, ocSex, requiredSexProperties);
-        } else if (matches("species")) {
-            ++cur;
-            doObjectClass(origin, ocSpecies, requiredSpeciesProperties);
         } else if (matches("skill")) {
             doSkill();
         } else if (matches("character")) {
@@ -70,15 +60,27 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
         } else if (matches("object")) {
             doObject();
         } else {
-            std::stringstream ss;
-            ss << "Expected top level construct, but found " << cur->type;
-            if (cur->type == Token::Identifier) {
-                ss << " ~" << cur->text << '~';
+            bool foundType = false;
+
+            for (const auto &type : objectTypes) {
+                if (cur->text == type.name) {
+                    ++cur;
+                    doObjectClass(origin, type);
+                    foundType = true;
+                    break;
+                }
             }
-            throw BuildError(cur->origin, ss.str());
+
+            if (!foundType) {
+                std::stringstream ss;
+                ss << "Expected top level construct, but found " << cur->type;
+                if (cur->type == Token::Identifier) {
+                    ss << " ~" << cur->text << '~';
+                }
+                throw BuildError(origin, ss.str());
+            }
         }
     }
-
 }
 
 void Parser::doTitle() {
@@ -299,10 +301,19 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
     return obj;
 }
 
-void Parser::doObjectClass(const Origin &origin, int objClass, const char **requiredProperties) {
+void Parser::doObjectClass(const Origin &origin, const ObjectDefSpecialization &def) {
     std::shared_ptr<ObjectDef> newObj = doObjectCore(origin);
-    newObj->properties.insert(std::make_pair(propClass, objClass));
-    requireProperties(newObj, requiredProperties);
+    newObj->properties.insert(std::make_pair(propClass, def.classId));
+
+    for (int i = 0; def.requiredProperties[i] != nullptr; ++i) {
+        const char *name = def.requiredProperties[i];
+        if (!newObj->hasProperty(name)) {
+            std::stringstream ss;
+            ss << "Object " << newObj->name << " requires property " << name;
+            throw BuildError(newObj->origin, ss.str());
+        }
+    }
+
     gameData.dataItems.push_back(newObj);
 }
 

@@ -160,6 +160,8 @@ public:
     std::string name;
     Type type;
 };
+
+struct ObjectDefSpecialization;
 class Parser {
 public:
     Parser(GameData &gameData, std::vector<SymbolDef> &symbols)
@@ -180,7 +182,7 @@ private:
     void doDamageTypes();
     void doObject();
     std::shared_ptr<ObjectDef> doObjectCore(const Origin &origin);
-    void doObjectClass(const Origin &origin, int objClass, const char **requiredProperties);
+    void doObjectClass(const Origin &origin, const ObjectDefSpecialization &requiredProperties);
 
     std::string doList();
     std::string doSkillSet(bool setDefaults = false);
@@ -197,7 +199,6 @@ private:
     bool matches(const std::string &text);
 
     void checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type);
-    void requireProperties(std::shared_ptr<ObjectDef> objDef, const char **properties);
 
     std::vector<SymbolDef> &symbols;
     std::list<Token>::iterator cur;
