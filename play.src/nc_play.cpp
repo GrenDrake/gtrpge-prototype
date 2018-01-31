@@ -145,8 +145,13 @@ static void drawCombatTracker(Game &game) {
         unsigned shownSkills = 0;
         for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
             if (game.testSkillFlags(sklCounter, sklOnTracker)) {
-                mvprintw(top+whoCounter+1, left+6+maxNameLength+shownSkills*10, "%d/%d",
-                        14, 421);
+                if (game.testSkillFlags(sklCounter, sklVariable)) {
+                    mvprintw(top+whoCounter+1, left+6+maxNameLength+shownSkills*10, "%d/%d",
+                            game.getSkillCur(whoIdent, sklCounter), game.getSkillMax(whoIdent, sklCounter));
+                } else {
+                    mvprintw(top+whoCounter+1, left+6+maxNameLength+shownSkills*10, "%d",
+                            game.getSkillMax(whoIdent, sklCounter));
+                }
                 ++shownSkills;
             }
         }

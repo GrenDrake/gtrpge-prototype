@@ -393,6 +393,13 @@ void Game::doNode(std::uint32_t address) {
             case opAddToCombat:
                 combatants.push_back(operands[0]);
                 break;
+            case opCombatant:
+                if (operands[0] >= combatants.size()) {
+                    push(0);
+                } else {
+                    push(combatants[operands[0]]);
+                }
+                break;
 
             case opGetProperty: {
                 push(getObjectProperty(operands[0], operands[1]));

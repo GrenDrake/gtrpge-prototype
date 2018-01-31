@@ -211,7 +211,45 @@ ACTION act-swing {
         say-uf #_0;
         say " swings ";
         say-pronoun #_0 pro-adject;
-        say " sword! Swish!\n";
+        say " sword! ";
+
+
+        store _9 0;
+        combatant 0;
+        store _8 stack;
+        label swing-start;
+
+        fetch _8;
+        fetch _0;
+        subtract;
+        jump-false skip-me;
+
+        // skill-check cRef skillRef Mods Target
+
+        skill-check #_0 skl-melee 0 25;
+        jump-gt 0 hit-missed;
+
+        say-uf #_8;
+        say " is hit! ";
+        do-damage #_8 13 skl-health dt-cutting;
+        jump skip-me;
+
+        label hit-missed;
+        say-uf #_8;
+        say " avoids the strike! ";
+
+        label skip-me;
+
+        fetch _9;
+        push 1;
+        add;
+        store _9 stack;
+        combatant #_9;
+        store _8 stack;
+        fetch _8;
+        jump-true swing-start;
+
+        say "\n";
     }
     outOfCombat {
         say "You brandish the sword wildly.";

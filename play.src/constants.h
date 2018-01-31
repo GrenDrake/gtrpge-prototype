@@ -163,6 +163,7 @@ const int opIsInParty       = 0xA1;
 const int opRemoveFromParty = 0xA2;
 const int opResetCombat     = 0xB0;
 const int opAddToCombat     = 0xB1;
+const int opCombatant       = 0xB2;
 const int opGetProperty     = 0xC0;
 
 const int operandNone           = 0;
