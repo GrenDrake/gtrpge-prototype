@@ -732,6 +732,10 @@ bool Game::actionAllowed() const {
     return inLocation && isRunning;
 }
 
+bool Game::isInCombat() const {
+    return inCombat;
+}
+
 void Game::say(const std::string &text) {
     outputBuffer += text;
 }

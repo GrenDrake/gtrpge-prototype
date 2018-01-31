@@ -89,6 +89,72 @@ static void drawOutput(Game &game) {
     }
 }
 
+static void drawCombatTracker(Game &game) {
+    unsigned maxNameLength = 0;
+    for (const auto &whoIdent : game.combatants) {
+        auto length = game.getNameOf(whoIdent).size();
+        if (length > maxNameLength) {
+            maxNameLength = length;
+        }
+    }
+    unsigned skillsToShow = 0;
+    for (int i = 0; i < sklCount; ++i) {
+        if (game.testSkillFlags(i, sklOnTracker)) {
+            ++skillsToShow;
+        }
+    }
+
+    const unsigned trackerWidth = maxNameLength + 8 + skillsToShow * 10;
+    const unsigned trackerHeight = game.combatants.size() + 1;
+    const std::uint32_t skillTable = game.readWord(headerSkillTable);
+
+    int maxX = 0, maxY = 0;
+    getmaxyx(stdscr, maxY, maxX);
+    const unsigned top = 1;
+    const unsigned left = maxX - trackerWidth;
+
+    bkgdset(A_NORMAL | COLOR_PAIR(colorDialog));
+    for (unsigned y = 0; y < trackerHeight; ++y) {
+        for (unsigned x = 0; x < trackerWidth; ++x) {
+            mvaddch(y+top, x+left, ' ');
+        }
+        mvaddch(y+top, left, ACS_VLINE);
+    }
+    mvaddch(top, left, ACS_ULCORNER);
+    mvaddch(top+trackerHeight-1, left, ACS_LLCORNER);
+
+    attron(A_BOLD);
+    mvprintw(top, left+4, "NAME");
+    unsigned shownSkills = 0;
+    for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
+        if (game.testSkillFlags(sklCounter, sklOnTracker)) {
+            std::uint32_t nameAddr = game.readWord(skillTable + sklCounter*sklSize + sklName);
+            mvprintw(top, left+6+maxNameLength+shownSkills*10, "%s", toTitleCase(game.getNameOf(nameAddr).substr(0,9)).c_str());
+            ++shownSkills;
+        }
+    }
+    attroff(A_BOLD);
+
+    int whoCounter = 0;
+    for (const auto &whoIdent : game.combatants) {
+        if (whoCounter == game.currentCombatant) {
+            mvaddch(top+whoCounter+1, left+2, '*');
+        }
+        mvprintw(top+whoCounter+1, left+4, "%s", toUpperFirst(game.getNameOf(whoIdent)).c_str());
+
+        unsigned shownSkills = 0;
+        for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
+            if (game.testSkillFlags(sklCounter, sklOnTracker)) {
+                mvprintw(top+whoCounter+1, left+6+maxNameLength+shownSkills*10, "%d/%d",
+                        14, 421);
+                ++shownSkills;
+            }
+        }
+
+        ++whoCounter;
+    }
+}
+
 void gameloop() {
     Game game;
 
@@ -101,6 +167,9 @@ void gameloop() {
         drawStatus(game);
         drawOutput(game);
         drawOptions(game);
+        if (game.isInCombat()) {
+            drawCombatTracker(game);
+        }
         refresh();
 
         int key = toupper(getch());

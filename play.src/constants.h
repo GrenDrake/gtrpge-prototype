@@ -66,6 +66,7 @@ const int sklKOZero         = 0x02; // KO character if reaches 0
 const int sklKOFull         = 0x04; // KO character is becomes full
 const int sklResetOnRest    = 0x08; // current skill value is reset when character rests
 const int sklX5             = 0x10; // multiply (max) value of skill by 5 for final value
+const int sklOnTracker      = 0x20; // show on combat tracker
 
 const int chrFlags          = 1;
 const int chrArticle        = 5;

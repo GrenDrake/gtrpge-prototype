@@ -105,6 +105,7 @@ public:
     // ////////////////////////////////////////////////////////////////////////
     // Player action commands                                                //
     bool actionAllowed() const;
+    bool isInCombat() const;
     void doOption(int optionNumber);
     void useItem(int itemNumber);
     void equipItem(std::uint32_t whoIdent, int itemNumber);
@@ -115,10 +116,12 @@ public:
     // ////////////////////////////////////////////////////////////////////////
     // Public game state data                                                //
     bool gameStarted;
+    unsigned currentCombatant, combatRound;
     std::vector<Option> options;
     std::vector<CarriedItem> inventory;
     std::uint32_t locationName;
     std::vector<std::uint32_t> party;
+    std::vector<std::uint32_t> combatants;
 private:
     // ////////////////////////////////////////////////////////////////////////
     // Miscellaneous                                                         //
@@ -192,8 +195,6 @@ private:
     std::string outputBuffer;
     unsigned gameTime;
     bool inCombat, startedCombat;
-    unsigned currentCombatant, combatRound;
-    std::vector<std::uint32_t> combatants;
 };
 
 std::string toTitleCase(std::string text);
