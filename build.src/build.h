@@ -173,8 +173,6 @@ private:
     void doVersion();
     void doConstant();
     void doNode();
-    void doSex();
-    void doSpecies();
     void doSkill();
     void doCharacter();
     void doItemDef();
@@ -182,6 +180,7 @@ private:
     void doDamageTypes();
     void doObject();
     std::shared_ptr<ObjectDef> doObjectCore(const Origin &origin);
+    void doObjectClass(const Origin &origin, int objClass, const char **requiredProperties);
 
     std::string doList();
     std::string doSkillSet(bool setDefaults = false);

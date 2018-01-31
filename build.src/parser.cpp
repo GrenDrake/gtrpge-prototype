@@ -28,8 +28,18 @@ void Parser::requireProperties(std::shared_ptr<ObjectDef> objDef, const char **p
 
 void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end) {
     cur = start;
+    const char *requiredSexProperties[] = {
+        "name",
+        "subject", "object", "reflexive", "adjective", "possessive",
+        nullptr
+    };
+    const char *requiredSpeciesProperties[] = {
+        "name",
+        nullptr
+    };
 
     while (cur != end) {
+        const Origin &origin = cur->origin;
 
         if (matches("node")) {
             doNode();
@@ -44,9 +54,11 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
         } else if (matches("item")) {
             doItemDef();
         } else if (matches("sex")) {
-            doSex();
+            ++cur;
+            doObjectClass(origin, ocSex, requiredSexProperties);
         } else if (matches("species")) {
-            doSpecies();
+            ++cur;
+            doObjectClass(origin, ocSpecies, requiredSpeciesProperties);
         } else if (matches("skill")) {
             doSkill();
         } else if (matches("character")) {
@@ -287,6 +299,13 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
     return obj;
 }
 
+void Parser::doObjectClass(const Origin &origin, int objClass, const char **requiredProperties) {
+    std::shared_ptr<ObjectDef> newObj = doObjectCore(origin);
+    newObj->properties.insert(std::make_pair(propClass, objClass));
+    requireProperties(newObj, requiredProperties);
+    gameData.dataItems.push_back(newObj);
+}
+
 
 std::string Parser::doList() {
     const Origin &origin = cur->origin;
@@ -331,40 +350,6 @@ std::string Parser::doSkillSet(bool setDefaults) {
 
     gameData.dataItems.push_back(skillset);
     return ss.str();
-}
-
-
-void Parser::doSex() {
-    const Origin &origin = cur->origin;
-    require("sex");
-
-    std::shared_ptr<ObjectDef> newSex = doObjectCore(origin);
-    newSex->properties[propClass] = Value(ocSex);
-
-    const char *requiredProperties[] = {
-        "name",
-        "subject", "object", "reflexive", "adjective", "possessive",
-        nullptr
-    };
-    requireProperties(newSex, requiredProperties);
-
-    gameData.dataItems.push_back(newSex);
-}
-
-void Parser::doSpecies() {
-    const Origin &origin = cur->origin;
-    require("species");
-
-    std::shared_ptr<ObjectDef> newSpecies = doObjectCore(origin);
-    newSpecies->properties[propClass] = Value(ocSpecies);
-
-    const char *requiredProperties[] = {
-        "name",
-        nullptr
-    };
-    requireProperties(newSpecies, requiredProperties);
-
-    gameData.dataItems.push_back(newSpecies);
 }
 
 void Parser::doSkill() {
