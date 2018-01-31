@@ -256,8 +256,8 @@ std::string Game::getPronoun(std::uint32_t cRef, int pronounType) {
     if (!isType(cRef, idCharacter)) {
         throw PlayError("Tried to get pronoun for non-character");
     }
-    std::uint32_t sex = getProperty(cRef, chrSex);
-    return getString(getObjectProperty(sex, pronounType));
+    Character *cDef = getCharacter(cRef);
+    return getString(getObjectProperty(cDef->sex, pronounType));
 }
 
 bool Game::addItems(int qty, std::uint32_t itemIdent) {
