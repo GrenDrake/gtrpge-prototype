@@ -7,7 +7,7 @@ ITEM gnoll-cage-key {
     onUse {
         say "You admire the key for a few minutes.";
         add-return;
-    }
+    };
 }
 
 /* ************************************************************************* *

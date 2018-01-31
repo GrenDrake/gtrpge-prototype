@@ -492,6 +492,7 @@ Value Parser::doProperty(const std::string &forName) {
         node->block = std::shared_ptr<Block>(doBlock());
         node->name = ss.str();
         gameData.nodes.push_back(node);
+        require(Token::Semicolon, true);
         return Value(node->name);
     } else if (matches(Token::Integer)) {
         int v = cur->value;

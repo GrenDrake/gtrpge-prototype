@@ -131,11 +131,11 @@ ITEM common-sword {
     slot "weapon"
     canEquip {
         push true;
-    }
+    };
     onEquip {
-    }
+    };
     onRemove {
-    }
+    };
     actionList (
         act-swing
         act-thrust
@@ -166,7 +166,7 @@ ITEM teleport-crystal {
         remove-items 1 teleport-crystal;
         say "Light flashes and you vision goes blank. Moments later, the world returns.";
         add-continue town-gate;
-    }
+    };
 }
 
 ITEM gnoll-potion {
@@ -184,7 +184,7 @@ ITEM gnoll-potion {
 
         label already-gnoll;
         say "Nothing happens. Perhaps you can't become any more gnoll-like then you are?";
-    }
+    };
 }
 
 /* ************************************************************************* *
@@ -193,7 +193,7 @@ ITEM gnoll-potion {
 
 ACTION act-punch {
     "punch"
-    inCombat { }
+    inCombat { };
 }
 
 ACTION act-fireball {
@@ -202,7 +202,7 @@ ACTION act-fireball {
     inCombat {
         say-uf #_0;
         say " uses fireball! KABOOM!\n";
-    }
+    };
 }
 
 ACTION act-swing {
@@ -250,11 +250,11 @@ ACTION act-swing {
         jump-true swing-start;
 
         say "\n";
-    }
+    };
     outOfCombat {
         say "You brandish the sword wildly.";
         add-return;
-    }
+    };
 }
 
 ACTION act-thrust {
@@ -262,7 +262,7 @@ ACTION act-thrust {
     outOfCombat {
         say "You brandish the sword wildly.";
         add-return;
-    }
+    };
 }
 
 /* ************************************************************************* *
