@@ -126,10 +126,6 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         labels.insert(std::make_pair(ss.str(), storageFirstTemp-i));
     }
 
-    for (auto &c : gameData.constants) {
-        labels.insert(std::make_pair(c.first, c.second));
-    }
-
     // write the string table and create the appropriate labels
     std::uint8_t idByte = idString;
     for (auto &str : gameData.strings) {
@@ -138,6 +134,18 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         out.write(reinterpret_cast<char*>(&idByte), 1);
         out.write(str.first.c_str(), str.first.size());
         out.put(0);
+    }
+
+    for (auto &c : gameData.constants) {
+        if (c.second.type == Value::Identifier) {
+            auto iter = labels.find(c.second.text);
+            if (iter == labels.end()) {
+                throw BuildError(Origin(), "Bad constant value");
+            }
+            labels.insert(std::make_pair(c.first, iter->second));
+        } else {
+            labels.insert(std::make_pair(c.first, c.second.value));
+        }
     }
 
     // reserve space for the skill table
@@ -247,9 +255,9 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
 
     out.seekp(headerStartNode);
     writeLabelValue(out, "start");
-    writeLabelValue(out, gameData.title);
-    writeLabelValue(out, gameData.byline);
-    writeLabelValue(out, gameData.version);
+    writeLabelValue(out, "title");
+    writeLabelValue(out, "byline");
+    writeLabelValue(out, "version");
     writeLabelValue(out, "__skill_table");
     writeLabelValue(out, "__damage_types");
     writeLabelValue(out, gameData.addString("weapon"));

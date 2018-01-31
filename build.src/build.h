@@ -45,7 +45,7 @@ public:
 
     std::string addString(const std::string &text);
 
-    std::unordered_map<std::string, std::uint32_t> constants;
+    std::unordered_map<std::string, Value> constants;
     std::unordered_map<std::string, std::string> strings;
     std::vector<std::shared_ptr<Node> > nodes;
     std::vector<std::shared_ptr<SkillDef> > skills;
@@ -170,9 +170,6 @@ public:
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);
 private:
-    void doTitle();
-    void doByline();
-    void doVersion();
     void doConstant();
     void doNode();
     void doSkill();

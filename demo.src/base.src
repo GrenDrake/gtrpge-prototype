@@ -1,6 +1,6 @@
-TITLE "Forest of the Gnoll";
-VERSION "Alpha-1";
-BYLINE "Gren Drake, 2017";
+CONSTANT title "Forest of the Gnoll";
+CONSTANT version "Alpha-1";
+CONSTANT byline "Gren Drake, 2017";
 
 // constants that are used to refer to storage locations
 CONSTANT flg-took-key 0;

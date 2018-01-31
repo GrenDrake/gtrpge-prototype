@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) {
                 for (auto &i : cd->skillMap) {
                     const auto &v = gameData.constants.find(i.first);
                     if (v != gameData.constants.end()) {
-                        cd->skills[v->second] = i.second.value;
+                        cd->skills[v->second.value] = i.second.value;
                     }
                 }
                 cd->skillMap.clear();

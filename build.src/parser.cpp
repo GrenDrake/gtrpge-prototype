@@ -40,12 +40,6 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
 
         if (matches("node")) {
             doNode();
-        } else if (matches("title")) {
-            doTitle();
-        } else if (matches("byline")) {
-            doByline();
-        } else if (matches("version")) {
-            doVersion();
         } else if (matches("constant")) {
             doConstant();
         } else if (matches("item")) {
@@ -82,29 +76,6 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
     }
 }
 
-void Parser::doTitle() {
-    require("title");
-    require(Token::String);
-    gameData.title = gameData.addString(cur->text);
-    ++cur;
-    require(Token::Semicolon, true);
-}
-
-void Parser::doByline() {
-    require("byline");
-    require(Token::String);
-    gameData.byline = gameData.addString(cur->text);
-    ++cur;
-    require(Token::Semicolon, true);
-}
-
-void Parser::doVersion() {
-    require("version");
-    require(Token::String);
-    gameData.version = gameData.addString(cur->text);
-    ++cur;
-    require(Token::Semicolon, true);
-}
 
 void Parser::doConstant() {
     const Origin &origin = cur->origin;
@@ -114,8 +85,14 @@ void Parser::doConstant() {
     checkSymbol(origin, name, SymbolDef::Constant);
     ++cur;
 
-    require(Token::Integer);
-    gameData.constants.insert(std::make_pair(name, cur->value));
+    if (matches(Token::Integer)) {
+        gameData.constants.insert(std::make_pair(name, Value(cur->value)));
+    } else if (matches(Token::String)) {
+        std::string labelName = gameData.addString(cur->text);
+        gameData.constants.insert(std::make_pair(name, Value(labelName)));
+    } else {
+        throw BuildError(origin, "Constant value must be integer literal or string.");
+    }
     ++cur;
     require(Token::Semicolon, true);
 }
@@ -215,7 +192,7 @@ void Parser::doDamageTypes() {
         ++cur;
 
         checkSymbol(origin, typeName, SymbolDef::DamageType);
-        gameData.constants.insert(std::make_pair(typeName, typeNumber++));
+        gameData.constants.insert(std::make_pair(typeName, Value(typeNumber++)));
         gameData.damageTypes.push_back(typeRef);
     }
     ++cur;
@@ -257,7 +234,7 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
 
 void Parser::doObjectClass(const Origin &origin, const ObjectDefSpecialization &def) {
     std::shared_ptr<ObjectDef> newObj = doObjectCore(origin);
-    newObj->properties.insert(std::make_pair(propClass, def.classId));
+    newObj->properties.insert(std::make_pair(propClass, Value(def.classId)));
 
     for (int i = 0; def.requiredProperties[i] != nullptr; ++i) {
         const char *name = def.requiredProperties[i];
@@ -326,7 +303,7 @@ void Parser::doSkill() {
     ++cur;
 
     // create constant with skill name
-    gameData.constants.insert(std::make_pair(name, skillCounter++));
+    gameData.constants.insert(std::make_pair(name, Value(skillCounter++)));
 
     std::shared_ptr<SkillDef> skill(new SkillDef);
     skill->origin = origin;
@@ -558,7 +535,7 @@ Value Parser::doValue() {
     } else if (matches(Token::Integer)) {
         int v = cur->value;
         ++cur;
-        return v;
+        return Value(v);
     } else {
         std::stringstream ss;
         ss << "Expected value type, but found " << cur->type << '.';

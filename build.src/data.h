@@ -27,13 +27,13 @@ public:
     Value()
     : type(Integer), value(0)
     { }
-    Value(const std::string &text)
+    explicit Value(const std::string &text)
     : type(Identifier), text(text), value(0)
     { }
     Value(Type type, const std::string &text)
     : type(type), text(text), value(0)
     { }
-    Value(int value)
+    explicit Value(int value)
     : type(Integer), value(value)
     { }
 
