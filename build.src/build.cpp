@@ -88,6 +88,10 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("possessive", propPossessive);
     ObjectDef::setPropertyIdent("adjective", propAdjective);
     ObjectDef::setPropertyIdent("reflexive", propReflexive);
+    ObjectDef::setPropertyIdent("cost-skill", propCostSkill);
+    ObjectDef::setPropertyIdent("cost-amount", propCostAmount);
+    ObjectDef::setPropertyIdent("peace-node", propPeaceNode);
+    ObjectDef::setPropertyIdent("combat-node", propCombatNode);
 
     try {
         std::vector<SymbolDef> symbols;

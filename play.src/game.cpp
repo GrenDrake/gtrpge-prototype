@@ -573,9 +573,9 @@ void Game::doCombatLoop() {
 
     auto actionList = getActions(combatants[currentCombatant]);
     for (auto action : actionList) {
-        std::uint32_t node = getProperty(action, actCombatNode);
+        std::uint32_t node = getObjectProperty(action, propCombatNode);
         if (node) {
-            options.push_back(Option(getProperty(action, actName), node));
+            options.push_back(Option(getObjectProperty(action, propName), node));
         }
     }
     options.push_back(Option(readWord(headerWeaponSlot), 0));
@@ -713,7 +713,7 @@ void Game::doAction(std::uint32_t cRef, std::uint32_t action) {
     if (cRef == 0 || action == 0) {
         return;
     }
-    uint32_t peaceNode = getProperty(action, actPeaceNode);
+    uint32_t peaceNode = getObjectProperty(action, propPeaceNode);
     if (!peaceNode) {
         return;
     }

@@ -96,9 +96,14 @@ const int propObject        = 6;
 const int propAdjective     = 7;
 const int propPossessive    = 8;
 const int propReflexive     = 9;
+const int propCostSkill     = 10;
+const int propCostAmount    = 11;
+const int propCombatNode    = 12;
+const int propPeaceNode     = 13;
 
 const int ocSpecies         = 1;
 const int ocSex             = 2;
+const int ocAction          = 3;
 
 const int damageTypeCount   = 8;
 const int opEnd             = 0x00;

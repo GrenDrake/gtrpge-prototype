@@ -117,16 +117,16 @@ void doCharacter(Game &game) {
 
                 mvprintw(y, 0, "%c) %s", i+'1', toUpperFirst(game.getNameOf(actions[i])).c_str());
 
-                int cost = game.getProperty(actions[i], actCost);
+                int cost = game.getObjectProperty(actions[i], propCostAmount);
                 if (cost != 0) {
-                    std::uint32_t sklIndex = game.getProperty(actions[i], actSkill);
+                    std::uint32_t sklIndex = game.getObjectProperty(actions[i], propCostSkill);
                     std::uint32_t nameAddr = game.readWord(skillTable + sklIndex*sklSize + sklName);
                     mvprintw(y, 35, "%d %s", cost, toUpperFirst(game.getNameOf(nameAddr)).c_str());
                 }
 
-                int node = game.getProperty(actions[i], actCombatNode);
+                int node = game.getObjectProperty(actions[i], propCombatNode);
                 if (node) mvprintw(y, 45, "Combat");
-                node = game.getProperty(actions[i], actPeaceNode);
+                node = game.getObjectProperty(actions[i], propPeaceNode);
                 if (node) mvprintw(y, 55, "General");
 
                 bkgdset(A_NORMAL);
@@ -197,7 +197,7 @@ void doCharacter(Game &game) {
             case '\n':
             case '\r':
                 if (mode == modeActions) {
-                    std::uint32_t node = game.getProperty(actions[selection], actPeaceNode);
+                    std::uint32_t node = game.getObjectProperty(actions[selection], propPeaceNode);
                     if (node) {
                         game.doAction(curChar, actions[selection]);
                         addToOutput(game.getOutput());

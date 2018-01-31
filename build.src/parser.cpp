@@ -26,6 +26,7 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
     ObjectDefSpecialization objectTypes[] = {
         { "sex",     ocSex,     { "name", "object", "reflexive", "adjective", "possessive" } },
         { "species", ocSpecies, { "name" } },
+        { "action",  ocAction,  { "name" } },
     };
 
     while (cur != end) {
@@ -53,8 +54,6 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doSkill();
         } else if (matches("character")) {
             doCharacter();
-        } else if (matches("action")) {
-            doAction();
         } else if (matches("damage-types")) {
             doDamageTypes();
         } else if (matches("object")) {
@@ -200,51 +199,6 @@ void Parser::doItemDef() {
     ++cur;
 
     gameData.dataItems.push_back(item);
-}
-
-void Parser::doAction() {
-    const Origin &origin = cur->origin;
-    require("action");
-
-    require(Token::Identifier);
-    const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Item);
-    ++cur;
-
-    require(Token::OpenBrace, true);
-
-    std::shared_ptr<ActionDef> action(new ActionDef);
-    action->origin = origin;
-    action->name = name;
-
-    require(Token::String);
-    action->displayName = gameData.addString(cur->text);
-    ++cur;
-
-    while (!matches(Token::CloseBrace)) {
-        require(Token::Identifier);
-        const std::string &pName = cur->text;
-        ++cur;
-
-        if (pName == "cost") {
-            require(Token::Identifier);
-            action->energyStat = cur->text;
-            ++cur;
-
-            require(Token::Integer);
-            action->energyCost = cur->value;
-            ++cur;
-        } else if (pName == "incombat") {
-            action->combatNode = doProperty(action->name);
-        } else if (pName == "outofcombat") {
-            action->peaceNode = doProperty(action->name);
-        } else {
-            throw BuildError(origin, "Unknown action property " + pName);
-        }
-    }
-    ++cur;
-
-    gameData.dataItems.push_back(action);
 }
 
 void Parser::doDamageTypes() {

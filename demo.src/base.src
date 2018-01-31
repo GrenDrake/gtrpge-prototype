@@ -192,22 +192,23 @@ ITEM gnoll-potion {
  * ************************************************************************* */
 
 ACTION act-punch {
-    "punch"
-    inCombat { };
+    name "punch";
+    combat-node { };
 }
 
 ACTION act-fireball {
-    "fireball"
-    cost skl-energy 2
-    inCombat {
+    name "fireball";
+    cost-skill skl-energy;
+    cost-amount 2;
+    combat-node {
         say-uf #_0;
         say " uses fireball! KABOOM!\n";
     };
 }
 
 ACTION act-swing {
-    "swing"
-    inCombat {
+    name "swing";
+    combat-node {
         say-uf #_0;
         say " swings ";
         say-pronoun #_0 pro-adject;
@@ -251,15 +252,15 @@ ACTION act-swing {
 
         say "\n";
     };
-    outOfCombat {
+    peace-node {
         say "You brandish the sword wildly.";
         add-return;
     };
 }
 
 ACTION act-thrust {
-    "thrust"
-    outOfCombat {
+    name "thrust";
+    peace-node {
         say "You brandish the sword wildly.";
         add-return;
     };
