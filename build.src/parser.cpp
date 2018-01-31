@@ -442,6 +442,19 @@ void Parser::doCharacter() {
         }
     }
 
+    if (character->skillSet.empty()) {
+        std::stringstream ss;
+        ss << "__an_skillset_empty_" << anonymousCounter;
+        ++anonymousCounter;
+
+        std::shared_ptr<SkillSet> skillset(new SkillSet);
+        skillset->origin = origin;
+        skillset->name = ss.str();
+        skillset->setDefaults = true;
+        gameData.dataItems.push_back(skillset);
+        character->skillSet = ss.str();
+    }
+
     require(Token::CloseBrace, true);
     gameData.dataItems.push_back(character);
 }
