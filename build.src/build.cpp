@@ -92,6 +92,17 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("cost-amount", propCostAmount);
     ObjectDef::setPropertyIdent("peace-node", propPeaceNode);
     ObjectDef::setPropertyIdent("combat-node", propCombatNode);
+    ObjectDef::setPropertyIdent("on-use", propOnUse);
+    ObjectDef::setPropertyIdent("can-equip", propCanEquip);
+    ObjectDef::setPropertyIdent("on-equip", propOnEquip);
+    ObjectDef::setPropertyIdent("on-remove", propOnRemove);
+    ObjectDef::setPropertyIdent("slot", propSlot);
+    ObjectDef::setPropertyIdent("action-list", propActionList);
+    ObjectDef::setPropertyIdent("skills", propSkills);
+    ObjectDef::setPropertyIdent("faction", propFaction);
+    ObjectDef::setPropertyIdent("gear", propGear);
+    ObjectDef::setPropertyIdent("base-abilities", propBaseAbilities);
+    ObjectDef::setPropertyIdent("extra-abilities", propExtraAbilities);
 
     try {
         std::vector<SymbolDef> symbols;
