@@ -157,6 +157,9 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
         Value value = doProperty(obj->name);
 
         std::uint32_t propId = ObjectDef::getPropertyIdent(propName);
+        if (propId == propInternalName) {
+            throw BuildError(origin, "Cannot set object internal name");
+        }
         auto iter = obj->properties.find(propId);
         if (iter != obj->properties.end()) {
             throw BuildError(origin, "Duplicate property " + propName);
@@ -165,6 +168,9 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
         }
     }
     ++cur;
+
+
+    obj->properties.insert(std::make_pair(propInternalName, Value(gameData.addString(obj->name))));
     return obj;
 }
 
