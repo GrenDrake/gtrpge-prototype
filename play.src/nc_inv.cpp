@@ -57,19 +57,19 @@ void doInventory(Game &game) {
             std::stringstream itemName, itemTraits;
 
             if (item.qty == 1) {
-                itemName << toUpperFirst(game.getNameOf(game.getProperty(item.itemIdent, itmArticle)));
-                itemName << game.getNameOf(game.getProperty(item.itemIdent, itmSingular));
+                itemName << toUpperFirst(game.getNameOf(game.getObjectProperty(item.itemIdent, propArticle)));
+                itemName << game.getNameOf(game.getObjectProperty(item.itemIdent, propName));
             } else {
                 itemName << item.qty << ' ';
-                itemName << game.getNameOf(game.getProperty(item.itemIdent, itmPlural));
+                itemName << game.getNameOf(game.getObjectProperty(item.itemIdent, propPlural));
             }
 
-            if (game.getProperty(item.itemIdent, itmOnUse)) {
+            if (game.getObjectProperty(item.itemIdent, propOnUse)) {
                 itemTraits << "Usable  ";
             }
 
-            if (game.getProperty(item.itemIdent, itmSlot)) {
-                itemTraits << "Equip as: " << toTitleCase(game.getNameOf(game.getProperty(item.itemIdent, itmSlot)));
+            if (game.getObjectProperty(item.itemIdent, propSlot)) {
+                itemTraits << "Equip as: " << toTitleCase(game.getNameOf(game.getObjectProperty(item.itemIdent, propSlot)));
             }
 
             if (curItem == i + curPage * invPerPage) {
@@ -84,7 +84,7 @@ void doInventory(Game &game) {
 
         }
 
-        std::uint32_t descString = game.getProperty(game.inventory[curItem].itemIdent, itmDescription);
+        std::uint32_t descString = game.getObjectProperty(game.inventory[curItem].itemIdent, propDescription);
         if (descString) {
             auto i = wrapString(game.getNameOf(descString), COLS-12);
             mvprintw(13, 3, i[0].c_str());
@@ -99,14 +99,14 @@ void doInventory(Game &game) {
         if (key == 'Z') {
             break;
         } else if (key == KEY_ENTER || key == 'U' || key == ' ' || key == '\n' || key == '\r') {
-            if (!game.getProperty(game.inventory[curItem].itemIdent, itmOnUse)) {
+            if (!game.getObjectProperty(game.inventory[curItem].itemIdent, propOnUse)) {
                 continue;
             }
             game.useItem(curItem);
             addToOutput(game.getOutput());
             break;
         } else if (key == 'E') {
-            std::uint32_t slot = game.getProperty(game.inventory[curItem].itemIdent, itmSlot);
+            std::uint32_t slot = game.getObjectProperty(game.inventory[curItem].itemIdent, propSlot);
             if (!slot) {
                 continue;
             }

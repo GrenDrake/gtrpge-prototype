@@ -111,6 +111,7 @@ const int propFaction           = 21;
 const int propGear              = 22;
 const int propBaseAbilities     = 23;
 const int propExtraAbilities    = 24;
+const int propDescription       = 25;
 
 const int ocSpecies         = 1;
 const int ocSex             = 2;

@@ -126,43 +126,53 @@ CHARACTER the-player {
  * ************************************************************************* */
 
 ITEM common-sword {
-    "a " "common sword" "common swords"
-    "A perfectly ordinary sword."
-    slot "weapon"
-    canEquip {
+    article "a ";
+    name    "common sword";
+    plural  "common swords";
+    description "A perfectly ordinary sword.";
+    slot    "weapon";
+    can-equip {
         push true;
     };
-    onEquip {
+    on-equip {
     };
-    onRemove {
+    on-remove {
     };
-    actionList (
+    action-list list(
         act-swing
         act-thrust
-    )
+    );
 }
 
 ITEM common-helmet {
-    "a " "common helmet" "common helmets"
-    slot "head"
+    article "a ";
+    name    "common helmet";
+    plural  "common helmets";
+    slot    "head";
 }
 ITEM loincloth {
-    "a " "loincloth" "loincloths"
-    slot "body"
+    article "a ";
+    name    "loincloth";
+    plural  "loincloths";
+    slot    "body";
 }
 ITEM plate-armour {
-    "a " "suit of plate armour" "suits of plate armour"
-    slot "body"
-    skills (
+    article "a ";
+    name    "suit of plate armour";
+    plural  "suits of plate armour";
+    slot    "body";
+    skills skillset(
         skl-strength 50;
         skl-dexterity -3;
-    )
+    );
 }
 
 ITEM teleport-crystal {
-    "a " "teleport crystal" "teleport crystals"
-    "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic."
-    onUse {
+    article "a ";
+    name    "teleport crystal";
+    plural  "teleport crystals";
+    description "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic.";
+    on-use {
         remove-items 1 teleport-crystal;
         say "Light flashes and you vision goes blank. Moments later, the world returns.";
         add-continue town-gate;
@@ -170,9 +180,11 @@ ITEM teleport-crystal {
 }
 
 ITEM gnoll-potion {
-    "a " "potion of gnoll" "potions of gnoll"
-    "A potion of transformation intended to make one more gnoll-like."
-    onUse {
+    article "a ";
+    name    "potion of gnoll";
+    plural  "potions of gnoll";
+    description "A potion of transformation intended to make one more gnoll-like.";
+    on-use {
         remove-items 1 gnoll-potion;
         add-return;
         get-species the-player;

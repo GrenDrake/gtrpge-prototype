@@ -215,12 +215,6 @@ std::string Game::getNameOf(std::uint32_t address) {
             ss << getString(readWord(c->def+chrArticle));
             ss << getString(readWord(c->def+chrName));
             return ss.str(); }
-        case idItem:
-            work = address + itmArticle;
-            ss << getString(readWord(work));
-            work = address + itmSingular;
-            ss << getString(readWord(work));
-            return ss.str();
         case idSex:
             work = address + sexName;
             return getString(readWord(work));
@@ -269,8 +263,8 @@ bool Game::addItems(int qty, std::uint32_t itemIdent) {
     }
     inventory.push_back(CarriedItem(qty, itemIdent));
     std::sort(inventory.begin(), inventory.end(), [this](const Game::CarriedItem &a, const Game::CarriedItem &b) {
-        const char *aName = getString(getProperty(a.itemIdent, itmSingular));
-        const char *bName = getString(getProperty(b.itemIdent, itmSingular));
+        const char *aName = getString(getObjectProperty(a.itemIdent, propName));
+        const char *bName = getString(getObjectProperty(b.itemIdent, propName));
         return strcmp(aName, bName) < 0;
     });
     return true;
@@ -382,9 +376,9 @@ void Game::resetCharacter(std::uint32_t cRef) {
         int count = readByte(gearList+1);
         for (int i = 0; i < count; ++i) {
             std::uint32_t itemRef = readWord(gearList+2+i*4);
-            std::uint32_t slot = getProperty(itemRef, itmSlot);
+            std::uint32_t slot = getObjectProperty(itemRef, propSlot);
             c->gear.insert(std::make_pair(slot, itemRef));
-            std::uint32_t onEquip = getProperty(itemRef, itmOnEquip);
+            std::uint32_t onEquip = getObjectProperty(itemRef, propOnEquip);
             if (onEquip) {
                 doNode(onEquip);
             }
@@ -441,7 +435,7 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     }
 
     for (auto item : c->gear) {
-        std::uint32_t itemSkills = getProperty(item.second, itmSkillSet);
+        std::uint32_t itemSkills = getObjectProperty(item.second, propSkills);
         if (itemSkills) {
             base += static_cast<short>(readShort(itemSkills + 1 + skillNo * 2));
         }
@@ -512,7 +506,7 @@ std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {
     }
 
     for (const auto &item : c->gear) {
-        list = getProperty(item.second, itmActionList);
+        list = getObjectProperty(item.second, propActionList);
         if (list) {
             unsigned count = readByte(list+1);
             for (unsigned int i = 0; i < count; ++i) {
@@ -645,11 +639,11 @@ void Game::useItem(int itemNumber) {
     uint32_t item = inventory[itemNumber].itemIdent;
     if (!item) return;
 
-    uint32_t onUse = getProperty(item, itmOnUse);
+    uint32_t onUse = getObjectProperty(item, propOnUse);
     if (!onUse) return;
 
-    uint32_t article = getProperty(item, itmArticle);
-    uint32_t name = getProperty(item, itmSingular);
+    uint32_t article = getObjectProperty(item, propArticle);
+    uint32_t name = getObjectProperty(item, propName);
 
     clearOutput();
     say("\n> Using ");
@@ -673,12 +667,12 @@ void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
     uint32_t item = inventory[itemNumber].itemIdent;
     if (!item) return;
 
-    uint32_t slot = getProperty(item, itmSlot);
+    uint32_t slot = getObjectProperty(item, propSlot);
     if (!slot) return;
 
     if (who->gear.count(slot) > 0) {
         std::uint32_t oldItem = who->gear[slot];
-        std::uint32_t onRemove = getProperty(oldItem, itmOnRemove);
+        std::uint32_t onRemove = getObjectProperty(oldItem, propOnRemove);
         if (onRemove) {
             doNode(onRemove);
         }
@@ -687,7 +681,7 @@ void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
     }
 
     removeItems(1, item);
-    std::uint32_t onEquip = getProperty(item, itmOnEquip);
+    std::uint32_t onEquip = getObjectProperty(item, propOnEquip);
     if (onEquip) {
         doNode(onEquip);
     }

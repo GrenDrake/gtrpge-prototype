@@ -27,6 +27,7 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
         { "sex",     ocSex,     { "name", "object", "reflexive", "adjective", "possessive" } },
         { "species", ocSpecies, { "name" } },
         { "action",  ocAction,  { "name" } },
+        { "item",    ocItem,    { "article", "name", "plural" } },
     };
 
     while (cur != end) {
@@ -42,8 +43,6 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doNode();
         } else if (matches("constant")) {
             doConstant();
-        } else if (matches("item")) {
-            doItemDef();
         } else if (matches("skill")) {
             doSkill();
         } else if (matches("character")) {
@@ -113,69 +112,6 @@ void Parser::doNode() {
     node->origin = origin;
 
     gameData.nodes.push_back(node);
-}
-
-void Parser::doItemDef() {
-    const Origin &origin = cur->origin;
-    require("item");
-    require(Token::Identifier);
-    const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Item);
-    ++cur;
-
-    std::shared_ptr<ItemDef> item(new ItemDef);
-    item->origin = origin;
-    item->name = name;
-    require(Token::OpenBrace, true);
-    require(Token::String);
-    item->article = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    item->singular = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    item->plural = gameData.addString(cur->text);
-    ++cur;
-
-    if (matches(Token::String)) {
-        item->description = gameData.addString(cur->text);
-        ++cur;
-    }
-
-    item->flags = doFlags();
-
-    while (!matches(Token::CloseBrace)) {
-        const Origin &pOrigin = cur->origin;
-        require(Token::Identifier);
-        const std::string &pName = cur->text;
-        ++cur;
-
-        if (pName == "onuse") {
-            const Value &value = doProperty(item->name);
-            item->onUse = value;
-        } else if (pName == "canequip") {
-            const Value &value = doProperty(item->name);
-            item->canEquip = value;
-        } else if (pName == "onequip") {
-            const Value &value = doProperty(item->name);
-            item->onEquip = value;
-        } else if (pName == "onremove") {
-            const Value &value = doProperty(item->name);
-            item->onRemove = value;
-        } else if (pName == "slot") {
-            const Value &value = doValue();
-            item->slot = value;
-        } else if (pName == "actionlist") {
-            item->actionsList = doList();
-        } else if (pName == "skills") {
-            item->skillSet = doSkillSet();
-        } else {
-            throw BuildError(pOrigin, "Unknown item property " + pName);
-        }
-    }
-    ++cur;
-
-    gameData.dataItems.push_back(item);
 }
 
 void Parser::doDamageTypes() {

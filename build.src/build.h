@@ -174,7 +174,6 @@ private:
     void doNode();
     void doSkill();
     void doCharacter();
-    void doItemDef();
     void doDamageTypes();
     void doObject();
     std::shared_ptr<ObjectDef> doObjectCore(const Origin &origin);

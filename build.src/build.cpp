@@ -103,6 +103,7 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("gear", propGear);
     ObjectDef::setPropertyIdent("base-abilities", propBaseAbilities);
     ObjectDef::setPropertyIdent("extra-abilities", propExtraAbilities);
+    ObjectDef::setPropertyIdent("description", propDescription);
 
     try {
         std::vector<SymbolDef> symbols;

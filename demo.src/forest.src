@@ -3,8 +3,10 @@
  * ************************************************************************* */
 
 ITEM gnoll-cage-key {
-    "a " "very shiny key" ""
-    onUse {
+    article "a ";
+    name    "very shiny key";
+    plural "";
+    on-use {
         say "You admire the key for a few minutes.";
         add-return;
     };
