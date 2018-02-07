@@ -100,27 +100,6 @@ void CharacterDef::write(std::ostream &out) {
 }
 
 
-void ItemDef::write(std::ostream &out) {
-    writeByte(out, idItem);
-    writeFlags(out, origin, flags);
-    writeLabelValue(out, article);
-    writeLabelValue(out, singular);
-    writeLabelValue(out, plural);
-    if (description.empty()) {
-        writeWord(out, 0);
-    } else {
-        writeLabelValue(out, description);
-    }
-    writeValue(out, origin, onUse);
-    writeValue(out, origin, canEquip);
-    writeValue(out, origin, onEquip);
-    writeValue(out, origin, onRemove);
-    writeValue(out, origin, slot);
-    writeLabelValue(out, actionsList);
-    writeLabelValue(out, skillSet);
-}
-
-
 void DataList::write(std::ostream &out) {
     writeByte(out, idList);
     writeByte(out, values.size());
@@ -136,15 +115,6 @@ void SkillSet::write(std::ostream &out) {
     for (std::uint16_t val : skills) {
         writeShort(out, val);
     }
-}
-
-void ActionDef::write(std::ostream &out) {
-    writeByte(out, idAction);
-    writeLabelValue(out, energyStat);
-    writeWord(out, energyCost);
-    writeLabelValue(out, displayName);
-    writeValue(out, origin, combatNode);
-    writeValue(out, origin, peaceNode);
 }
 
 void ObjectDef::write(std::ostream &out) {

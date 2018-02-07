@@ -25,33 +25,6 @@ const int idSkillSet        = 0xF8;
 const int idAction          = 0xF7;
 const int idObject          = 0xF6;
 
-const int itmFlags          = 1;
-const int itmArticle        = 5;
-const int itmSingular       = 9;
-const int itmPlural         = 13;
-const int itmDescription    = 17;
-const int itmOnUse          = 21;
-const int itmCanEquip       = 25;
-const int itmOnEquip        = 29;
-const int itmOnRemove       = 33;
-const int itmSlot           = 37;
-const int itmActionList     = 41;
-const int itmSkillSet       = 45;
-const int itmSize           = 49;
-
-const int sexFlags          = 1;
-const int sexName           = 5;
-const int sexSubject        = 9;
-const int sexObject         = 13;
-const int sexPossessive     = 17;
-const int sexAdjective      = 21;
-const int sexReflexive      = 25;
-const int sexSize           = 29;
-
-const int spcFlags          = 1;
-const int spcName           = 5;
-const int spcSize           = 9;
-
 const int sklBaseSkill      = 0;
 const int sklName           = 4;
 const int sklFlags          = 8;
@@ -79,13 +52,6 @@ const int chrGearList       = 29;
 const int chrBaseAbilities  = 33;
 const int chrExtraAbilities = 37;
 const int chrSize           = 41;
-
-const int actSkill          = 1;
-const int actCost           = 5;
-const int actName           = 9;
-const int actCombatNode     = 13;
-const int actPeaceNode      = 17;
-const int actSize           = 21;
 
 const int propName              = 1;
 const int propArticle           = 2;

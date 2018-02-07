@@ -187,26 +187,13 @@ std::uint32_t Game::getObjectProperty(std::uint32_t objRef, std::uint16_t propId
 
 
 std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
-    std::uint32_t curFlags = 0;
-    flags = 1 << flags;
-    switch(getType(address)) {
-        case idItem:
-            curFlags = getProperty(address, itmFlags);
-            return (flags & curFlags) == flags;
-        default: {
-            std::stringstream ss;
-            ss << "Tried to test flag of unflagged object type ";
-            ss << getType(address) << " at 0x" << std::hex << address << ".";
-            throw PlayError(ss.str());
-        }
-    }
+    return 0; // TODO
 }
 
 std::string Game::getNameOf(std::uint32_t address) {
     std::stringstream ss;
 
     int type = getType(address);
-    int work;
     switch(type) {
         case idString:
             return getString(address);
@@ -215,15 +202,6 @@ std::string Game::getNameOf(std::uint32_t address) {
             ss << getString(readWord(c->def+chrArticle));
             ss << getString(readWord(c->def+chrName));
             return ss.str(); }
-        case idSex:
-            work = address + sexName;
-            return getString(readWord(work));
-        case idSpecies:
-            work = address + spcName;
-            return getString(readWord(work));
-        case idAction:
-            work = address + actName;
-            return getString(readWord(work));
         case idObject: {
             std::uint32_t name = getObjectProperty(address, propName);
             if (name == 0) {

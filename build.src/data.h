@@ -151,22 +151,6 @@ public:
     std::string gearList, skillSet;
 };
 
-class ItemDef : public DataType {
-public:
-    virtual size_t getSize() const {
-        return itmSize;
-    }
-    virtual void write(std::ostream &out);
-    virtual std::string getTypeName() const {
-        return "ITEM";
-    }
-
-    std::unordered_set<Value> flags;
-    std::string article, singular, plural, description;
-    Value onUse, canEquip, onEquip, onRemove, slot;
-    std::string actionsList, skillSet;
-};
-
 class DataList : public DataType {
 public:
     virtual size_t getSize() const {
@@ -196,22 +180,6 @@ public:
     std::unordered_map<std::string, Value> skillMap;
     std::array<std::uint16_t, sklCount> skills;
     bool setDefaults;
-};
-
-class ActionDef : public DataType {
-public:
-    virtual size_t getSize() const {
-        return actSize;
-    }
-    virtual void write(std::ostream &out);
-    virtual std::string getTypeName() const {
-        return "ACTION";
-    }
-
-    std::string energyStat;
-    std::uint32_t energyCost;
-    std::string displayName;
-    Value combatNode, peaceNode;
 };
 
 std::ostream& operator<<(std::ostream &out, const Value &type);
