@@ -373,8 +373,8 @@ Value Parser::doProperty(const std::string &forName) {
     }
 }
 
-std::unordered_set<Value> Parser::doFlags() {
-    std::unordered_set<Value> flags;
+std::vector<Value> Parser::doFlags() {
+    std::vector<Value> flags;
 
     if (!matches(Token::OpenParan)) {
         return flags;
@@ -382,7 +382,7 @@ std::unordered_set<Value> Parser::doFlags() {
     ++cur;
 
     while (!matches(Token::CloseParan)) {
-        flags.insert(doValue());
+        flags.push_back(doValue());
     }
     ++cur;
 

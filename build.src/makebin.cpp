@@ -64,7 +64,7 @@ void writeValue(std::ostream &out, const Origin &origin, const Value &value) {
     writeWord(out, result);
 }
 
-void writeFlags(std::ostream &out, const Origin &origin, const std::unordered_set<Value> &flags) {
+void writeFlags(std::ostream &out, const Origin &origin, const std::vector<Value> &flags) {
     std::uint32_t result = 0;
 
     if (!flags.empty()) {

@@ -6,7 +6,6 @@
 #include <fstream>
 #include <list>
 #include <unordered_map>
-#include <unordered_set>
 #include <memory>
 #include <string>
 #include <vector>
@@ -182,7 +181,7 @@ private:
     std::string doList();
     std::string doSkillSet(bool setDefaults = false);
     Value doProperty(const std::string &forName);
-    std::unordered_set<Value> doFlags();
+    std::vector<Value> doFlags();
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();
     std::shared_ptr<Statement> doImpliedSay();

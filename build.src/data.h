@@ -4,7 +4,6 @@
 #include <array>
 #include <memory>
 #include <unordered_map>
-#include <unordered_set>
 #include <string>
 #include <list>
 #include <vector>
@@ -43,20 +42,6 @@ public:
     std::string text;
     int value;
 };
-namespace std {
-    template<>
-    struct hash<Value> {
-        typedef Value argument_type;
-        typedef size_t result_type;
-
-        size_t operator()(const Value &x) const {
-            if (x.type == Value::Integer) {
-                return x.value;
-            }
-            return hash<std::string>{}(x.text);
-        }
-    };
-}
 
 class Statement {
 public:
@@ -85,7 +70,7 @@ public:
     Value statSkill;
     std::string displayName;
     int defaultValue;
-    std::unordered_set<Value> flags;
+    std::vector<Value> flags;
 };
 
 class DataType {
@@ -145,7 +130,7 @@ public:
 
     std::string article, displayName;
     Value sex, species;
-    std::unordered_set<Value> flags;
+    std::vector<Value> flags;
     Value faction;
     std::string baseAbilities, extraAbilities;
     std::string gearList, skillSet;

@@ -9,7 +9,7 @@ void writeShort(std::ostream &out, std::uint16_t value);
 void writeWord(std::ostream &out, std::uint32_t value);
 
 void writeValue(std::ostream &out, const Origin &origin, const Value &value);
-void writeFlags(std::ostream &out, const Origin &origin, const std::unordered_set<Value> &flags);
+void writeFlags(std::ostream &out, const Origin &origin, const std::vector<Value> &flags);
 void writeLabelValue(std::ostream &out, const std::string &labelName);
 
 /* ************************************************************************
