@@ -4,7 +4,7 @@ GTRPGE is an engine for RPG games using a choice-based (or gamebook like) design
 
 As GTRPGE is still incomplete, no actual releases are available. The assembler (build) should compile under most C++ compilers. The interpreter (play) is slightly less portable as it also requires ncurses.
 
-# Assembling Game Fiels
+# Assembling Game Files
 
 The assembler takes one argument: the filename of a project file describing the project to build.
 
