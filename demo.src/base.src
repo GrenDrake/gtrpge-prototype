@@ -100,25 +100,27 @@ DAMAGE-TYPES {
  * ************************************************************************* */
 
 CHARACTER the-player {
-    "the " "player"
-    sex-neuter spc-human
-    faction 0
-    skills (
+    article "the ";
+    name "player";
+    sex sex-neuter;
+    species spc-human;
+    faction 0;
+    skills skillset(
         skl-strength 12;
         skl-toughness 14;
         skl-melee 4;
-    )
-    gear (
+    );
+    gear list(
         common-helmet
         common-sword
         loincloth
-    )
-    baseAbilities (
+    );
+    baseAbilities list(
         act-punch
-    )
-    extraAbilities (
+    );
+    extraAbilities list(
         act-fireball
-    )
+    );
 }
 
 /* ************************************************************************* *

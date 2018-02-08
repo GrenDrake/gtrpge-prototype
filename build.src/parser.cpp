@@ -24,10 +24,12 @@ struct ObjectDefSpecialization {
 void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end) {
     cur = start;
     ObjectDefSpecialization objectTypes[] = {
-        { "sex",     ocSex,     { "name", "object", "reflexive", "adjective", "possessive" } },
-        { "species", ocSpecies, { "name" } },
-        { "action",  ocAction,  { "name" } },
-        { "item",    ocItem,    { "article", "name", "plural" } },
+        { "sex",       ocSex,       { "name", "object", "reflexive", "adjective", "possessive" } },
+        { "species",   ocSpecies,   { "name" } },
+        { "action",    ocAction,    { "name" } },
+        { "item",      ocItem,      { "article", "name", "plural" } },
+        { "character", ocCharacter, { "article", "name", "sex", "species" } },
+        { "" }
     };
 
     while (cur != end) {
@@ -45,8 +47,8 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doConstant();
         } else if (matches("skill")) {
             doSkill();
-        } else if (matches("character")) {
-            doCharacter();
+//        } else if (matches("character")) {
+//            doCharacter();
         } else if (matches("damage-types")) {
             doDamageTypes();
         } else if (matches("object")) {

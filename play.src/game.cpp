@@ -164,10 +164,6 @@ const char *Game::getString(std::uint32_t address) const {
     return reinterpret_cast<const char*>(&data[address+1]);
 }
 
-std::uint32_t Game::getProperty(std::uint32_t address, int propId) const {
-    return readWord(address + propId);
-}
-
 std::uint32_t Game::getObjectProperty(std::uint32_t objRef, std::uint16_t propId) {
     if (!isType(objRef, idObject)) {
         throw PlayError("Tried to get property of non-object");
@@ -197,11 +193,6 @@ std::string Game::getNameOf(std::uint32_t address) {
     switch(type) {
         case idString:
             return getString(address);
-        case idCharacter: {
-            Character *c = getCharacter(address);
-            ss << getString(readWord(c->def+chrArticle));
-            ss << getString(readWord(c->def+chrName));
-            return ss.str(); }
         case idObject: {
             std::uint32_t name = getObjectProperty(address, propName);
             if (name == 0) {
@@ -225,7 +216,7 @@ std::string Game::getNameOf(std::uint32_t address) {
 }
 
 std::string Game::getPronoun(std::uint32_t cRef, int pronounType) {
-    if (!isType(cRef, idCharacter)) {
+    if (getObjectProperty(cRef, propClass) != ocCharacter) {
         throw PlayError("Tried to get pronoun for non-character");
     }
     Character *cDef = getCharacter(cRef);
@@ -326,11 +317,11 @@ void Game::resetCharacter(std::uint32_t cRef) {
 
     Character *c = new Character;
     c->def = cRef;
-    c->sex = getProperty(cRef, chrSex);
-    c->species = getProperty(cRef, chrSpecies);
+    c->sex = getObjectProperty(cRef, propSex);
+    c->species = getObjectProperty(cRef, propSpecies);
     characters.insert(std::make_pair(cRef, c));
 
-    std::uint32_t skillSet = getProperty(c->def, chrSkillDefaults);
+    std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
     for (int i = 0; i < sklCount; ++i) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
@@ -349,7 +340,7 @@ void Game::resetCharacter(std::uint32_t cRef) {
         }
     }
 
-    std::uint32_t gearList = getProperty(cRef, chrGearList);
+    std::uint32_t gearList = getObjectProperty(cRef, propGear);
     if (gearList) {
         int count = readByte(gearList+1);
         for (int i = 0; i < count; ++i) {
@@ -406,7 +397,7 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     Character *c = getCharacter(cRef);
     if (!c) return 0;
 
-    std::uint32_t skillSet = getProperty(c->def, chrSkillDefaults);
+    std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
     int base = 0;
     if (skillSet != 0) {
         base = readShort(skillSet + 1 + skillNo * 2);
@@ -466,7 +457,7 @@ std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {
 
     const std::uint32_t weaponSlot = readWord(headerWeaponSlot);
     if (c->gear.count(weaponSlot) == 0) {
-        list = getProperty(cRef, chrBaseAbilities);
+        list = getObjectProperty(cRef, propBaseAbilities);
         if (list) {
             unsigned count = readByte(list+1);
             for (unsigned int i = 0; i < count; ++i) {
@@ -475,7 +466,7 @@ std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {
         }
     }
 
-    list = getProperty(cRef, chrExtraAbilities);
+    list = getObjectProperty(cRef, propExtraAbilities);
     if (list) {
         unsigned count = readByte(list+1);
         for (unsigned int i = 0; i < count; ++i) {
@@ -537,7 +528,7 @@ void Game::newNode(std::uint32_t address) {
 }
 
 void Game::doCombatLoop() {
-    while (getProperty(combatants[currentCombatant], chrFaction) != 0) {
+    while (getObjectProperty(combatants[currentCombatant], propFaction) != 0) {
         say(toUpperFirst(getNameOf(combatants[currentCombatant])));
         say(" takes a turn.\n");
         advanceCombatant();

@@ -84,7 +84,6 @@ public:
     std::string getTimeString(bool exact = false);
     std::string getOutput() const;
 
-    std::uint32_t getProperty(std::uint32_t address, int propId) const;
     std::uint32_t getObjectProperty(std::uint32_t objRef, std::uint16_t propId);
     std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
     std::string getNameOf(std::uint32_t address);

@@ -17,40 +17,44 @@ ITEM gnoll-cage-key {
  * ************************************************************************* */
 
 CHARACTER the-gnoll {
-    "the " "gnoll"
-    sex-male spc-gnoll
-    ( /* cflg-character */ )
-    faction 0
-    skills (
+    article "the ";
+    name "gnoll";
+    sex sex-male;
+    species spc-gnoll;
+    faction 0;
+    skills skillset(
         skl-strength 12;
         skl-toughness 14;
         skl-void-magic 4;
-    )
-    baseAbilities (
+    );
+    baseAbilities list(
         act-punch
-    )
-    gear (
+    );
+    gear list(
         common-sword
-    )
+    );
 }
 
 CHARACTER imp-1 {
-    "a " "tall male imp"
-    sex-male spc-human
-    ()
-    faction 1
+    article "a ";
+    name "tall male imp";
+    sex sex-male;
+    species spc-human;
+    faction 1;
 }
 CHARACTER imp-2 {
-    "a " "fat male imp"
-    sex-male spc-human
-    ()
-    faction 1
+    article "a ";
+    name "fat male imp";
+    sex sex-male;
+    species spc-human;
+    faction 1;
 }
 CHARACTER imp-3 {
-    "a " "female imp"
-    sex-female spc-human
-    ()
-    faction 1
+    article "a ";
+    name "female imp";
+    sex sex-male;
+    species spc-human;
+    faction 1;
 }
 
 /* ************************************************************************* *

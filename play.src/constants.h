@@ -79,6 +79,10 @@ const int propBaseAbilities     = 23;
 const int propExtraAbilities    = 24;
 const int propDescription       = 25;
 const int propInternalName      = 26;
+const int propSex               = 27;
+const int propSpecies           = 28;
+const int propAi                = 29;
+
 
 const int ocSpecies         = 1;
 const int ocSex             = 2;

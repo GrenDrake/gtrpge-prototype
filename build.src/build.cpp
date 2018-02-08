@@ -17,7 +17,7 @@ BuildError::BuildError(const std::string &msg)
     strncpy(errorMessage, msg.c_str(), errorMessageLength-1);
 }
 BuildError::BuildError(const Origin &origin, const std::string &msg)
-: std::runtime_error(msg)
+: std::runtime_error(msg), errorMessage("")
 {
     std::stringstream ss;
     ss << origin << ' ' << msg;
@@ -105,6 +105,9 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("extra-abilities", propExtraAbilities);
     ObjectDef::setPropertyIdent("description", propDescription);
     ObjectDef::setPropertyIdent("internal-name", propInternalName);
+    ObjectDef::setPropertyIdent("sex", propSex);
+    ObjectDef::setPropertyIdent("species", propSpecies);
+    ObjectDef::setPropertyIdent("ai", propAi);
 
     try {
         std::vector<SymbolDef> symbols;
