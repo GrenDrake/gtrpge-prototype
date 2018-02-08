@@ -226,13 +226,13 @@ std::string Parser::doSkillSet(bool setDefaults) {
         require(Token::Identifier);
         const std::string &name = cur->text;
         ++cur;
-        
+
         if (name == "defaults") {
             skillset->setDefaults = true;
             require(Token::Semicolon, true);
             continue;
         }
-        
+
         const Value &v = doValue();
         require(Token::Semicolon, true);
         skillset->skillMap.insert(std::make_pair(name, v));

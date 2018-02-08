@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "errorlog.h"
 #include "project.h"
 #include "build.h"
 #include "data.h"
@@ -64,9 +65,27 @@ std::string formatForDump(std::string text, size_t maxlen) {
     }
 }
 
+void showErrorLog(ErrorLog &log) {
+    for (const ErrorLog::ErrorMessage &message : log.messages) {
+        switch(message.type) {
+            case ErrorLog::Error:
+                std::cerr << "ERROR: ";
+                break;
+            case ErrorLog::Warning:
+                std::cerr << "WARING: ";
+                break;
+            default:
+                std::cerr << "UNKNOWN MESSAGE TYPE: ";
+        }
+        std::cerr << message.origin << ' ';
+        std::cerr << message.message << '\n';
+    }
+}
+
 int main(int argc, char *argv[]) {
     GameData gameData;
-    Lexer lexer;
+    ErrorLog log;
+    Lexer lexer(log);
 
     if (argc != 2) {
         std::cerr << "USAGE: build <project-file>\n";
@@ -115,6 +134,11 @@ int main(int argc, char *argv[]) {
         Parser parser(gameData, symbols);
         for (const std::string &file : project->sourceFiles) {
             lexer.doFile(file);
+            if (log.foundErrors) {
+                showErrorLog(log);
+                delete project;
+                return 1;
+            }
             parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
         }
 

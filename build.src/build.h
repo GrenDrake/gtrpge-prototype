@@ -10,18 +10,8 @@
 #include <string>
 #include <vector>
 
-class Origin {
-public:
-    Origin()
-    : file("(no-file)"), line(0), column(0)
-    { }
-    Origin(const std::string &file, int line, int column)
-    : file(file), line(line), column(column)
-    { }
-
-    std::string file;
-    int line, column;
-};
+#include "errorlog.h"
+#include "origin.h"
 
 class BuildError : public std::runtime_error {
 public:
@@ -91,6 +81,9 @@ public:
 
 class Lexer {
 public:
+    Lexer(ErrorLog &log)
+    : log(log)
+    { }
     void doFile(const std::string &file);
 
     std::list<Token> tokens;
@@ -139,6 +132,7 @@ private:
         return false;
     }
 
+    ErrorLog &log;
     std::string text;
     std::string file;
     std::uint32_t pos;

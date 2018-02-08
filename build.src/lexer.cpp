@@ -93,7 +93,7 @@ void Lexer::unescape(const Origin &origin, std::string &text) {
                 text[i] = '\n';
                 break;
             default:
-                throw BuildError(origin, "Unknown escape in string.");
+                log.add(ErrorLog::Error, origin, "Unknown escape in string.");
         }
         text.erase(i+1, 1);
     }
@@ -120,7 +120,8 @@ void Lexer::doFile(const std::string &file) {
             next(); next();
             while (here() != '*' || peek() != '/') {
                 if (here() == 0) {
-                    throw BuildError(origin, "Unexpected end of file during block comment.");
+                    log.add(ErrorLog::Error, origin, "Unexpected end of file during block comment.");
+                    return;
                 }
                 next();
             }
@@ -150,7 +151,8 @@ void Lexer::doFile(const std::string &file) {
                 next();
             }
             if (!pos) {
-                throw BuildError(origin, "Unexpected end of file.");
+                log.add(ErrorLog::Error, origin, "Unexpected end of file.");
+                return;
             }
             std::string str = text.substr(start, pos-start);
             unescape(origin, str);
@@ -177,7 +179,7 @@ void Lexer::doFile(const std::string &file) {
                 next();
             }
             if (!isspace(here()) && !ispunct(here())) {
-                throw BuildError(origin, "Expected whitespace.");
+                log.add(ErrorLog::Error, origin, "Expected whitespace.");
             }
             tokens.push_back(Token(origin, Token::Integer, value));
         } else if (isdigit(here()) || here() == '-') {
@@ -193,7 +195,7 @@ void Lexer::doFile(const std::string &file) {
                 value += here() - '0';
             }
             if (!isspace(here()) && !ispunct(here())) {
-                throw BuildError(origin, "Expected whitespace.");
+                log.add(ErrorLog::Error, origin, "Expected whitespace.");
             }
             if (neg) {
                 value = -value;
@@ -202,7 +204,7 @@ void Lexer::doFile(const std::string &file) {
         } else {
             std::stringstream ss;
             ss << "Found unexpected character " << (char)here() << " (" << here() << ").";
-            throw BuildError(origin, ss.str());
+            log.add(ErrorLog::Error, origin, ss.str());
             next();
         }
     }
