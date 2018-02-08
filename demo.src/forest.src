@@ -23,6 +23,7 @@ CHARACTER the-gnoll {
     species spc-gnoll;
     faction 0;
     skills skillset(
+        defaults;
         skl-strength 12;
         skl-toughness 14;
         skl-void-magic 4;
@@ -41,6 +42,9 @@ CHARACTER imp-1 {
     sex sex-male;
     species spc-human;
     faction 1;
+    skills skillset(
+        defaults;
+    );
 }
 CHARACTER imp-2 {
     article "a ";
@@ -48,6 +52,9 @@ CHARACTER imp-2 {
     sex sex-male;
     species spc-human;
     faction 1;
+    skills skillset(
+        defaults;
+    );
 }
 CHARACTER imp-3 {
     article "a ";
@@ -55,6 +62,9 @@ CHARACTER imp-3 {
     sex sex-male;
     species spc-human;
     faction 1;
+    skills skillset(
+        defaults;
+    );
 }
 
 /* ************************************************************************* *
