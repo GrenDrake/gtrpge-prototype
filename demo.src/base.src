@@ -275,6 +275,16 @@ ACTION act-swing {
 
 ACTION act-thrust {
     name "thrust";
+    combat-node {
+        get-property #_0 $faction;
+        random-not-faction stack;
+        say-uf stack;
+        " breaks into dance.\n";
+        get-property #_0 $faction;
+        random-of-faction stack;
+        say-uf stack;
+        " appluads loudly.\n";
+    };
     peace-node {
         say "You brandish the sword wildly.";
         add-return;

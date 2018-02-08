@@ -404,6 +404,35 @@ void Game::doNode(std::uint32_t address) {
             case opGetProperty: {
                 push(getObjectProperty(operands[0], operands[1]));
                 break; }
+                
+            case opRandomOfFaction: {
+                if (!inCombat) break;
+                std::vector<std::uint32_t> options;
+                for (std::uint32_t who : combatants) {
+                    if (getObjectProperty(who, propFaction) == operands[0]) {
+                        options.push_back(who);
+                    }
+                }
+                if (options.empty()) {
+                    push(0);
+                } else {
+                    push(options[rand() % options.size()]);
+                }
+                break; }
+            case opRandomNotFaction: {
+                if (!inCombat) break;
+                std::vector<std::uint32_t> options;
+                for (std::uint32_t who : combatants) {
+                    if (getObjectProperty(who, propFaction) != operands[0]) {
+                        options.push_back(who);
+                    }
+                }
+                if (options.empty()) {
+                    push(0);
+                } else {
+                    push(options[rand() % options.size()]);
+                }
+                break; }
 
             default: {
                 std::stringstream ss;

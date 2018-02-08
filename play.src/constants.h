@@ -155,6 +155,8 @@ const int opResetCombat     = 0xB0;
 const int opAddToCombat     = 0xB1;
 const int opCombatant       = 0xB2;
 const int opGetProperty     = 0xC0;
+const int opRandomOfFaction = 0xC1;
+const int opRandomNotFaction= 0xC2;
 
 const int operandNone           = 0;
 const int operandImmediate      = 1;
