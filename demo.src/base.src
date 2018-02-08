@@ -299,7 +299,8 @@ NODE start {
     "Welcome to the game!";
     add-option "Create a new character" chargen-sex;
 
-    do-node forest-event-setup;
+    push forest-event-setup;
+    do-node;
 }
 
 NODE chargen-sex {
@@ -328,5 +329,6 @@ NODE chargen-done {
 
     say "Beginning the game now.\n* * * * * * * * * *\n";
     start-game;
-    do-node forest-path;
+    push forest-path;
+    do-node;
 }

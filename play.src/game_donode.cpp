@@ -42,7 +42,7 @@ void Game::doNode(std::uint32_t address) {
             case opEnd:
                 return;
             case opDoNode:
-                doNode(operands[0]);
+                doNode(pop());
                 break;
             case opSetLocation:
                 a1 = operands[0];

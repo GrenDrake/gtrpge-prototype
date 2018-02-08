@@ -203,7 +203,8 @@ NODE entering-cabin {
     label gnoll-home;
     store flg-visited-gnoll true;
     say "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n";
-    do-node inside-cabin;
+    push inside-cabin;
+    do-node;
 }
 
 NODE inside-cabin {
@@ -231,7 +232,7 @@ NODE deep-forest {
 
 NODE forest-do-event {
     random-from-list #forest-events;
-    do-node stack;
+    do-node;
 }
 NODE forest-event-setup {
     create-list forest-events;
