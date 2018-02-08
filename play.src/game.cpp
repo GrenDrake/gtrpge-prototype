@@ -529,8 +529,14 @@ void Game::newNode(std::uint32_t address) {
 
 void Game::doCombatLoop() {
     while (getObjectProperty(combatants[currentCombatant], propFaction) != 0) {
-        say(toUpperFirst(getNameOf(combatants[currentCombatant])));
-        say(" takes a turn.\n");
+        std::uint32_t ai = getObjectProperty(combatants[currentCombatant], propAi);
+        if (ai > 0) {
+            setTemp(0, combatants[currentCombatant]);
+            newNode(ai);
+        } else {
+            say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+            say(" takes a turn.\n");
+        }
         advanceCombatant();
     }
 

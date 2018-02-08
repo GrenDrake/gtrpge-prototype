@@ -45,6 +45,10 @@ CHARACTER imp-1 {
     skills skillset(
         defaults;
     );
+    ai {
+        say-uf #_0;
+        " sings \"Dance magic, dance!\"\n";
+    };
 }
 CHARACTER imp-2 {
     article "a ";
