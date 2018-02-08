@@ -47,8 +47,6 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
             doConstant();
         } else if (matches("skill")) {
             doSkill();
-//        } else if (matches("character")) {
-//            doCharacter();
         } else if (matches("damage-types")) {
             doDamageTypes();
         } else if (matches("object")) {
@@ -274,67 +272,6 @@ void Parser::doSkill() {
 
     require(Token::Semicolon, true);
     gameData.skills.push_back(skill);
-}
-
-void Parser::doCharacter() {
-    const Origin &origin = cur->origin;
-    require("character");
-    require(Token::Identifier);
-    const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Character);
-    ++cur;
-
-    std::shared_ptr<CharacterDef> character(new CharacterDef);
-    character->origin = origin;
-    character->name = name;
-    require(Token::OpenBrace, true);
-
-    require(Token::String);
-    character->article = gameData.addString(cur->text);
-    ++cur;
-    require(Token::String);
-    character->displayName = gameData.addString(cur->text);
-    ++cur;
-
-    character->sex = doValue();
-    character->species = doValue();
-
-    character->flags = doFlags();
-
-    while (!matches(Token::CloseBrace)) {
-        require(Token::Identifier);
-        const std::string &identText = cur->text;
-        ++cur;
-        if (identText == "faction") {
-            character->faction = doValue();
-        } else if (identText == "skills") {
-            character->skillSet = doSkillSet(true);
-        } else if (identText == "gear") {
-            character->gearList = doList();
-        } else if (identText == "baseabilities") {
-            character->baseAbilities = doList();
-        } else if (identText == "extraabilities") {
-            character->extraAbilities = doList();
-        } else {
-            throw BuildError(origin, "Unknown character property " + identText);
-        }
-    }
-
-    if (character->skillSet.empty()) {
-        std::stringstream ss;
-        ss << "__an_skillset_empty_" << anonymousCounter;
-        ++anonymousCounter;
-
-        std::shared_ptr<SkillSet> skillset(new SkillSet);
-        skillset->origin = origin;
-        skillset->name = ss.str();
-        skillset->setDefaults = true;
-        gameData.dataItems.push_back(skillset);
-        character->skillSet = ss.str();
-    }
-
-    require(Token::CloseBrace, true);
-    gameData.dataItems.push_back(character);
 }
 
 Value Parser::doProperty(const std::string &forName) {
