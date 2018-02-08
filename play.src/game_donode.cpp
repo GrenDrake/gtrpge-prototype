@@ -53,11 +53,6 @@ void Game::doNode(std::uint32_t address) {
                     location = address;
                 }
                 break;
-            case opHasFlag:
-                a1 = operands[0];
-                a2 = operands[1];
-                push(hasFlag(a1, a2));
-                break;
             case opStartGame: // start-game;
                 gameStarted = true;
                 break;

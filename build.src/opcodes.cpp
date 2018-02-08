@@ -12,7 +12,6 @@ Command commands[] = {
     { "label",           -1,                1 },
     { "end",             opEnd,             0 },
     { "do-node",         opDoNode,          0 },
-    { "has-flag",        opHasFlag,         2 },
     { "start-game",      opStartGame,       0 },
     { "add-time",        opAddTime,         2 },
     { "push",            opPush,            1 },

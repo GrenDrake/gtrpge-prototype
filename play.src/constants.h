@@ -94,7 +94,6 @@ const int damageTypeCount   = 8;
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
 const int opSetLocation     = 0x02;
-const int opHasFlag         = 0x03;
 const int opStartGame       = 0x04;
 const int opAddTime         = 0x05;
 const int opPush            = 0x0E;
