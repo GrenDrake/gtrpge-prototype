@@ -45,7 +45,7 @@ void Game::doNode(std::uint32_t address) {
                 doNode(pop());
                 break;
             case opSetLocation:
-                a1 = operands[0];
+                a1 = pop();
                 inLocation = true;
                 if (locationName != a1) {
                     newLocation = true;

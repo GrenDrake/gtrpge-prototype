@@ -17,7 +17,7 @@ Command commands[] = {
     { "add-time",        opAddTime,         2 },
     { "push",            opPush,            1 },
     { "pop",             opPop,             0 },
-    { "set-location",    opSetLocation,     1 },
+    { "set-location",    opSetLocation,     0 },
     { "add-option",      opAddOption,       2 },
     { "add-option-xtra", opAddOptionXtra,   3 },
     { "add-continue",    opAddContinue,     1 },
