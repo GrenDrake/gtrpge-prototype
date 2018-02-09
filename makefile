@@ -3,14 +3,14 @@ CXXFLAGS=-Wall -g -std=c++11 -pedantic
 BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o \
            build.src/makebin.o build.src/data.o build.src/project.o \
 		   build.src/opcodes.o
-BUILD_TARGET=build
+BUILD_TARGET=./build
 
 PLAY_LIBS=-lncurses
 PLAY_NCURSES=play.src/nc_play.o play.src/nc_inv.o play.src/nc_char.o play.src/nc_util.o
 PLAY_OBJS=$(PLAY_NCURSES) play.src/textutils.o play.src/game.o play.src/game_donode.o
-PLAY_TARGET=play
+PLAY_TARGET=./play
 
-all: build play game.bin
+all: $(BUILD_TARGET) $(PLAY_TARGET) game.bin
 
 
 
@@ -20,8 +20,8 @@ $(BUILD_TARGET): $(BUILD_OBJS)
 $(PLAY_TARGET): $(PLAY_OBJS)
 	$(CXX) $(PLAY_OBJS) $(PLAY_LIBS) -o $(PLAY_TARGET)
 
-game.bin: demo.prj demo.src/*
-	./build demo.prj
+game.bin: $(BUILD_TARGET) demo.prj demo.src/*
+	$(BUILD_TARGET) demo.prj
 
 
 
