@@ -392,7 +392,7 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opAddToCombat:
-                combatants.push_back(operands[0]);
+                combatants.push_back(pop());
                 break;
             case opCombatant:
                 a1 = pop();
@@ -404,7 +404,9 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opGetProperty: {
-                push(getObjectProperty(operands[0], operands[1]));
+                a2 = pop();
+                a1 = pop();
+                push(getObjectProperty(a1, a2));
                 break; }
 
             case opRandomOfFaction: {

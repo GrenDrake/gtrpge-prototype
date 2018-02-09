@@ -127,9 +127,9 @@ NODE examine-wall {
 NODE imp-fight {
     "Three imps are gathered around a campfire, cackling and conversing." say
     reset-combat
-    add-to-combat imp-1
-    add-to-combat imp-2
-    add-to-combat imp-3
+    imp-1 add-to-combat
+    imp-2 add-to-combat
+    imp-3 add-to-combat
 }
 
 

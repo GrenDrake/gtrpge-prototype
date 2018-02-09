@@ -282,11 +282,11 @@ ACTION act-swing {
 ACTION act-thrust {
     name "thrust";
     combat-node {
-        get-property #_0 $faction
+        #_0 $faction get-property
         random-not-faction
         say-uf
         " breaks into dance.\n" say
-        get-property #_0 $faction
+        #_0 $faction get-property
         random-of-faction
         say-uf
         " appluads loudly.\n" say
