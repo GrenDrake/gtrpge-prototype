@@ -178,7 +178,8 @@ ITEM teleport-crystal {
     on-use {
         remove-items 1 teleport-crystal;
         say "Light flashes and you vision goes blank. Moments later, the world returns.";
-        add-continue town-gate;
+        push town-gate;
+        add-continue;
     };
 }
 

@@ -102,7 +102,9 @@ NODE hurt-self-void {
 
 NODE examine-wall {
     say "It looks much as one might expect.";
-    add-time 1 12;
+    push 1;
+    push 12;
+    add-time;
     do-damage the-player 5 skl-health dt-blunt;
     add-return;
 }

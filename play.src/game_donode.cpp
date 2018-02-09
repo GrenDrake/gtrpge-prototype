@@ -57,7 +57,9 @@ void Game::doNode(std::uint32_t address) {
                 gameStarted = true;
                 break;
             case opAddTime: // add-time [hours] [minutes];
-                gameTime += operands[0] * minutesPerHour + operands[1];
+                a2 = pop();
+                a1 = pop();
+                gameTime += a1 * minutesPerHour + a2;
                 break;
             case opPush:
                 a1 = operands[0];
@@ -79,7 +81,7 @@ void Game::doNode(std::uint32_t address) {
                 options.push_back(Option(a1, a2, a3));
                 break;
             case opAddContinue:
-                a1 = operands[1];
+                a1 = pop();
                 options.push_back(Option(1, a1));
                 break;
             case opAddReturn:
@@ -399,7 +401,7 @@ void Game::doNode(std::uint32_t address) {
             case opGetProperty: {
                 push(getObjectProperty(operands[0], operands[1]));
                 break; }
-                
+
             case opRandomOfFaction: {
                 if (!inCombat) break;
                 std::vector<std::uint32_t> options;
