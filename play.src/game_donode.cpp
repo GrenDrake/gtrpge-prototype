@@ -92,19 +92,23 @@ void Game::doNode(std::uint32_t address) {
                 say(getNameOf(pop()));
                 break;
             case opSayUF:
-                say(toUpperFirst(getNameOf(operands[0])));
+                say(toUpperFirst(getNameOf(pop())));
                 break;
             case opSayTC:
-                say(toTitleCase(getNameOf(operands[0])));
+                say(toTitleCase(getNameOf(pop())));
                 break;
             case opSayPronoun:
-                say(getPronoun(operands[0], operands[1]));
+                a2 = pop();
+                a1 = pop();
+                say(getPronoun(a1, a2));
                 break;
             case opSayPronounUF:
-                say(toUpperFirst(getPronoun(operands[0], operands[1])));
+                a2 = pop();
+                a1 = pop();
+                say(toUpperFirst(getPronoun(a1, a2)));
                 break;
             case opSayNumber:
-                say(operands[0]);
+                say(pop());
                 break;
 
             case opJump:

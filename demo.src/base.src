@@ -220,7 +220,7 @@ ACTION act-fireball {
     cost-skill skl-energy;
     cost-amount 2;
     combat-node {
-        say-uf #_0
+        #_0 say-uf
         " uses fireball! KABOOM!\n" say
     };
 }
@@ -228,9 +228,9 @@ ACTION act-fireball {
 ACTION act-swing {
     name "swing";
     combat-node {
-        say-uf #_0
+        #_0 say-uf
         " swings " say
-        say-pronoun #_0 pro-adject
+        #_0 pro-adject say-pronoun
         " sword! " say
 
 
@@ -249,13 +249,13 @@ ACTION act-swing {
         skill-check #_0 skl-melee 0 25
         jump-gt 0 hit-missed
 
-        say-uf #_8
+        #_8 say-uf
         " is hit! " say
         do-damage #_8 13 skl-health dt-cutting
         skip-me jump
 
         label hit-missed
-        say-uf #_8
+        #_8 say-uf
         " avoids the strike! " say
 
         label skip-me
@@ -283,11 +283,11 @@ ACTION act-thrust {
     combat-node {
         get-property #_0 $faction
         random-not-faction stack
-        say-uf stack
+        say-uf
         " breaks into dance.\n" say
         get-property #_0 $faction
         random-of-faction stack
-        say-uf stack
+        say-uf
         " appluads loudly.\n" say
     };
     peace-node {
