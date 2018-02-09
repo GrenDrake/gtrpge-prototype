@@ -365,7 +365,8 @@ std::shared_ptr<Statement> Parser::doStatement() {
         const Command *cmd = getCommand(cur->text);
         statement->commandInfo = cmd;
         if (cmd == nullptr) {
-            throw BuildError(origin, cur->text + " is an unknown command.");
+            statement->parts.push_back(Value("push"));
+            statement->parts.push_back(doValue());
         } else {
             statement->parts.push_back(doValue());
             for (int i = 0; i < cmd->argCount; ++i) {
