@@ -129,49 +129,49 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opJumpEq:
+                a3 = pop();
                 a1 = pop();
-                a2 = operands[0];
-                a3 = operands[1];
+                a2 = pop();
                 if (a1 == a2) {
                     ip = a3;
                 }
                 break;
             case opJumpNeq:
+                a3 = pop();
                 a1 = pop();
-                a2 = operands[0];
-                a3 = operands[1];
+                a2 = pop();
                 if (a1 != a2) {
                     ip = a3;
                 }
                 break;
             case opJumpLt:
+                a3 = pop();
                 a1 = pop();
-                a2 = operands[0];
-                a3 = operands[1];
+                a2 = pop();
                 if (a1 < a2) {
                     ip = a3;
                 }
                 break;
             case opJumpLte:
+                a3 = pop();
                 a1 = pop();
-                a2 = operands[0];
-                a3 = operands[1];
+                a2 = pop();
                 if (a1 <= a2) {
                     ip = a3;
                 }
                 break;
             case opJumpGt:
+                a3 = pop();
                 a1 = pop();
-                a2 = operands[0];
-                a3 = operands[1];
+                a2 = pop();
                 if (a1 > a2) {
                     ip = a3;
                 }
                 break;
             case opJumpGte:
+                a3 = pop();
                 a1 = pop();
-                a2 = operands[0];
-                a3 = operands[1];
+                a2 = pop();
                 if (a1 >= a2) {
                     ip = a3;
                 }

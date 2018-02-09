@@ -193,7 +193,7 @@ ITEM gnoll-potion {
         remove-items 1 gnoll-potion
         add-return
         get-species the-player
-        jump-eq spc-gnoll already-gnoll
+        spc-gnoll already-gnoll jump-eq
 
         set-species the-player spc-gnoll
         "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll."
@@ -247,7 +247,7 @@ ACTION act-swing {
         // skill-check cRef skillRef Mods Target
 
         skill-check #_0 skl-melee 0 25
-        jump-gt 0 hit-missed
+        0 hit-missed jump-gt
 
         #_8 say-uf
         " is hit! " say
