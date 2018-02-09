@@ -327,8 +327,8 @@ NODE chargen-species {
 
 NODE chargen-done {
     set-species the-player stack // set player species
-    add-to-party the-player
-    add-to-party the-gnoll
+    the-player add-to-party
+    the-gnoll add-to-party
 
     add-items 20 teleport-crystal
     add-items 2 gnoll-potion

@@ -358,12 +358,13 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opAddToParty:
-                party.push_back(operands[0]);
+                party.push_back(pop());
                 break;
             case opIsInParty: {
+                a1 = pop();
                 bool found = false;
                 for (unsigned i = 0; i < party.size(); ++i) {
-                    if (party[i] == operands[0]) {
+                    if (party[i] == a1) {
                         found = true;
                     }
                 }
@@ -371,9 +372,10 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRemoveFromParty: {
+                a1 = pop();
                 auto i = party.begin();
                 while (i != party.end()) {
-                    if (*i == operands[0]) {
+                    if (*i == a1) {
                         i = party.erase(i);
                     } else {
                         ++i;
