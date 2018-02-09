@@ -233,9 +233,10 @@ ACTION act-swing {
         #_0 pro-adject say-pronoun
         " sword! " say
 
+        3 combatant say-uf " test! " say
 
         store _9 0
-        combatant 0
+        0 combatant
         store _8 stack
         label swing-start
 
@@ -264,7 +265,7 @@ ACTION act-swing {
         push 1
         add
         store _9 stack
-        combatant #_9
+        #_9 combatant
         store _8 stack
         fetch _8
         push swing-start
@@ -282,11 +283,11 @@ ACTION act-thrust {
     name "thrust";
     combat-node {
         get-property #_0 $faction
-        random-not-faction stack
+        random-not-faction
         say-uf
         " breaks into dance.\n" say
         get-property #_0 $faction
-        random-of-faction stack
+        random-of-faction
         say-uf
         " appluads loudly.\n" say
     };

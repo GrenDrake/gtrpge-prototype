@@ -395,10 +395,11 @@ void Game::doNode(std::uint32_t address) {
                 combatants.push_back(operands[0]);
                 break;
             case opCombatant:
-                if (operands[0] >= combatants.size()) {
+                a1 = pop();
+                if (a1 >= combatants.size()) {
                     push(0);
                 } else {
-                    push(combatants[operands[0]]);
+                    push(combatants[a1]);
                 }
                 break;
 
@@ -408,9 +409,10 @@ void Game::doNode(std::uint32_t address) {
 
             case opRandomOfFaction: {
                 if (!inCombat) break;
+                a1 = pop();
                 std::vector<std::uint32_t> options;
                 for (std::uint32_t who : combatants) {
-                    if (getObjectProperty(who, propFaction) == operands[0]) {
+                    if (getObjectProperty(who, propFaction) == a1) {
                         options.push_back(who);
                     }
                 }
@@ -422,9 +424,10 @@ void Game::doNode(std::uint32_t address) {
                 break; }
             case opRandomNotFaction: {
                 if (!inCombat) break;
+                a1 = pop();
                 std::vector<std::uint32_t> options;
                 for (std::uint32_t who : combatants) {
-                    if (getObjectProperty(who, propFaction) != operands[0]) {
+                    if (getObjectProperty(who, propFaction) != a1) {
                         options.push_back(who);
                     }
                 }

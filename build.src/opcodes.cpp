@@ -72,9 +72,9 @@ Command commands[] = {
     { "reset-combat",       opResetCombat,      0 },
     { "add-to-combat",      opAddToCombat,      1 },
     { "get-property",       opGetProperty,      2 },
-    { "combatant",          opCombatant,        1 },
-    { "random-of-faction",  opRandomOfFaction,  1 },
-    { "random-not-faction", opRandomNotFaction, 1 },
+    { "combatant",          opCombatant,        0 },
+    { "random-of-faction",  opRandomOfFaction,  0 },
+    { "random-not-faction", opRandomNotFaction, 0 },
 };
 
 const Command* getCommand(const std::string name) {
