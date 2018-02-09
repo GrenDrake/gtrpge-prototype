@@ -178,8 +178,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opStore:
-                a1 = operands[0];
-                a2 = operands[1];
+                a2 = pop();
+                a1 = pop();
                 if (a2) {
                     storage[a1] = a2;
                 } else {
@@ -187,22 +187,21 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opFetch:
-                a1 = operands[0];
-                push(fetch(a1));
+                push(fetch(pop()));
                 break;
 
             case opAddItems:
-                a1 = operands[0];
-                a2 = operands[1];
-                push(addItems(a1, a2));
+                a2 = pop(); // qty
+                a1 = pop(); // itemIdent
+                push(addItems(a2, a1));
                 break;
             case opRemoveItems:
-                a1 = operands[0]; // qty
-                a2 = operands[1]; // itemIdent
-                push(removeItems(a1, a2));
+                a2 = pop(); // qty
+                a1 = pop(); // itemIDent
+                push(removeItems(a2, a1));
                 break;
             case opItemQty:
-                a1 = operands[0]; // itemIdent
+                a1 = pop(); // itemIdent
                 push(itemQty(a1));
                 break;
 

@@ -142,7 +142,7 @@ NODE town-gate {
     push forest-path
     add-option
 
-    fetch flg-took-key
+    flg-took-key fetch
     push no-key
     jump-true
     "\n\nA key can be seen glinting in the sun not far from the gate."
@@ -154,8 +154,8 @@ NODE town-gate {
 }
 
 NODE take-key {
-    add-items 1 gnoll-cage-key
-    store flg-took-key true
+    gnoll-cage-key 1 add-items
+    flg-took-key true store
     "You pick up the key and stick it in your pocket." say
     add-return
 }
@@ -169,7 +169,7 @@ NODE gnoll-cage {
     push forest-path
     add-option
 
-    fetch flg-rescued-gnoll
+    flg-rescued-gnoll fetch
     push no-gnoll
     jump-true
     " Inside the cage you can see a rather emaciated gnoll."
@@ -189,10 +189,10 @@ NODE gnoll-cage {
 
 NODE talk-to-gnoll {
     add-return
-    fetch flg-talked-to-caged-gnoll
+    flg-talked-to-caged-gnoll fetch
     push second-talk
     jump-true
-    store flg-talked-to-caged-gnoll true
+    flg-talked-to-caged-gnoll true store
     "You can barely make out the gnoll's words; \"Help me, please!\""
     say
     end
@@ -203,13 +203,13 @@ NODE talk-to-gnoll {
 
 NODE open-cage {
     add-return
-    item-qty gnoll-cage-key
+    gnoll-cage-key item-qty
     push no-key
     jump-false
     "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\""
     say
-    remove-items 1 gnoll-cage-key
-    store flg-rescued-gnoll true
+    gnoll-cage-key 1 remove-items
+    flg-rescued-gnoll true store
     end
 
     label no-key
@@ -238,7 +238,7 @@ NODE outside-cabin {
     set-location
     "A small cabin has been built here, nestled between the trees."
     say
-    fetch flg-rescued-gnoll
+    flg-rescued-gnoll fetch
     push no-gnoll
     jump-false
     " A trail of smoke can be seen curling up from the chimney; it appears someone is home!"
@@ -253,7 +253,7 @@ NODE outside-cabin {
 }
 
 NODE entering-cabin {
-    fetch flg-rescued-gnoll
+    flg-rescued-gnoll fetch
     push  gnoll-home
     jump-true
     "Try as you might, the door is quite secure."
@@ -262,7 +262,7 @@ NODE entering-cabin {
     end
 
     label gnoll-home
-    store flg-visited-gnoll true
+    flg-visited-gnoll true store
     "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n"
     say
     push inside-cabin

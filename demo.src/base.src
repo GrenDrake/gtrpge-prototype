@@ -176,7 +176,7 @@ ITEM teleport-crystal {
     plural  "teleport crystals";
     description "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic.";
     on-use {
-        remove-items 1 teleport-crystal
+        teleport-crystal 1 remove-items
         "Light flashes and you vision goes blank. Moments later, the world returns."
         say
         town-gate
@@ -190,7 +190,7 @@ ITEM gnoll-potion {
     plural  "potions of gnoll";
     description "A potion of transformation intended to make one more gnoll-like.";
     on-use {
-        remove-items 1 gnoll-potion
+        gnoll-potion 1 remove-items
         add-return
         get-species the-player
         spc-gnoll already-gnoll jump-eq
@@ -228,20 +228,14 @@ ACTION act-fireball {
 ACTION act-swing {
     name "swing";
     combat-node {
-        #_0 say-uf
-        " swings " say
-        #_0 pro-adject say-pronoun
-        " sword! " say
+        #_0 say-uf " swings " say #_0 pro-adject say-pronoun " sword! " say
 
-        3 combatant say-uf " test! " say
-
-        store _9 0
-        0 combatant
-        store _8 stack
+        _9 0 store
+        _8 0 combatant store
         label swing-start
 
-        fetch _8
-        fetch _0
+        _8 fetch
+        _0 fetch
         subtract
         skip-me jump-false
 
@@ -261,13 +255,14 @@ ACTION act-swing {
 
         label skip-me
 
-        fetch _9
+        _9
+        _9 fetch
         push 1
         add
-        store _9 stack
-        #_9 combatant
-        store _8 stack
-        fetch _8
+        store
+
+        _8 #_9 combatant store
+        _8 fetch
         push swing-start
         jump-true
 
@@ -330,10 +325,10 @@ NODE chargen-done {
     the-player add-to-party
     the-gnoll add-to-party
 
-    add-items 20 teleport-crystal
-    add-items 2 gnoll-potion
-    add-items 1 loincloth
-    add-items 1 plate-armour
+    teleport-crystal 20 add-items
+    gnoll-potion 2 add-items
+    loincloth 1 add-items
+    plate-armour 1 add-items
 
     "Beginning the game now.\n* * * * * * * * * *\n" say
     start-game
