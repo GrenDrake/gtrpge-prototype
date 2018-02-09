@@ -108,18 +108,18 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opJump:
-                ip = operands[0];
+                ip = pop();
                 break;
             case opJumpTrue:
+                a2 = pop();
                 a1 = pop();
-                a2 = operands[0];
                 if (a1) {
                     ip = a2;
                 }
                 break;
             case opJumpFalse:
+                a2 = pop();
                 a1 = pop();
-                a2 = operands[0];
                 if (!a1) {
                     ip = a2;
                 }

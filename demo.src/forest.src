@@ -141,7 +141,8 @@ NODE town-gate {
     add-option;
 
     fetch flg-took-key;
-    jump-true no-key;
+    push no-key;
+    jump-true;
     say "\n\nA key can be seen glinting in the sun not far from the gate.";
     push "Take key";
     push take-key;
@@ -165,7 +166,8 @@ NODE gnoll-cage {
     add-option;
 
     fetch flg-rescued-gnoll;
-    jump-true no-gnoll;
+    push no-gnoll;
+    jump-true;
     say " Inside the cage you can see a rather emaciated gnoll.";
     push "Open the cage";
     push open-cage;
@@ -182,7 +184,8 @@ NODE gnoll-cage {
 NODE talk-to-gnoll {
     add-return;
     fetch flg-talked-to-caged-gnoll;
-    jump-true second-talk;
+    push second-talk;
+    jump-true;
     store flg-talked-to-caged-gnoll true;
     say "You can barely make out the gnoll's words; \"Help me, please!\"";
     end;
@@ -193,7 +196,8 @@ NODE talk-to-gnoll {
 NODE open-cage {
     add-return;
     item-qty gnoll-cage-key;
-    jump-false no-key;
+    push no-key;
+    jump-false;
     say "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\"";
     remove-items 1 gnoll-cage-key;
     store flg-rescued-gnoll true;
@@ -223,7 +227,8 @@ NODE outside-cabin {
     set-location;
     say "A small cabin has been built here, nestled between the trees.";
     fetch flg-rescued-gnoll;
-    jump-false no-gnoll;
+    push no-gnoll;
+    jump-false;
     say " A trail of smoke can be seen curling up from the chimney; it appears someone is home!";
     label no-gnoll;
     push "Re-eneter the forest";
@@ -236,7 +241,8 @@ NODE outside-cabin {
 
 NODE entering-cabin {
     fetch flg-rescued-gnoll;
-    jump-true gnoll-home;
+    push  gnoll-home;
+    jump-true;
     say "Try as you might, the door is quite secure.";
     add-return;
     end;

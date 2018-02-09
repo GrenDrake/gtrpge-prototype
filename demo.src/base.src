@@ -239,7 +239,8 @@ ACTION act-swing {
         fetch _8;
         fetch _0;
         subtract;
-        jump-false skip-me;
+        push skip-me;
+        jump-false;
 
         // skill-check cRef skillRef Mods Target
 
@@ -249,7 +250,8 @@ ACTION act-swing {
         say-uf #_8;
         say " is hit! ";
         do-damage #_8 13 skl-health dt-cutting;
-        jump skip-me;
+        push skip-me;
+        jump;
 
         label hit-missed;
         say-uf #_8;
@@ -264,7 +266,8 @@ ACTION act-swing {
         combatant #_9;
         store _8 stack;
         fetch _8;
-        jump-true swing-start;
+        push swing-start;
+        jump-true;
 
         say "\n";
     };
