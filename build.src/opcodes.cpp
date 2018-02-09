@@ -21,7 +21,7 @@ Command commands[] = {
     { "add-option-xtra", opAddOptionXtra,   0 },
     { "add-continue",    opAddContinue,     0 },
     { "add-return",      opAddReturn,       0 },
-    { "say",             opSay,             1 },
+    { "say",             opSay,             0 },
     { "say-uf",          opSayUF,           1 },
     { "say-tc",          opSayTC,           1 },
     { "say-pronoun",     opSayPronoun,      2 },

@@ -7,7 +7,7 @@ ITEM gnoll-cage-key {
     name    "very shiny key";
     plural "";
     on-use {
-        say "You admire the key for a few minutes."
+        "You admire the key for a few minutes." say
         add-return
     };
 }
@@ -47,7 +47,7 @@ CHARACTER imp-1 {
     );
     ai {
         say-uf #_0
-        say " sings \"Dance magic, dance!\"\n"
+        " sings \"Dance magic, dance!\"\n" say
     };
 }
 CHARACTER imp-2 {
@@ -78,7 +78,8 @@ CHARACTER imp-3 {
 NODE forest-path {
     push "On Forest Path"
     set-location
-    say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
+    "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
+    say
     push "Follow the path north"
     push forest-fork
     add-option
@@ -104,18 +105,18 @@ NODE forest-path {
 
 NODE hurt-self-health {
     do-damage 0 56 skl-health dt-blunt
-    say "You hurt yourself."
+    "You hurt yourself." say
     add-return
 }
 
 NODE hurt-self-void {
     do-damage the-player -6 skl-void dt-blunt
-    say "You hurt yourself."
+    "You hurt yourself." say
     add-return
 }
 
 NODE examine-wall {
-    say "It looks much as one might expect."
+    "It looks much as one might expect." say
     push 1
     push 12
     add-time
@@ -124,7 +125,7 @@ NODE examine-wall {
 }
 
 NODE imp-fight {
-    say "Three imps are gathered around a campfire, cackling and conversing."
+    "Three imps are gathered around a campfire, cackling and conversing." say
     reset-combat
     add-to-combat imp-1
     add-to-combat imp-2
@@ -135,7 +136,8 @@ NODE imp-fight {
 NODE town-gate {
     push "Outside the Town Gates"
     set-location
-    say "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
+    "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
+    say
     push "Return to the forest"
     push forest-path
     add-option
@@ -143,7 +145,8 @@ NODE town-gate {
     fetch flg-took-key
     push no-key
     jump-true
-    say "\n\nA key can be seen glinting in the sun not far from the gate."
+    "\n\nA key can be seen glinting in the sun not far from the gate."
+    say
     push "Take key"
     push take-key
     add-option
@@ -153,14 +156,15 @@ NODE town-gate {
 NODE take-key {
     add-items 1 gnoll-cage-key
     store flg-took-key true
-    say "You pick up the key and stick it in your pocket."
+    "You pick up the key and stick it in your pocket." say
     add-return
 }
 
 NODE gnoll-cage {
     push "By a Cage in the Forest"
     set-location
-    say "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage."
+    "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage."
+    say
     push "Return to the forest path"
     push forest-path
     add-option
@@ -168,7 +172,8 @@ NODE gnoll-cage {
     fetch flg-rescued-gnoll
     push no-gnoll
     jump-true
-    say " Inside the cage you can see a rather emaciated gnoll."
+    " Inside the cage you can see a rather emaciated gnoll."
+    say
     push "Open the cage"
     push open-cage
     add-option
@@ -178,7 +183,8 @@ NODE gnoll-cage {
     end
 
     label no-gnoll
-    say " The cage stands empty and open."
+    " The cage stands empty and open."
+    say
 }
 
 NODE talk-to-gnoll {
@@ -187,10 +193,12 @@ NODE talk-to-gnoll {
     push second-talk
     jump-true
     store flg-talked-to-caged-gnoll true
-    say "You can barely make out the gnoll's words; \"Help me, please!\""
+    "You can barely make out the gnoll's words; \"Help me, please!\""
+    say
     end
     label second-talk
-    say "The gnoll continues to plead for help in a barely audible voice."
+    "The gnoll continues to plead for help in a barely audible voice."
+    say
 }
 
 NODE open-cage {
@@ -198,19 +206,22 @@ NODE open-cage {
     item-qty gnoll-cage-key
     push no-key
     jump-false
-    say "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\""
+    "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\""
+    say
     remove-items 1 gnoll-cage-key
     store flg-rescued-gnoll true
     end
 
     label no-key
-    say "You rattle the door of the cage, but it is firmly locked."
+    "You rattle the door of the cage, but it is firmly locked."
+    say
 }
 
 NODE forest-fork {
     push "A Fork in the Path"
     set-location
-    say "The path through the forest branches here, one fork leading north, towards what appears to be a small cabin while another leads deeper into the forest. It is also possible to return to the south, towards the town."
+    "The path through the forest branches here, one fork leading north, towards what appears to be a small cabin while another leads deeper into the forest. It is also possible to return to the south, towards the town."
+    say
     push "Take the north path"
     push outside-cabin
     add-option
@@ -225,11 +236,13 @@ NODE forest-fork {
 NODE outside-cabin {
     push "A Cabin in the Forest"
     set-location
-    say "A small cabin has been built here, nestled between the trees."
+    "A small cabin has been built here, nestled between the trees."
+    say
     fetch flg-rescued-gnoll
     push no-gnoll
     jump-false
-    say " A trail of smoke can be seen curling up from the chimney; it appears someone is home!"
+    " A trail of smoke can be seen curling up from the chimney; it appears someone is home!"
+    say
     label no-gnoll
     push "Re-eneter the forest"
     push forest-fork
@@ -243,13 +256,15 @@ NODE entering-cabin {
     fetch flg-rescued-gnoll
     push  gnoll-home
     jump-true
-    say "Try as you might, the door is quite secure."
+    "Try as you might, the door is quite secure."
+    say
     add-return
     end
 
     label gnoll-home
     store flg-visited-gnoll true
-    say "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n"
+    "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n"
+    say
     push inside-cabin
     do-node
 }
@@ -257,7 +272,8 @@ NODE entering-cabin {
 NODE inside-cabin {
     push "Inside the Gnoll's Cabin"
     set-location
-    say "The interior of the cabin is crampt, but cozy. You can see the gnoll slotched back on a wooden chair, a mug of some dark liquid in his hand.\n\n\"Good to see you again, my rescuer!\" he says as you enter."
+    "The interior of the cabin is crampt, but cozy. You can see the gnoll slotched back on a wooden chair, a mug of some dark liquid in his hand.\n\n\"Good to see you again, my rescuer!\" he says as you enter."
+    say
     push "Talk to the gnoll"
     push gnoll-cabin-talk
     add-option
@@ -267,14 +283,15 @@ NODE inside-cabin {
 }
 
 NODE gnoll-cabin-talk {
-    say "You have a nice chat with the gnoll."
+    "You have a nice chat with the gnoll." say
     add-return
 }
 
 NODE deep-forest {
     push "Deep in the Forest"
     set-location
-    say "You are deep within the forest. A path leads back out towards civilization, or you can take your chances exploring the forest."
+    "You are deep within the forest. A path leads back out towards civilization, or you can take your chances exploring the forest."
+    say
     push "Head towards civilization"
     push forest-fork
     add-option
@@ -299,16 +316,19 @@ NODE forest-event-setup {
 }
 
 NODE forest-event-imps {
-    say "You stumble across a pair of imps eating a meal. They wish you a good day and you carry on your way."
+    "You stumble across a pair of imps eating a meal. They wish you a good day and you carry on your way."
+    say
     add-return
 }
 
 NODE forest-event-skeleton {
-    say "You discover a menacing looking skeleton loitering around a grave. It fails to notice you entirely."
+    "You discover a menacing looking skeleton loitering around a grave. It fails to notice you entirely."
+    say
     add-return
 }
 
 NODE forest-event-nothing {
-    say "You stumble around in the forest for a while, but eventually end up back were you started without finding anything."
+    "You stumble around in the forest for a while, but eventually end up back were you started without finding anything."
+    say
     add-return
 }

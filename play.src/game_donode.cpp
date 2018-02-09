@@ -89,7 +89,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opSay:
-                say(getNameOf(operands[0]));
+                say(getNameOf(pop()));
                 break;
             case opSayUF:
                 say(toUpperFirst(getNameOf(operands[0])));

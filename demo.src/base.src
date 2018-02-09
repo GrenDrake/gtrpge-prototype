@@ -177,8 +177,9 @@ ITEM teleport-crystal {
     description "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic.";
     on-use {
         remove-items 1 teleport-crystal
-        say "Light flashes and you vision goes blank. Moments later, the world returns."
-        push town-gate
+        "Light flashes and you vision goes blank. Moments later, the world returns."
+        say
+        town-gate
         add-continue
     };
 }
@@ -195,11 +196,13 @@ ITEM gnoll-potion {
         jump-eq spc-gnoll already-gnoll
 
         set-species the-player spc-gnoll
-        say "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll."
+        "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll."
+        say
         end
 
         label already-gnoll
-        say "Nothing happens. Perhaps you can't become any more gnoll-like then you are?"
+        "Nothing happens. Perhaps you can't become any more gnoll-like then you are?"
+        say
     };
 }
 
@@ -218,7 +221,7 @@ ACTION act-fireball {
     cost-amount 2;
     combat-node {
         say-uf #_0
-        say " uses fireball! KABOOM!\n"
+        " uses fireball! KABOOM!\n" say
     };
 }
 
@@ -226,9 +229,9 @@ ACTION act-swing {
     name "swing";
     combat-node {
         say-uf #_0
-        say " swings "
+        " swings " say
         say-pronoun #_0 pro-adject
-        say " sword! "
+        " sword! " say
 
 
         store _9 0
@@ -239,8 +242,7 @@ ACTION act-swing {
         fetch _8
         fetch _0
         subtract
-        push skip-me
-        jump-false
+        skip-me jump-false
 
         // skill-check cRef skillRef Mods Target
 
@@ -248,14 +250,13 @@ ACTION act-swing {
         jump-gt 0 hit-missed
 
         say-uf #_8
-        say " is hit! "
+        " is hit! " say
         do-damage #_8 13 skl-health dt-cutting
-        push skip-me
-        jump
+        skip-me jump
 
         label hit-missed
         say-uf #_8
-        say " avoids the strike! "
+        " avoids the strike! " say
 
         label skip-me
 
@@ -269,10 +270,10 @@ ACTION act-swing {
         push swing-start
         jump-true
 
-        say "\n"
+        "\n" say
     };
     peace-node {
-        say "You brandish the sword wildly."
+        "You brandish the sword wildly." say
         add-return
     };
 }
@@ -283,14 +284,14 @@ ACTION act-thrust {
         get-property #_0 $faction
         random-not-faction stack
         say-uf stack
-        say " breaks into dance.\n"
+        " breaks into dance.\n" say
         get-property #_0 $faction
         random-of-faction stack
         say-uf stack
-        say " appluads loudly.\n"
+        " appluads loudly.\n" say
     };
     peace-node {
-        say "You brandish the sword wildly."
+        "You brandish the sword wildly." say
         add-return
     };
 }
@@ -300,9 +301,8 @@ ACTION act-thrust {
  * ************************************************************************* */
 
 NODE start {
-    "Welcome to the game!"
-    say stack
-    push "Create a new character"
+    "Welcome to the game!" say
+    "Create a new character"
     chargen-sex
     add-option
 
@@ -311,22 +311,17 @@ NODE start {
 }
 
 NODE chargen-sex {
-    say "What sex is your character?"
-    push "Male"
-    chargen-species sex-male add-option-xtra
-    push "Female"
-    chargen-species sex-female add-option-xtra
+    "What sex is your character?" say
+    "Male" chargen-species sex-male add-option-xtra
+    "Female" chargen-species sex-female add-option-xtra
 }
 
 NODE chargen-species {
-    set-sex the-player stack // set player sex
-    say "What species is your character?"
-    push "Human"
-    chargen-done spc-human add-option-xtra
-    push "Gnoll"
-    chargen-done spc-gnoll add-option-xtra
-    push "Dragon"
-    chargen-done spc-dragon add-option-xtra
+    set-sex the-player stack
+    "What species is your character?" say
+    push "Human" chargen-done spc-human add-option-xtra
+    push "Gnoll" chargen-done spc-gnoll add-option-xtra
+    push "Dragon" chargen-done spc-dragon add-option-xtra
 }
 
 NODE chargen-done {
@@ -339,7 +334,7 @@ NODE chargen-done {
     add-items 1 loincloth
     add-items 1 plate-armour
 
-    say "Beginning the game now.\n* * * * * * * * * *\n"
+    "Beginning the game now.\n* * * * * * * * * *\n" say
     start-game
     forest-path
     do-node
