@@ -70,14 +70,14 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opAddOption:
-                a1 = operands[0];
-                a2 = operands[1];
+                a2 = pop();
+                a1 = pop();
                 options.push_back(Option(a1, a2));
                 break;
             case opAddOptionXtra:
-                a1 = operands[0];
-                a2 = operands[1];
-                a3 = operands[2];
+                a3 = pop();
+                a2 = pop();
+                a1 = pop();
                 options.push_back(Option(a1, a2, a3));
                 break;
             case opAddContinue:

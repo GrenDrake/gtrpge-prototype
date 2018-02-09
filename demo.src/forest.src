@@ -79,13 +79,27 @@ NODE forest-path {
     push "On Forest Path";
     set-location;
     say "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail.";
-    add-option "Follow the path north" forest-fork;
-    add-option "Follow the path south" town-gate;
-    add-option "Examine the stone wall" examine-wall;
-    add-option "Take the overgrown trail" gnoll-cage;
-    add-option "Hurt yourself" hurt-self-health;
-    add-option "Inflict void on yourself" hurt-self-void;
-    add-option "Fight some immps" imp-fight;
+    push "Follow the path north";
+    push forest-fork;
+    add-option;
+    push "Follow the path south";
+    push town-gate;
+    add-option;
+    push "Examine the stone wall";
+    push examine-wall;
+    add-option;
+    push "Take the overgrown trail";
+    push gnoll-cage;
+    add-option;
+    push "Hurt yourself";
+    push hurt-self-health;
+    add-option;
+    push "Inflict void on yourself";
+    push hurt-self-void;
+    add-option;
+    push "Fight some immps";
+    push imp-fight;
+    add-option;
 }
 
 NODE hurt-self-health {
@@ -122,12 +136,16 @@ NODE town-gate {
     push "Outside the Town Gates";
     set-location;
     say "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed.";
-    add-option "Return to the forest" forest-path;
+    push "Return to the forest";
+    push forest-path;
+    add-option;
 
     fetch flg-took-key;
     jump-true no-key;
     say "\n\nA key can be seen glinting in the sun not far from the gate.";
-    add-option "Take key" take-key;
+    push "Take key";
+    push take-key;
+    add-option;
     label no-key;
 }
 
@@ -142,13 +160,19 @@ NODE gnoll-cage {
     push "By a Cage in the Forest";
     set-location;
     say "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage.";
-    add-option "Return to the forest path" forest-path;
+    push "Return to the forest path";
+    push forest-path;
+    add-option;
 
     fetch flg-rescued-gnoll;
     jump-true no-gnoll;
     say " Inside the cage you can see a rather emaciated gnoll.";
-    add-option "Open the cage" open-cage;
-    add-option "Try to talk to the gnoll" talk-to-gnoll;
+    push "Open the cage";
+    push open-cage;
+    add-option;
+    push "Try to talk to the gnoll";
+    push talk-to-gnoll;
+    add-option;
     end;
 
     label no-gnoll;
@@ -183,9 +207,15 @@ NODE forest-fork {
     push "A Fork in the Path";
     set-location;
     say "The path through the forest branches here, one fork leading north, towards what appears to be a small cabin while another leads deeper into the forest. It is also possible to return to the south, towards the town.";
-    add-option "Take the north path" outside-cabin;
-    add-option "Go deeper into the forest" deep-forest;
-    add-option "Return to the south" forest-path;
+    push "Take the north path";
+    push outside-cabin;
+    add-option;
+    push "Go deeper into the forest";
+    push deep-forest;
+    add-option;
+    push "Return to the south";
+    push forest-path;
+    add-option;
 }
 
 NODE outside-cabin {
@@ -196,8 +226,12 @@ NODE outside-cabin {
     jump-false no-gnoll;
     say " A trail of smoke can be seen curling up from the chimney; it appears someone is home!";
     label no-gnoll;
-    add-option "Re-eneter the forest" forest-fork;
-    add-option "Try to enter the cabin." entering-cabin;
+    push "Re-eneter the forest";
+    push forest-fork;
+    add-option;
+    push "Try to enter the cabin.";
+    push entering-cabin;
+    add-option;
 }
 
 NODE entering-cabin {
@@ -218,8 +252,12 @@ NODE inside-cabin {
     push "Inside the Gnoll's Cabin";
     set-location;
     say "The interior of the cabin is crampt, but cozy. You can see the gnoll slotched back on a wooden chair, a mug of some dark liquid in his hand.\n\n\"Good to see you again, my rescuer!\" he says as you enter.";
-    add-option "Talk to the gnoll" gnoll-cabin-talk;
-    add-option "Leave" outside-cabin;
+    push "Talk to the gnoll";
+    push gnoll-cabin-talk;
+    add-option;
+    push "Leave";
+    push outside-cabin;
+    add-option;
 }
 
 NODE gnoll-cabin-talk {
@@ -231,8 +269,12 @@ NODE deep-forest {
     push "Deep in the Forest";
     set-location;
     say "You are deep within the forest. A path leads back out towards civilization, or you can take your chances exploring the forest.";
-    add-option "Head towards civilization" forest-fork;
-    add-option "Explore a while" forest-do-event;
+    push "Head towards civilization";
+    push forest-fork;
+    add-option;
+    push "Explore a while";
+    push forest-do-event;
+    add-option;
 }
 
 /* ************************************************************************* *

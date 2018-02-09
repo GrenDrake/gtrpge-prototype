@@ -298,7 +298,9 @@ ACTION act-thrust {
 
 NODE start {
     "Welcome to the game!";
-    add-option "Create a new character" chargen-sex;
+    push "Create a new character";
+    push chargen-sex;
+    add-option;
 
     push forest-event-setup;
     do-node;
@@ -306,16 +308,31 @@ NODE start {
 
 NODE chargen-sex {
     say "What sex is your character?";
-    add-option-xtra "Male" chargen-species sex-male;
-    add-option-xtra "Female" chargen-species sex-female;
+    push "Male";
+    push chargen-species;
+    push sex-male;
+    add-option-xtra;
+    push "Female";
+    push chargen-species;
+    push sex-female;
+    add-option-xtra;
 }
 
 NODE chargen-species {
     set-sex the-player stack; // set player sex
     say "What species is your character?";
-    add-option-xtra "Human" chargen-done spc-human;
-    add-option-xtra "Gnoll" chargen-done spc-gnoll;
-    add-option-xtra "Dragon" chargen-done spc-dragon;
+    push "Human";
+    push chargen-done;
+    push spc-human;
+    add-option-xtra;
+    push "Gnoll";
+    push chargen-done;
+    push spc-gnoll;
+    add-option-xtra;
+    push "Dragon";
+    push chargen-done;
+    push spc-dragon;
+    add-option-xtra;
 }
 
 NODE chargen-done {
