@@ -47,7 +47,7 @@ CHARACTER imp-1 {
     );
     ai {
         say-uf #_0
-        " sings \"Dance magic, dance!\"\n"
+        say " sings \"Dance magic, dance!\"\n"
     };
 }
 CHARACTER imp-2 {

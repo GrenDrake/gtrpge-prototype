@@ -353,10 +353,6 @@ std::shared_ptr<Block> Parser::doBlock() {
 }
 
 std::shared_ptr<Statement> Parser::doStatement() {
-    if (matches(Token::String)) {
-        return doImpliedSay();
-    }
-
     const Origin &origin = cur->origin;
     std::shared_ptr<Statement> statement(new Statement);
     statement->origin = origin;
@@ -373,6 +369,9 @@ std::shared_ptr<Statement> Parser::doStatement() {
                 statement->parts.push_back(doValue());
             }
         }
+    } else if (matches(Token::String) || matches(Token::Integer)) {
+        statement->parts.push_back(Value("push"));
+        statement->parts.push_back(doValue());
     } else {
         throw BuildError(origin, "Unhandled token type in statement.");
     }
@@ -380,16 +379,6 @@ std::shared_ptr<Statement> Parser::doStatement() {
         return nullptr;
     }
 
-    return statement;
-}
-
-std::shared_ptr<Statement> Parser::doImpliedSay() {
-    const Origin &origin = cur->origin;
-    std::shared_ptr<Statement> statement(new Statement);
-    statement->origin = origin;
-
-    statement->parts.push_back(Value("say"));
-    statement->parts.push_back(doValue());
     return statement;
 }
 

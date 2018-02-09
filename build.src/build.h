@@ -177,7 +177,6 @@ private:
     std::vector<Value> doFlags();
     std::shared_ptr<Block> doBlock();
     std::shared_ptr<Statement> doStatement();
-    std::shared_ptr<Statement> doImpliedSay();
     Value doValue();
 
     void require(Token::Type type, bool advance = false);

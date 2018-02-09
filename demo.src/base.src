@@ -283,11 +283,11 @@ ACTION act-thrust {
         get-property #_0 $faction
         random-not-faction stack
         say-uf stack
-        " breaks into dance.\n"
+        say " breaks into dance.\n"
         get-property #_0 $faction
         random-of-faction stack
         say-uf stack
-        " appluads loudly.\n"
+        say " appluads loudly.\n"
     };
     peace-node {
         say "You brandish the sword wildly."
@@ -301,6 +301,7 @@ ACTION act-thrust {
 
 NODE start {
     "Welcome to the game!"
+    say stack
     push "Create a new character"
     chargen-sex
     add-option
