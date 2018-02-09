@@ -360,31 +360,24 @@ std::shared_ptr<Statement> Parser::doStatement() {
     const Origin &origin = cur->origin;
     std::shared_ptr<Statement> statement(new Statement);
     statement->origin = origin;
-    while (!matches(Token::Semicolon)) {
-        statement->parts.push_back(doValue());
+
+    if (matches(Token::Identifier)) {
+        const Command *cmd = getCommand(cur->text);
+        statement->commandInfo = cmd;
+        if (cmd == nullptr) {
+            throw BuildError(origin, cur->text + " is an unknown command.");
+        } else {
+            statement->parts.push_back(doValue());
+            for (int i = 0; i < cmd->argCount; ++i) {
+                statement->parts.push_back(doValue());
+            }
+        }
+    } else {
+        throw BuildError(origin, "Unhandled token type in statement.");
     }
-    ++cur;
     if (statement->parts.empty()) {
         return nullptr;
     }
-
-    const Value &cmdName = statement->parts.front();
-    if (cmdName.type != Value::Identifier) {
-        throw BuildError(origin, "Command must be identifier");
-    }
-
-    statement->commandInfo = getCommand(cmdName.text);
-    if (!statement->commandInfo) {
-        throw BuildError(origin, "Unknown command " + cmdName.text);
-    }
-
-    if (statement->parts.size() != (unsigned)statement->commandInfo->argCount + 1) {
-        std::stringstream ss;
-        ss << "Command " << cmdName.text << " expects " << statement->commandInfo->argCount;
-        ss << " arguments, but " << (statement->parts.size() - 1) << " were found.";
-        throw BuildError(origin, ss.str());
-    }
-
 
     return statement;
 }
@@ -396,7 +389,6 @@ std::shared_ptr<Statement> Parser::doImpliedSay() {
 
     statement->parts.push_back(Value("say"));
     statement->parts.push_back(doValue());
-    require(Token::Semicolon, true);
     return statement;
 }
 

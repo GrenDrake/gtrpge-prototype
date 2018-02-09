@@ -135,7 +135,7 @@ ITEM common-sword {
     description "A perfectly ordinary sword.";
     slot    "weapon";
     can-equip {
-        push true;
+        push true
     };
     on-equip {
     };
@@ -176,10 +176,10 @@ ITEM teleport-crystal {
     plural  "teleport crystals";
     description "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic.";
     on-use {
-        remove-items 1 teleport-crystal;
-        say "Light flashes and you vision goes blank. Moments later, the world returns.";
-        push town-gate;
-        add-continue;
+        remove-items 1 teleport-crystal
+        say "Light flashes and you vision goes blank. Moments later, the world returns."
+        push town-gate
+        add-continue
     };
 }
 
@@ -189,17 +189,17 @@ ITEM gnoll-potion {
     plural  "potions of gnoll";
     description "A potion of transformation intended to make one more gnoll-like.";
     on-use {
-        remove-items 1 gnoll-potion;
-        add-return;
-        get-species the-player;
-        jump-eq spc-gnoll already-gnoll;
+        remove-items 1 gnoll-potion
+        add-return
+        get-species the-player
+        jump-eq spc-gnoll already-gnoll
 
-        set-species the-player spc-gnoll;
-        say "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll.";
-        end;
+        set-species the-player spc-gnoll
+        say "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll."
+        end
 
-        label already-gnoll;
-        say "Nothing happens. Perhaps you can't become any more gnoll-like then you are?";
+        label already-gnoll
+        say "Nothing happens. Perhaps you can't become any more gnoll-like then you are?"
     };
 }
 
@@ -217,81 +217,81 @@ ACTION act-fireball {
     cost-skill skl-energy;
     cost-amount 2;
     combat-node {
-        say-uf #_0;
-        say " uses fireball! KABOOM!\n";
+        say-uf #_0
+        say " uses fireball! KABOOM!\n"
     };
 }
 
 ACTION act-swing {
     name "swing";
     combat-node {
-        say-uf #_0;
-        say " swings ";
-        say-pronoun #_0 pro-adject;
-        say " sword! ";
+        say-uf #_0
+        say " swings "
+        say-pronoun #_0 pro-adject
+        say " sword! "
 
 
-        store _9 0;
-        combatant 0;
-        store _8 stack;
-        label swing-start;
+        store _9 0
+        combatant 0
+        store _8 stack
+        label swing-start
 
-        fetch _8;
-        fetch _0;
-        subtract;
-        push skip-me;
-        jump-false;
+        fetch _8
+        fetch _0
+        subtract
+        push skip-me
+        jump-false
 
         // skill-check cRef skillRef Mods Target
 
-        skill-check #_0 skl-melee 0 25;
-        jump-gt 0 hit-missed;
+        skill-check #_0 skl-melee 0 25
+        jump-gt 0 hit-missed
 
-        say-uf #_8;
-        say " is hit! ";
-        do-damage #_8 13 skl-health dt-cutting;
-        push skip-me;
-        jump;
+        say-uf #_8
+        say " is hit! "
+        do-damage #_8 13 skl-health dt-cutting
+        push skip-me
+        jump
 
-        label hit-missed;
-        say-uf #_8;
-        say " avoids the strike! ";
+        label hit-missed
+        say-uf #_8
+        say " avoids the strike! "
 
-        label skip-me;
+        label skip-me
 
-        fetch _9;
-        push 1;
-        add;
-        store _9 stack;
-        combatant #_9;
-        store _8 stack;
-        fetch _8;
-        push swing-start;
-        jump-true;
+        fetch _9
+        push 1
+        add
+        store _9 stack
+        combatant #_9
+        store _8 stack
+        fetch _8
+        push swing-start
+        jump-true
 
-        say "\n";
+        say "\n"
     };
     peace-node {
-        say "You brandish the sword wildly.";
-        add-return;
+        say "You brandish the sword wildly."
+        add-return
     };
 }
 
 ACTION act-thrust {
     name "thrust";
     combat-node {
-        get-property #_0 $faction;
-        random-not-faction stack;
-        say-uf stack;
-        " breaks into dance.\n";
-        get-property #_0 $faction;
-        random-of-faction stack;
-        say-uf stack;
-        " appluads loudly.\n";
+        get-property #_0 $faction
+        random-not-faction stack
+        say-uf stack
+        " breaks into dance.\n"
+        get-property #_0 $faction
+        random-of-faction stack
+        say-uf stack
+        " appluads loudly.\n"
     };
     peace-node {
-        say "You brandish the sword wildly.";
-        add-return;
+        say "You brandish the sword wildly."
+        add-return
     };
 }
 
@@ -300,56 +300,56 @@ ACTION act-thrust {
  * ************************************************************************* */
 
 NODE start {
-    "Welcome to the game!";
-    push "Create a new character";
-    push chargen-sex;
-    add-option;
+    "Welcome to the game!"
+    push "Create a new character"
+    push chargen-sex
+    add-option
 
-    push forest-event-setup;
-    do-node;
+    push forest-event-setup
+    do-node
 }
 
 NODE chargen-sex {
-    say "What sex is your character?";
-    push "Male";
-    push chargen-species;
-    push sex-male;
-    add-option-xtra;
-    push "Female";
-    push chargen-species;
-    push sex-female;
-    add-option-xtra;
+    say "What sex is your character?"
+    push "Male"
+    push chargen-species
+    push sex-male
+    add-option-xtra
+    push "Female"
+    push chargen-species
+    push sex-female
+    add-option-xtra
 }
 
 NODE chargen-species {
-    set-sex the-player stack; // set player sex
-    say "What species is your character?";
-    push "Human";
-    push chargen-done;
-    push spc-human;
-    add-option-xtra;
-    push "Gnoll";
-    push chargen-done;
-    push spc-gnoll;
-    add-option-xtra;
-    push "Dragon";
-    push chargen-done;
-    push spc-dragon;
-    add-option-xtra;
+    set-sex the-player stack // set player sex
+    say "What species is your character?"
+    push "Human"
+    push chargen-done
+    push spc-human
+    add-option-xtra
+    push "Gnoll"
+    push chargen-done
+    push spc-gnoll
+    add-option-xtra
+    push "Dragon"
+    push chargen-done
+    push spc-dragon
+    add-option-xtra
 }
 
 NODE chargen-done {
-    set-species the-player stack; // set player species
-    add-to-party the-player;
-    add-to-party the-gnoll;
+    set-species the-player stack // set player species
+    add-to-party the-player
+    add-to-party the-gnoll
 
-    add-items 20 teleport-crystal;
-    add-items 2 gnoll-potion;
-    add-items 1 loincloth;
-    add-items 1 plate-armour;
+    add-items 20 teleport-crystal
+    add-items 2 gnoll-potion
+    add-items 1 loincloth
+    add-items 1 plate-armour
 
-    say "Beginning the game now.\n* * * * * * * * * *\n";
-    start-game;
-    push forest-path;
-    do-node;
+    say "Beginning the game now.\n* * * * * * * * * *\n"
+    start-game
+    push forest-path
+    do-node
 }
