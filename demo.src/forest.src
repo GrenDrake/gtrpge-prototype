@@ -305,14 +305,14 @@ NODE deep-forest {
  * ************************************************************************* */
 
 NODE forest-do-event {
-    random-from-list #forest-events
+    forest-events fetch random-from-list
     do-node
 }
 NODE forest-event-setup {
-    create-list forest-events
-    add-to-list forest-event-imps #forest-events
-    add-to-list forest-event-nothing #forest-events
-    add-to-list forest-event-skeleton #forest-events
+    forest-events create-list
+    forest-events fetch forest-event-imps add-to-list
+    forest-events fetch forest-event-nothing add-to-list
+    forest-events fetch forest-event-skeleton add-to-list
 }
 
 NODE forest-event-imps {

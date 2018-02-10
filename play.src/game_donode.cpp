@@ -12,7 +12,7 @@ void Game::doNode(std::uint32_t address) {
         throw PlayError(ss.str());
     }
 
-    std::uint32_t operands[4], a1, a2, a3;
+    std::uint32_t operands[4], a1, a2, a3, a4;
     while (true) {
         std::uint8_t cmdCode = readByte(ip++);
         std::uint8_t operandTypesByte = readByte(ip++);
@@ -206,8 +206,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opAddToList: {
-                a1 = operands[0]; // item to add
-                a2 = operands[1]; // list ident
+                a1 = pop(); // item to add
+                a2 = pop(); // list ident
                 std::shared_ptr<List> list = getList(a2);
                 if (list) {
                     list->add(a1, 1);
@@ -219,8 +219,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRemoveFromList: {
-                a1 = operands[0]; // item to remove
-                a2 = operands[1]; // list ident
+                a1 = pop(); // item to remove
+                a2 = pop(); // list ident
                 std::shared_ptr<List> list = getList(a2);
                 if (list) {
                     list->remove(a1);
@@ -232,8 +232,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opIsInList: {
-                a1 = operands[0]; // item to check for
-                a2 = operands[1]; // list ident
+                a1 = pop(); // item to check for
+                a2 = pop(); // list ident
                 std::shared_ptr<List> list = getList(a3);
                 if (!list) {
                     push(false);
@@ -243,7 +243,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRandomFromList: {
-                a1 = operands[0]; // list ident
+                a1 = pop(); // list ident
                 std::shared_ptr<List> list = getList(a1);
                 if (list) {
                     push(list->random());
@@ -255,7 +255,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opCreateList: {
-                a1 = operands[0]; // location to store list
+                a1 = pop(); // location to store list
                 List *list = new List;
                 std::uint32_t ident = nextListIdent++;
                 addList(ident, std::shared_ptr<List>(list));
@@ -263,9 +263,9 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opAddToListChance: {
-                a1 = operands[0]; // item to add
-                a2 = operands[1]; // item chance
-                a3 = operands[2]; // list ident
+                a2 = pop(); // item chance
+                a1 = pop(); // item to add
+                a3 = pop(); // list ident
                 std::shared_ptr<List> list = getList(a3);
                 if (list) {
                     list->add(a1, a2);
@@ -278,51 +278,73 @@ void Game::doNode(std::uint32_t address) {
             }
 
             case opResetCharacter:
-                resetCharacter(operands[0]);
+                resetCharacter(pop());
                 break;
             case opGetSex: {
-                Character *c = getCharacter(operands[0]);
+                Character *c = getCharacter(pop());
                 push(c->sex);
                 break;
             }
             case opGetSpecies: {
-                Character *c = getCharacter(operands[0]);
+                Character *c = getCharacter(pop());
                 push(c->species);
                 break;
             }
             case opSetSex: {
-                if (getObjectProperty(operands[1], propClass) != ocSex) {
+                a1 = pop();
+                a2 = pop();
+                if (getObjectProperty(a1, propClass) != ocSex) {
                     throw PlayError("Tried to set character sex to non-sex.");
                 }
-                Character *c = getCharacter(operands[0]);
-                c->sex = operands[1];
+                Character *c = getCharacter(a2);
+                c->sex = a1;
                 break;
             }
             case opSetSpecies: {
-                if (getObjectProperty(operands[1], propClass) != ocSpecies) {
+                a1 = pop();
+                a2 = pop();
+                if (getObjectProperty(a1, propClass) != ocSpecies) {
                     throw PlayError("Tried to set character species to non-species.");
                 }
-                Character *c = getCharacter(operands[0]);
-                c->species = operands[1];
+                Character *c = getCharacter(a2);
+                c->species = a1;
                 break;
             }
             case opGetSkill:
-                push(getSkillMax(operands[0], operands[1]));
+                a1 = pop();
+                a2 = pop();
+                push(getSkillMax(a2, a1));
                 break;
             case opAdjSkill:
-                adjSkillMax(operands[0], operands[1], operands[2]);
+                a1 = pop();
+                a2 = pop();
+                a3 = pop();
+                adjSkillMax(a3, a2, a1);
                 break;
             case opGetSkillCur:
-                push(getSkillCur(operands[0], operands[1]));
+                a1 = pop();
+                a2 = pop();
+                push(getSkillCur(a2, a1));
                 break;
             case opAdjSkillCur:
-                adjSkillCur(operands[0], operands[1], operands[2]);
+                a1 = pop();
+                a2 = pop();
+                a3 = pop();
+                adjSkillCur(a3, a2, a1);
                 break;
             case opSkillCheck:
-                push(doSkillCheck(operands[0], operands[1], operands[2], operands[3]));
+                a1 = pop(); // target
+                a2 = pop(); // modifier
+                a3 = pop(); // skill
+                a4 = pop(); // character
+                push(doSkillCheck(a4, a3, a2, a1));
                 break;
             case opDoDamage:
-                doDamage(operands[0], operands[1], operands[2], operands[3]);
+                a1 = pop();
+                a2 = pop();
+                a3 = pop();
+                a4 = pop();
+                doDamage(a4, a3, a2, a1);
                 break;
 
             case opAdd:
@@ -440,6 +462,18 @@ void Game::doNode(std::uint32_t address) {
                     push(options[rand() % options.size()]);
                 }
                 break; }
+
+            case opStackSwap:
+                a1 = pop();
+                a2 = pop();
+                push(a1);
+                push(a2);
+                break;
+            case opStackDup:
+                a1 = pop();
+                push(a1);
+                push(a1);
+                break;
 
             default: {
                 std::stringstream ss;

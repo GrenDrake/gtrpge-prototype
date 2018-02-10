@@ -241,12 +241,12 @@ ACTION act-swing {
 
         // skill-check cRef skillRef Mods Target
 
-        skill-check #_0 skl-melee 0 25
+        _0 fetch skl-melee 0 25 skill-check
         0 hit-missed jump-gt
 
         #_8 say-uf
         " is hit! " say
-        do-damage #_8 13 skl-health dt-cutting
+        #_8 13 skl-health dt-cutting do-damage
         skip-me jump
 
         label hit-missed
@@ -313,7 +313,7 @@ NODE chargen-sex {
 }
 
 NODE chargen-species {
-    set-sex the-player stack
+    the-player stk-swap set-sex
     "What species is your character?" say
     push "Human" chargen-done spc-human add-option-xtra
     push "Gnoll" chargen-done spc-gnoll add-option-xtra
@@ -321,7 +321,7 @@ NODE chargen-species {
 }
 
 NODE chargen-done {
-    set-species the-player stack // set player species
+    the-player stk-swap set-species  // set player species
     the-player add-to-party
     the-gnoll add-to-party
 
