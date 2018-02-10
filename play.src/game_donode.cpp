@@ -474,6 +474,9 @@ void Game::doNode(std::uint32_t address) {
                 push(a1);
                 push(a1);
                 break;
+            case opStackCount:
+                push(stack.size());
+                break;
 
             default: {
                 std::stringstream ss;

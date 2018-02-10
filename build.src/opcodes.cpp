@@ -77,6 +77,7 @@ Command commands[] = {
     { "random-not-faction", opRandomNotFaction, 0 },
     { "stk-swap",           opStackSwap,        0 },
     { "stk-dup",            opStackDup,         0 },
+    { "stk-count",          opStackCount,       0 },
 };
 
 const Command* getCommand(const std::string name) {

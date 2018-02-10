@@ -158,6 +158,7 @@ const int opRandomOfFaction = 0xC1;
 const int opRandomNotFaction= 0xC2;
 const int opStackSwap       = 0xC3;
 const int opStackDup        = 0xC4;
+const int opStackCount      = 0XC5;
 
 const int operandNone           = 0;
 const int operandImmediate      = 1;
