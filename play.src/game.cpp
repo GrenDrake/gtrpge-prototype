@@ -359,7 +359,7 @@ void Game::doDamage(std::uint32_t cRef, int amount, int to, int type) {
     adjSkillCur(cRef, to, -amount);
 }
 
-bool Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target) {
+int Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target) {
     std::uint32_t baseSkill = readByte(readWord(headerSkillTable)+sklSize*skill+sklBaseSkill);
     int dieResult = roll(3,6);
     int baseSkillLvl = getSkillCur(cRef, baseSkill);
@@ -380,12 +380,16 @@ bool Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target
         say(" + ");
         say(modifiers);
     }
+    int result = finalLvl + modifiers + dieResult - target;
+
     say(" + ");
     say(dieResult);
     say("(3d6) vs ");
     say(target);
-    say("]");
-    return (finalLvl + modifiers + dieResult - target) >= 0;
+    say(" = ");
+    say(result);
+    say("] ");
+    return result;
 }
 
 bool Game::testSkillFlags(int skillNo, uint32_t flags) {
