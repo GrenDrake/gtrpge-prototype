@@ -176,7 +176,7 @@ private:
     Value doProperty(const std::string &forName);
     std::vector<Value> doFlags();
     std::shared_ptr<Block> doBlock();
-    std::shared_ptr<Statement> doStatement();
+    void doStatement(std::shared_ptr<Block> forBlock);
     Value doValue();
 
     void require(Token::Type type, bool advance = false);
