@@ -58,7 +58,8 @@ public:
         Colon,
         OpenParan,
         CloseParan,
-        Indirection
+        Indirection,
+        Say
     };
 
     Token()

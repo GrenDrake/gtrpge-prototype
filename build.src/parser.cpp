@@ -384,8 +384,23 @@ void Parser::doStatement(std::shared_ptr<Block> forBlock) {
         std::shared_ptr<Statement> secondStmt(new Statement);
         secondStmt->parts.push_back(Value("fetch"));
         forBlock->statements.push_back(secondStmt);
+    } else if (matches(Token::Say)) {
+        ++cur;
+        statement->parts.push_back(Value("push"));
+        Value valueToSay = doValue();
+        statement->parts.push_back(valueToSay);
+        forBlock->statements.push_back(statement);
+        std::shared_ptr<Statement> secondStmt(new Statement);
+        if (valueToSay.type == Value::Integer) {
+            secondStmt->parts.push_back(Value("say-number"));
+        } else {
+            secondStmt->parts.push_back(Value("say"));
+        }
+        forBlock->statements.push_back(secondStmt);
     } else {
-        throw BuildError(origin, "Unhandled token type in statement.");
+        std::stringstream ss;
+        ss << "Unhandled token type " << cur->type << " in statement.";
+        throw BuildError(origin, ss.str());
     }
 }
 
