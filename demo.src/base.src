@@ -66,7 +66,7 @@ CONSTANT skl-reset-on-rest  0x08; // current skill value is reset when character
 CONSTANT skl-x5             0x10; // multiply (max) value of skill by 5 for final value
 CONSTANT skl-on-tracker     0x20; // display skill on combat tracker
 
-//    iname             stat            dname            default-value  flags
+//    iname             stat            dname            default  recovery  flags
 SKILL skl-strength      0               "strength"       10;
 SKILL skl-dexterity     0               "dexterity"      10;
 SKILL skl-toughness     0               "toughness"      10; // consitution
@@ -80,9 +80,9 @@ SKILL skl-persuasion    skl-spirit      "persuasion"     0;
 SKILL skl-black-magic   skl-knowledge   "black magic"    0;
 SKILL skl-holy-magic    skl-knowledge   "holy magic"     0;
 SKILL skl-void-magic    skl-knowledge   "void magic"     0;
-SKILL skl-health        0               "health"         5   ( skl-variable skl-ko-0 skl-reset-on-rest skl-x5 skl-on-tracker );
-SKILL skl-energy        0               "energy"         2   ( skl-variable skl-reset-on-rest skl-x5 skl-on-tracker );
-SKILL skl-void          0               "void-touched"   10   ( skl-variable skl-ko-full skl-on-tracker );
+SKILL skl-health        0               "health"         5   250  ( skl-variable skl-ko-0 skl-reset-on-rest skl-x5 skl-on-tracker );
+SKILL skl-energy        0               "energy"         2   1000 ( skl-variable skl-reset-on-rest skl-x5 skl-on-tracker );
+SKILL skl-void          0               "void-touched"   10  75   ( skl-variable skl-ko-full skl-on-tracker );
 
 DAMAGE-TYPES {
     dt-blunt   "blunt"

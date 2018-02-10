@@ -70,6 +70,7 @@ public:
     Value statSkill;
     std::string displayName;
     int defaultValue;
+    int recoveryRate; // points recovered (or lost if negative) per 1,000th of a minute
     std::vector<Value> flags;
 };
 

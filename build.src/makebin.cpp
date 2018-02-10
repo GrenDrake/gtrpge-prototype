@@ -198,6 +198,8 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
         writeValue(out, skill->origin, skill->statSkill);
         writeLabelValue(out, skill->displayName);
         writeFlags(out, skill->origin, skill->flags);
+        writeWord(out, skill->defaultValue);
+        writeWord(out, skill->recoveryRate);
     }
 
     // write damage type list

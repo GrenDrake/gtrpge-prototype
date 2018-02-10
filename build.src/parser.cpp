@@ -268,6 +268,11 @@ void Parser::doSkill() {
     skill->defaultValue = cur->value;
     ++cur;
 
+    if (matches(Token::Integer)) {
+        skill->recoveryRate = cur->value;
+        ++cur;
+    }
+
     skill->flags = doFlags();
 
     require(Token::Semicolon, true);
