@@ -232,17 +232,16 @@ ACTION act-swing {
 
         _9 0 store
         _8 0 combatant store
+        _7 #_0 $faction get-property store
+
         label swing-start
+        // skip characters of the same faction
+        #_8 $faction get-property #_7 skip-me jump-eq
 
-        _8 fetch
-        _0 fetch
-        subtract
-        skip-me jump-false
-
-        // skill-check cRef skillRef Mods Target
-
+        // do skill check
+        "\n" say
         _0 fetch skl-melee 0 25 skill-check
-        0 hit-missed jump-gt
+        0 hit-missed jump-lt
 
         #_8 say-uf
         " is hit! " say
@@ -297,6 +296,7 @@ ACTION act-thrust {
  * ************************************************************************* */
 
 NODE start {
+    -1 say-number
     "Welcome to the game!" say
     "Create a new character"
     chargen-sex
