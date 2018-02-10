@@ -12,31 +12,9 @@ void Game::doNode(std::uint32_t address) {
         throw PlayError(ss.str());
     }
 
-    std::uint32_t operands[4], a1, a2, a3, a4;
+    std::uint32_t a1, a2, a3, a4;
     while (true) {
         std::uint8_t cmdCode = readByte(ip++);
-        std::uint8_t operandTypesByte = readByte(ip++);
-        for (unsigned i = 0; i < 4; ++i) {
-            int type = operandTypesByte >> (i * 2);
-            type &= 0x03;
-            switch(type) {
-                case operandNone:
-                    operands[i] = 0;
-                    break;
-                case operandStack:
-                    operands[i] = pop();
-                    break;
-                case operandStorage:
-                    a1 = readWord(ip);
-                    operands[i] = fetch(a1);
-                    ip += 4;
-                    break;
-                case operandImmediate:
-                    operands[i] = readWord(ip);
-                    ip += 4;
-                    break;
-            }
-        }
 
         switch(cmdCode) {
             case opEnd:
@@ -62,7 +40,8 @@ void Game::doNode(std::uint32_t address) {
                 gameTime += a1 * minutesPerHour + a2;
                 break;
             case opPush:
-                a1 = operands[0];
+                a1 = readWord(ip);
+                ip += 4;
                 push(a1);
                 break;
             case opPop:
