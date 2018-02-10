@@ -148,7 +148,7 @@ void Game::doNode(std::uint32_t address) {
                 a3 = pop();
                 a1 = pop();
                 a2 = pop();
-                if (a1 < a2) {
+                if (a1 > a2) {
                     ip = a3;
                 }
                 break;
@@ -156,7 +156,7 @@ void Game::doNode(std::uint32_t address) {
                 a3 = pop();
                 a1 = pop();
                 a2 = pop();
-                if (a1 <= a2) {
+                if (a1 >= a2) {
                     ip = a3;
                 }
                 break;
@@ -164,7 +164,7 @@ void Game::doNode(std::uint32_t address) {
                 a3 = pop();
                 a1 = pop();
                 a2 = pop();
-                if (a1 > a2) {
+                if (a1 < a2) {
                     ip = a3;
                 }
                 break;
@@ -172,7 +172,7 @@ void Game::doNode(std::uint32_t address) {
                 a3 = pop();
                 a1 = pop();
                 a2 = pop();
-                if (a1 >= a2) {
+                if (a1 <= a2) {
                     ip = a3;
                 }
                 break;
