@@ -46,7 +46,7 @@ CHARACTER imp-1 {
         defaults;
     );
     ai {
-        #_0 say-uf
+        *_0 say-uf
         " sings \"Dance magic, dance!\"\n" say
     };
 }

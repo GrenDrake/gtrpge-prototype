@@ -220,7 +220,7 @@ ACTION act-fireball {
     cost-skill skl-energy;
     cost-amount 2;
     combat-node {
-        #_0 say-uf
+        *_0 say-uf
         " uses fireball! KABOOM!\n" say
     };
 }
@@ -228,15 +228,15 @@ ACTION act-fireball {
 ACTION act-swing {
     name "whirlwind";
     combat-node {
-        #_0 say-uf " swings " say #_0 pro-adject say-pronoun " sword! " say
+        *_0 say-uf " swings " say *_0 pro-adject say-pronoun " sword! " say
 
         _9 0 store
         _8 0 combatant store
-        _7 #_0 $faction get-property store
+        _7 *_0 $faction get-property store
 
         label swing-start
         // skip characters of the same faction
-        #_8 $faction get-property #_7 skip-me jump-eq
+        *_8 $faction get-property *_7 skip-me jump-eq
 
         // do skill check
         "\n" say
@@ -244,19 +244,19 @@ ACTION act-swing {
         0 hit-missed jump-lt
 
         // a hit!
-        #_8 say-uf " is hit! " say
-        #_8 13 skl-health dt-cutting do-damage
+        *_8 say-uf " is hit! " say
+        *_8 13 skl-health dt-cutting do-damage
         skip-me jump
 
         // missed!
         label hit-missed
-        #_8 say-uf " avoids the strike! " say
+        *_8 say-uf " avoids the strike! " say
 
         // done with this target
         label skip-me
-        _9 #_9 increment store    // get next combatant
-        _8 #_9 combatant store    // check if combatant valid
-        #_8 swing-start jump-true // if so, restart loop
+        _9 *_9 increment store    // get next combatant
+        _8 *_9 combatant store    // check if combatant valid
+        *_8 swing-start jump-true // if so, restart loop
         "\n" say                  // otherwise, all done
     };
     peace-node {
@@ -268,11 +268,11 @@ ACTION act-swing {
 ACTION act-thrust {
     name "thrust";
     combat-node {
-        #_0 $faction get-property
+        *_0 $faction get-property
         random-not-faction
         say-uf
         " breaks into dance.\n" say
-        #_0 $faction get-property
+        *_0 $faction get-property
         random-of-faction
         say-uf
         " appluads loudly.\n" say

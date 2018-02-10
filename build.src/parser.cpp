@@ -376,6 +376,14 @@ void Parser::doStatement(std::shared_ptr<Block> forBlock) {
         statement->parts.push_back(Value("push"));
         statement->parts.push_back(doValue());
         forBlock->statements.push_back(statement);
+    } else if (matches(Token::Indirection)) {
+        ++cur;
+        statement->parts.push_back(Value("push"));
+        statement->parts.push_back(doValue());
+        forBlock->statements.push_back(statement);
+        std::shared_ptr<Statement> secondStmt(new Statement);
+        secondStmt->parts.push_back(Value("fetch"));
+        forBlock->statements.push_back(secondStmt);
     } else {
         throw BuildError(origin, "Unhandled token type in statement.");
     }

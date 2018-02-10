@@ -40,6 +40,9 @@ std::ostream& operator<<(std::ostream &out, const Token::Type &type) {
         case Token::CloseParan:
             out << "Close Paran";
             break;
+        case Token::Indirection:
+            out << "Indirection Operator";
+            break;
         default:
             out << "(unhandled type)";
     }
@@ -71,6 +74,9 @@ std::ostream& operator<<(std::ostream &out, const Token &token) {
         case Token::OpenParan:
         case Token::CloseParan:
             // do nothing
+            break;
+        case Token::Indirection:
+            out << " * ";
             break;
         default:
             out << " (unhandled type)";
@@ -144,6 +150,9 @@ void Lexer::doFile(const std::string &file) {
         } else if (here() == ')') {
             next();
             tokens.push_back(Token(origin, Token::CloseParan));
+        } else if (here() == '*') {
+            next();
+            tokens.push_back(Token(origin, Token::Indirection));
         } else if (here() == '"') {
             next();
             unsigned start = pos;

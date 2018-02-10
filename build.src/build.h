@@ -57,7 +57,8 @@ public:
         Semicolon,
         Colon,
         OpenParan,
-        CloseParan
+        CloseParan,
+        Indirection
     };
 
     Token()
@@ -123,7 +124,7 @@ private:
         if (!initial && isdigit(c)) {
             return true;
         }
-        if (initial && (c == '#' || c == '$')) {
+        if (initial && (c == '$')) {
             return true;
         }
         if (isalpha(c) || c == '-' || c == '_') {
