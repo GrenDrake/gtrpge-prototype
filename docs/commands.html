@@ -17,50 +17,59 @@ th {
 td.command {
     font-weight: bold;
 }
+td.table-zone-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em;
+    background: #C55;
+}
 </style></head><body>
 <h1>GTRPGE Command List</h1>
+
+<ul>
+    <li><a href='#toc-special'>Special</a>
+    <li><a href='#toc-a'>A</a>
+    <li><a href='#toc-c'>C</a>
+    <li><a href='#toc-d'>D</a>
+    <li><a href='#toc-e'>E</a>
+    <li><a href='#toc-f'>F</a>
+    <li><a href='#toc-g'>G</a>
+    <li><a href='#toc-h'>H</a>
+    <li><a href='#toc-i'>I</a>
+    <li><a href='#toc-j'>J</a>
+    <li><a href='#toc-m'>M</a>
+    <li><a href='#toc-p'>P</a>
+    <li><a href='#toc-r'>R</a>
+    <li><a href='#toc-s'>S</a>
+</ul>
 
 <table>
 <tr><th>Pops</th><th>Command</th><th>Pushes</th><th>Description</th></tr>
 <tr>
+    <td colspan='4' class='table-zone-header' id='toc-special'>Special Commands</td>
+</tr><tr>
     <td></td>
     <td class='command'>label [label-name]</td>
     <td></td>
     <td>Creates a label for use with jump commands.</td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-a'>A</td>
 </tr><tr>
-    <td></td>
-    <td class='command'>end</td>
-    <td></td>
-    <td>Ends evaluation of current node</td>
-</tr><tr>
-    <td>[node-address]</td>
-    <td class='command'>do-node</td>
-    <td></td>
-    <td>Evaluates the node located at <i>node-address</i>.</td>
-</tr><tr>
-    <td></td>
-    <td class='command'>start-game</td>
-    <td></td>
+    <td>[value] [value]</td>
+    <td class='command'>add</td>
+    <td>[value]</td>
     <td></td>
 </tr><tr>
-    <td>[hours] [minutes]</td>
-    <td class='command'>add-time</td>
+    <td>[option node] </td>
+    <td class='command'>add-continue</td>
     <td></td>
-    <td></td>
+    <td>Adds an option with the default option name ("Continue") that takes the player to the specified node.</td>
 </tr><tr>
-    <td></td>
-    <td class='command'>push [value]</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td></td>
-    <td class='command'>pop</td>
-    <td></td>
-    <td>Discards the top value from the stack</td>
-</tr><tr>
-    <td>[location name] </td>
-    <td class='command'>set-location</td>
-    <td></td>
+    <td>[item] [qty]</td>
+    <td class='command'>add-items</td>
+    <td>[succeeded?]</td>
     <td></td>
 </tr><tr>
     <td>[option text] [option node] </td>
@@ -73,53 +82,180 @@ td.command {
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[option node] </td>
-    <td class='command'>add-continue</td>
-    <td></td>
-    <td>Adds an option with the default option name ("Continue") that takes the player to the specified node.</td>
-</tr><tr>
     <td></td>
     <td class='command'>add-return</td>
     <td></td>
     <td>Add an option with the default option name ("Continue") that returns the player to the last visited location.</td>
 </tr><tr>
-    <td>[text string] </td>
-    <td class='command'>say</td>
+    <td>[hours] [minutes]</td>
+    <td class='command'>add-time</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[text string] </td>
-    <td class='command'>say-uf</td>
+    <td>[character]</td>
+    <td class='command'>add-to-combat</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[text string] </td>
-     <td class='command'>say-tc</td>
+    <td>[list id] [value]</td>
+    <td class='command'>add-to-list</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[character] [pronoun type] </td>
-    <td class='command'>say-pronoun</td>
+    <td>[list id] [value] [chance]</td>
+    <td class='command'>add-to-list-chance</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[character] [pronoun type] </td>
-    <td class='command'>say-pronoun-uf</td>
+    <td>[character]</td>
+    <td class='command'>add-to-party</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[integer] </td>
-    <td class='command'>say-number</td>
+    <td>[character] [skill] [amount]</td>
+    <td class='command'>adj-skill</td>
     <td></td>
     <td></td>
+</tr><tr>
+    <td>[character] [skill] [amount]</td>
+    <td class='command'>adj-skill-cur</td>
+    <td></td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-c'>C</td>
+</tr><tr>
+    <td>[list id]</td>
+    <td class='command'>create-list</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[combatant index]</td>
+    <td class='command'>combatant</td>
+    <td>[character]</td>
+    <td>Get the combatant at a specified index in the current turn order</td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-d'>D</td>
+</tr><tr>
+    <td>[value]</td>
+    <td class='command'>decrement</td>
+    <td>[value]</td>
+    <td></td>
+</tr><tr>
+    <td>[value] [value]</td>
+    <td class='command'>divide</td>
+    <td>[value]</td>
+    <td></td>
+</tr><tr>
+    <td>[character] [amount] [target skill] [damage type]</td>
+    <td class='command'>do-damage</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[node-address]</td>
+    <td class='command'>do-node</td>
+    <td></td>
+    <td>Evaluates the node located at <i>node-address</i>.</td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-e'>E</td>
+</tr><tr>
+    <td></td>
+    <td class='command'>end</td>
+    <td></td>
+    <td>Ends evaluation of current node</td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-f'>F</td>
+</tr><tr>
+    <td>[storage position]</td>
+    <td class='command'>fetch</td>
+    <td>[value]</td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-g'>G</td>
+</tr><tr>
+    <td>[object] [property id]</td>
+    <td class='command'>get-property</td>
+    <td>[value]</td>
+    <td></td>
+</tr><tr>
+    <td>[character]</td>
+    <td class='command'>get-sex</td>
+    <td>[sex]</td>
+    <td></td>
+</tr><tr>
+    <td>[character] [skill]</td>
+    <td class='command'>get-skill-cur</td>
+    <td>[skill value]</td>
+    <td></td>
+</tr><tr>
+    <td>[character]</td>
+    <td class='command'>get-species</td>
+    <td>[species]</td>
+    <td></td>
+</tr><tr>
+    <td>[character] [skill]</td>
+    <td class='command'>get-skill</td>
+    <td>[skill value]</td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-h'>H</td>
+</tr><tr>
+    <td>[object] [property id]</td>
+    <td class='command'>has property</td>
+    <td>[value]</td>
+    <td>Pushes a true value if the object has the property. a false value otherwise</td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-i'>I</td>
+</tr><tr>
+    <td>[value]</td>
+    <td class='command'>increment</td>
+    <td>[value]</td>
+    <td></td>
+</tr><tr>
+    <td>[character]</td>
+    <td class='command'>is-koed</td>
+    <td>[value]</td>
+    <td>Pushes a true value if the character is KOed. a false value otherwise</td>
+</tr><tr>
+    <td>[list id] [value]</td>
+    <td class='command'>is-in-list</td>
+    <td>[in list?]</td>
+    <td></td>
+</tr><tr>
+    <td>[character]</td>
+    <td class='command'>is-in-party</td>
+    <td>[value]</td>
+    <td></td>
+</tr><tr>
+    <td>[item]</td>
+    <td class='command'>item-qty</td>
+    <td>[qty]</td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-j'>J</td>
 </tr><tr>
     <td>[label name] </td>
     <td class='command'>jump</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[value] [label name] </td>
-    <td class='command'>jump-true</td>
+    <td>[value 1] [value 2] [label name]</td>
+    <td class='command'>jump-eq</td>
     <td></td>
     <td></td>
 </tr><tr>
@@ -129,12 +265,12 @@ td.command {
     <td></td>
 </tr><tr>
     <td>[value 1] [value 2] [label name]</td>
-    <td class='command'>jump-eq</td>
+    <td class='command'>jump-gt</td>
     <td></td>
     <td></td>
 </tr><tr>
     <td>[value 1] [value 2] [label name]</td>
-    <td class='command'>jump-neq</td>
+    <td class='command'>jump-gte</td>
     <td></td>
     <td></td>
 </tr><tr>
@@ -149,144 +285,18 @@ td.command {
     <td></td>
 </tr><tr>
     <td>[value 1] [value 2] [label name]</td>
-    <td class='command'>jump-gt</td>
+    <td class='command'>jump-neq</td>
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[value 1] [value 2] [label name]</td>
-    <td class='command'>jump-gte</td>
+    <td>[value] [label name] </td>
+    <td class='command'>jump-true</td>
     <td></td>
     <td></td>
-</tr><tr>
-    <td>[storage position] [value]</td>
-    <td class='command'>store</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[storage position]</td>
-    <td class='command'>fetch</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[item] [qty]</td>
-    <td class='command'>add-items</td>
-    <td>[succeeded?]</td>
-    <td></td>
-</tr><tr>
-    <td>[item] [qty]</td>
-    <td class='command'>remove-items</td>
-    <td>[succeeded?]</td>
-    <td></td>
-</tr><tr>
-    <td>[item]</td>
-    <td class='command'>item-qty</td>
-    <td>[qty]</td>
-    <td></td>
-</tr><tr>
-    <td>[list id] [value]</td>
-    <td class='command'>add-to-list</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[list id] [value]</td>
-    <td class='command'>is-in-list</td>
-    <td>[in list?]</td>
-    <td></td>
-</tr><tr>
-    <td>[list id] [value]</td>
-    <td class='command'>remove-from-list</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[list id]</td>
-    <td class='command'>random-from-list</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[list id]</td>
-    <td class='command'>create-list</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[list id] [value] [chance]</td>
-    <td class='command'>add-to-list-chance</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>reset-character</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>get-sex</td>
-    <td>[sex]</td>
-    <td></td>
-</tr><tr>
-    <td>[character] [sex]</td>
-    <td class='command'>set-sex</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>get-species</td>
-    <td>[species]</td>
-    <td></td>
-</tr><tr>
-    <td>[character] [species]</td>
-    <td class='command'>set-species</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character] [skill]</td>
-    <td class='command'>get-skill</td>
-    <td>[skill value]</td>
-    <td></td>
-</tr><tr>
-    <td>[character] [skill] [amount]</td>
-    <td class='command'>adj-skill</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character] [skill]</td>
-    <td class='command'>get-skill-cur</td>
-    <td>[skill value]</td>
-    <td></td>
-</tr><tr>
-    <td>[character] [skill] [amount]</td>
-    <td class='command'>adj-skill-cur</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character] [skill] [modifiers] [target]</td>
-    <td class='command'>skill-check</td>
-    <td>[result]</td>
-    <td>Result will be negative if the skill check failed, or zero or more if the check was successful. The magnitude of the result indicates the degree by which the character succeeded.</td>
-</tr><tr>
-    <td>[character] [amount] [target skill] [damage type]</td>
-    <td class='command'>do-damage</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[value] [value]</td>
-    <td class='command'>add</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[value] [value]</td>
-    <td class='command'>subtract</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[value] [value]</td>
-    <td class='command'>multiply</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[value] [value]</td>
-    <td class='command'>divide</td>
-    <td>[value]</td>
-    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-m'>M</td>
 </tr><tr>
     <td>[value] [value]</td>
     <td class='command'>modulo</td>
@@ -294,54 +304,37 @@ td.command {
     <td></td>
 </tr><tr>
     <td>[value] [value]</td>
+    <td class='command'>multiply</td>
+    <td>[value]</td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-p'>P</td>
+</tr><tr>
+    <td></td>
+    <td class='command'>pop</td>
+    <td></td>
+    <td>Discards the top value from the stack</td>
+</tr><tr>
+    <td>[value] [value]</td>
     <td class='command'>power</td>
     <td>[value]</td>
     <td></td>
 </tr><tr>
-    <td>[value]</td>
-    <td class='command'>increment</td>
-    <td>[value]</td>
     <td></td>
+    <td class='command'>push [value]</td>
+    <td></td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-r'>R</td>
 </tr><tr>
-    <td>[value]</td>
-    <td class='command'>decrement</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>add-to-party</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>is-in-party</td>
+    <td>[list id]</td>
+    <td class='command'>random-from-list</td>
     <td>[value]</td>
     <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>remove-from-party</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td></td>
-    <td class='command'>reset-combat</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[character]</td>
-    <td class='command'>add-to-combat</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[object] [property id]</td>
-    <td class='command'>get-property</td>
-    <td>[value]</td>
-    <td></td>
-</tr><tr>
-    <td>[combatant index]</td>
-    <td class='command'>combatant</td>
-    <td>[character]</td>
-    <td>Get the combatant at a specified index in the current turn order</td>
 </tr><tr>
     <td>[faction number]</td>
     <td class='command'>random-of-faction</td>
@@ -353,28 +346,112 @@ td.command {
     <td>[character]</td>
     <td>Get a random combatant who is <b>NOT</b> a member of the specified faction</td>
 </tr><tr>
-    <td>[value 1] [value 2]</td>
-    <td class='command'>stk-swap</td>
-    <td>[value 2] [value 1]</td>
-    <td>Swap the top two values on the stack</td>
+    <td>[item] [qty]</td>
+    <td class='command'>remove-items</td>
+    <td>[succeeded?]</td>
+    <td></td>
 </tr><tr>
-    <td>[value]</td>
-    <td class='command'>stk-dup</td>
-    <td>[value] [value]</td>
-    <td>Duplicate the top value on the stack</td>
+    <td>[list id] [value]</td>
+    <td class='command'>remove-from-list</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character]</td>
+    <td class='command'>remove-from-party</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character]</td>
+    <td class='command'>reset-character</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td></td>
+    <td class='command'>reset-combat</td>
+    <td></td>
+    <td></td>
+
+
+<tr>
+    <td colspan='4' class='table-zone-header' id='toc-s'>S</td>
+</tr><tr>
+    <td>[text string] </td>
+    <td class='command'>say</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[integer] </td>
+    <td class='command'>say-number</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character] [pronoun type] </td>
+    <td class='command'>say-pronoun</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character] [pronoun type] </td>
+    <td class='command'>say-pronoun-uf</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[text string] </td>
+     <td class='command'>say-tc</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[text string] </td>
+    <td class='command'>say-uf</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[location name] </td>
+    <td class='command'>set-location</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character] [sex]</td>
+    <td class='command'>set-sex</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character] [species]</td>
+    <td class='command'>set-species</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[character] [skill] [modifiers] [target]</td>
+    <td class='command'>skill-check</td>
+    <td>[result]</td>
+    <td>Result will be negative if the skill check failed, or zero or more if the check was successful. The magnitude of the result indicates the degree by which the character succeeded.</td>
+</tr><tr>
+    <td></td>
+    <td class='command'>start-game</td>
+    <td></td>
+    <td></td>
 </tr><tr>
     <td></td>
     <td class='command'>stk-count</td>
     <td>[value]</td>
     <td>Push a count of the stack size before this command onto the stack</td>
 </tr><tr>
-    <td>[character]</td>
-    <td class='command'>is-koed</td>
     <td>[value]</td>
-    <td>Pushes a true value if the character is KOed. a false value otherwise</td>
+    <td class='command'>stk-dup</td>
+    <td>[value] [value]</td>
+    <td>Duplicate the top value on the stack</td>
 </tr><tr>
-    <td>[object] [property id]</td>
-    <td class='command'>has property</td>
+    <td>[value 1] [value 2]</td>
+    <td class='command'>stk-swap</td>
+    <td>[value 2] [value 1]</td>
+    <td>Swap the top two values on the stack</td>
+</tr><tr>
+    <td>[storage position] [value]</td>
+    <td class='command'>store</td>
+    <td></td>
+    <td></td>
+</tr><tr>
+    <td>[value] [value]</td>
+    <td class='command'>subtract</td>
     <td>[value]</td>
-    <td>Pushes a true value if the object has the property. a false value otherwise</td>
+    <td></td>
 </table>
