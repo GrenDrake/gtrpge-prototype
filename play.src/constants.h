@@ -153,7 +153,9 @@ const int opRandomOfFaction = 0xC1;
 const int opRandomNotFaction= 0xC2;
 const int opStackSwap       = 0xC3;
 const int opStackDup        = 0xC4;
-const int opStackCount      = 0XC5;
+const int opStackCount      = 0xC5;
+const int opIsKOed          = 0xC6;
+const int opHasProperty     = 0xC7;
 
 // Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;

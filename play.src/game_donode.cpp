@@ -457,6 +457,15 @@ void Game::doNode(std::uint32_t address) {
                 push(stack.size());
                 break;
 
+            case opIsKOed: {
+                push(isKOed(pop()));
+                break; }
+            case opHasProperty:
+                a2 = pop();
+                a1 = pop();
+                push(objectHasProperty(a1, a2));
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;

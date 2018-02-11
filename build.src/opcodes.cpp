@@ -78,6 +78,8 @@ Command commands[] = {
     { "stk-swap",           opStackSwap,        0 },
     { "stk-dup",            opStackDup,         0 },
     { "stk-count",          opStackCount,       0 },
+    { "is-koed",            opIsKOed,           0 },
+    { "has-property",       opHasProperty,      0 },
 };
 
 const Command* getCommand(const std::string name) {

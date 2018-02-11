@@ -181,6 +181,20 @@ std::uint32_t Game::getObjectProperty(std::uint32_t objRef, std::uint16_t propId
     return propValue;
 }
 
+bool Game::objectHasProperty(std::uint32_t objRef, std::uint16_t propId) {
+    if (!isType(objRef, idObject)) {
+        throw PlayError("Tried to test property of non-object");
+    }
+
+    const std::uint16_t propCount = readShort(objRef + 1);
+    for (std::uint16_t i = 0; i < propCount; ++i) {
+        std::uint16_t idHere = readShort(objRef + 3 + i * 6);
+        if (idHere == propId) {
+            return true;
+        }
+    }
+    return false;
+}
 
 std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
     return 0; // TODO
