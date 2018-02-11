@@ -16,7 +16,7 @@ void writeLabelValue(std::ostream &out, const std::string &labelName);
  * OBJECT DEF STUFF                                                       */
 
 std::unordered_map<std::string, std::uint16_t> ObjectDef::propertyNames;
-std::uint16_t ObjectDef::nextProperty = 200;
+std::uint16_t ObjectDef::nextProperty = propFirstCustom;
 
 void ObjectDef::setPropertyIdent(const std::string &name, std::uint16_t id) {
     auto iter = propertyNames.find(name);
@@ -81,22 +81,6 @@ void DataType::prettyPrint(std::ostream &out) const {
     out << std::setw(32) << name << "   ";
     out << std::setw(10) << getTypeName() << "   ";
     out << origin;
-}
-
-
-
-void CharacterDef::write(std::ostream &out) {
-    writeByte(out, idCharacter);
-    writeFlags(out, origin, flags);
-    writeLabelValue(out, article);
-    writeLabelValue(out, displayName);
-    writeValue(out, origin, sex);
-    writeValue(out, origin, species);
-    writeValue(out, origin, faction);
-    writeLabelValue(out, skillSet);
-    writeLabelValue(out, gearList);
-    writeLabelValue(out, baseAbilities);
-    writeLabelValue(out, extraAbilities);
 }
 
 

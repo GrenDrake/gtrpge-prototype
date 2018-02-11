@@ -119,24 +119,6 @@ public:
     std::shared_ptr<Block> block;
 };
 
-class CharacterDef : public DataType {
-public:
-    virtual size_t getSize() const {
-        return chrSize;
-    }
-    virtual void write(std::ostream &out);
-    virtual std::string getTypeName() const {
-        return "CHARACTER";
-    }
-
-    std::string article, displayName;
-    Value sex, species;
-    std::vector<Value> flags;
-    Value faction;
-    std::string baseAbilities, extraAbilities;
-    std::string gearList, skillSet;
-};
-
 class DataList : public DataType {
 public:
     virtual size_t getSize() const {

@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+// GameFile Header Structure
 const int headerFileID      = 0x00;
 const int headerFileVersion = 0x04;
 const int headerStartNode   = 0x08;
@@ -14,17 +15,14 @@ const int headerBuildNumber = 0x24;
 const int headerChecksum    = 0x28;
 const int headerSize        = 64;
 
+// Data Type IDs
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
-const int idItem            = 0xFD;
-const int idSex             = 0xFC;
-const int idSpecies         = 0xFB;
-const int idCharacter       = 0xFA;
 const int idList            = 0xF9;
 const int idSkillSet        = 0xF8;
-const int idAction          = 0xF7;
 const int idObject          = 0xF6;
 
+// SkillDef Structure
 const int sklBaseSkill      = 0;
 const int sklName           = 4;
 const int sklFlags          = 8;
@@ -36,6 +34,7 @@ const int sklSetSize        = 1 + sklCount * 2;
 
 const int sklX5Multiplier   = 50;
 
+// SkillDef Flags
 const int sklVariable       = 0x01; // variable stat (like health, energy, mana, corruption, etc.)
 const int sklKOZero         = 0x02; // KO character if reaches 0
 const int sklKOFull         = 0x04; // KO character is becomes full
@@ -43,18 +42,7 @@ const int sklResetOnRest    = 0x08; // current skill value is reset when charact
 const int sklX5             = 0x10; // multiply (max) value of skill by 5 for final value
 const int sklOnTracker      = 0x20; // show on combat tracker
 
-const int chrFlags          = 1;
-const int chrArticle        = 5;
-const int chrName           = 9;
-const int chrSex            = 13;
-const int chrSpecies        = 17;
-const int chrFaction        = 21;
-const int chrSkillDefaults  = 25;
-const int chrGearList       = 29;
-const int chrBaseAbilities  = 33;
-const int chrExtraAbilities = 37;
-const int chrSize           = 41;
-
+// Predefined Properties
 const int propName              = 1;
 const int propArticle           = 2;
 const int propPlural            = 3;
@@ -85,14 +73,19 @@ const int propSex               = 27;
 const int propSpecies           = 28;
 const int propAi                = 29;
 
+const int propFirstCustom       = 256;
 
+// ObjectDef classes
 const int ocSpecies         = 1;
 const int ocSex             = 2;
 const int ocAction          = 3;
 const int ocItem            = 4;
 const int ocCharacter       = 5;
 
+// DamageType Count
 const int damageTypeCount   = 8;
+
+// Opcode/command numbers
 const int opEnd             = 0x00;
 const int opDoNode          = 0x01;
 const int opSetLocation     = 0x02;
@@ -162,11 +155,7 @@ const int opStackSwap       = 0xC3;
 const int opStackDup        = 0xC4;
 const int opStackCount      = 0XC5;
 
-const int operandNone           = 0;
-const int operandImmediate      = 1;
-const int operandStorage        = 2;
-const int operandStack          = 3;
-
+// Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;
 const unsigned storageTempCount = 10;
 
