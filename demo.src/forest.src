@@ -78,8 +78,7 @@ CHARACTER imp-3 {
 NODE forest-path {
     push "On Forest Path"
     set-location
-    "You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
-    say
+    >"You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
     push "Follow the path north"
     push forest-fork
     add-option
@@ -104,14 +103,14 @@ NODE forest-path {
 }
 
 NODE hurt-self-health {
-    do-damage 0 56 skl-health dt-blunt
-    "You hurt yourself." say
+    0 56 skl-health dt-blunt do-damage
+    >"You hurt yourself."
     add-return
 }
 
 NODE hurt-self-void {
-    do-damage the-player -6 skl-void dt-blunt
-    "You hurt yourself." say
+    the-player -6 skl-void dt-blunt do-damage
+    >"You hurt yourself."
     add-return
 }
 
@@ -125,7 +124,7 @@ NODE examine-wall {
 }
 
 NODE imp-fight {
-    "Three imps are gathered around a campfire, cackling and conversing." say
+    >"Three imps are gathered around a campfire, cackling and conversing."
     reset-combat
     imp-1 add-to-combat
     imp-2 add-to-combat
@@ -136,11 +135,8 @@ NODE imp-fight {
 NODE town-gate {
     push "Outside the Town Gates"
     set-location
-    "You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
-    say
-    push "Return to the forest"
-    push forest-path
-    add-option
+    >"You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
+    "Return to the forest" forest-path add-option
 
     flg-took-key fetch
     push no-key
