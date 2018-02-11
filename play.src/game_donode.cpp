@@ -465,6 +465,19 @@ void Game::doNode(std::uint32_t address) {
                 a1 = pop();
                 push(objectHasProperty(a1, a2));
                 break;
+            case opPartySize:
+                push(party.size());
+                break;
+            case opPartyIsKOed: {
+                bool partyIsKOed = true;
+                for (unsigned i = 0; i < party.size(); ++i) {
+                    if (!isKOed(party[i])) {
+                        partyIsKOed = false;
+                        break;
+                    }
+                }
+                push(partyIsKOed);
+                break;}
 
             default: {
                 std::stringstream ss;

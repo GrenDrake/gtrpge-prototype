@@ -156,6 +156,8 @@ const int opStackDup        = 0xC4;
 const int opStackCount      = 0xC5;
 const int opIsKOed          = 0xC6;
 const int opHasProperty     = 0xC7;
+const int opPartySize       = 0xC8;
+const int opPartyIsKOed     = 0xC9;
 
 // Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;
