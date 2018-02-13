@@ -92,7 +92,9 @@ public:
 
     Character* getCharacter(std::uint32_t address);
     const Character* getCharacter(std::uint32_t address) const;
+    void doRest(int forTime);
     bool isKOed(std::uint32_t cRef);
+    int skillRecoveryRate(int skillNo);
     bool testSkillFlags(int skillNo, uint32_t flags);
     int getSkillMax(std::uint32_t cRef, int skillNo);
     int getSkillCur(std::uint32_t cRef, int skillNo);

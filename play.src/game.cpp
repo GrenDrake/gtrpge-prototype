@@ -307,6 +307,41 @@ const Game::Character* Game::getCharacter(std::uint32_t address) const {
     return nullptr;
 }
 
+void Game::doRest(int forTime) {
+    if (forTime <= 0) return;
+
+    for (std::uint32_t whoRef : party) {
+        for (unsigned skillNumber = 0; skillNumber < sklCount; ++skillNumber) {
+            if (!testSkillFlags(skillNumber, sklVariable)) continue;
+            int rate = skillRecoveryRate(skillNumber);
+            if (rate == 0) continue;
+
+            int result = rate * forTime / 100;
+            if (result % 10 >= 5) {
+                result = result / 10 + 1;
+            } else {
+                result = result / 10;
+            }
+
+            adjSkillCur(whoRef, skillNumber, result);
+
+            if (whoRef == party[0]) {
+                if (rate > 0) {
+                    say("Gained ");
+                    say(result);
+                } else {
+                    say("Lost ");
+                    say(-result);
+                }
+                say(" ");
+                say(getNameOf(readWord(readWord(headerSkillTable) + skillNumber*sklSize + sklName)));
+                say(". ");
+            }
+        }
+    }
+    return;
+}
+
 bool Game::isKOed(std::uint32_t cRef) {
     for (unsigned i = 0; i < sklCount; ++i) {
         if (!testSkillFlags(i, sklVariable)) {
@@ -320,6 +355,10 @@ bool Game::isKOed(std::uint32_t cRef) {
         }
     }
     return false;
+}
+
+int Game::skillRecoveryRate(int skillNo) {
+    return readWord(readWord(headerSkillTable) + skillNo * sklSize + sklRecovery);
 }
 
 void Game::resetCharacter(std::uint32_t cRef) {

@@ -82,6 +82,7 @@ Command commands[] = {
     { "has-property",       opHasProperty,      0 },
     { "party-size",         opPartySize,        0 },
     { "party-is-koed",      opPartyIsKOed,      0 },
+    { "do-rest",            opDoRest,           0 },
 };
 
 const Command* getCommand(const std::string name) {

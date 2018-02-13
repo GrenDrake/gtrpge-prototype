@@ -478,6 +478,9 @@ void Game::doNode(std::uint32_t address) {
                 }
                 push(partyIsKOed);
                 break;}
+            case opDoRest:
+                doRest(pop());
+                break;
 
             default: {
                 std::stringstream ss;

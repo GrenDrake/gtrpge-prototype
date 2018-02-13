@@ -158,6 +158,7 @@ const int opIsKOed          = 0xC6;
 const int opHasProperty     = 0xC7;
 const int opPartySize       = 0xC8;
 const int opPartyIsKOed     = 0xC9;
+const int opDoRest          = 0xCA;
 
 // Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;

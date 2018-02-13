@@ -100,6 +100,22 @@ NODE forest-path {
     push "Fight some immps"
     push imp-fight
     add-option
+
+    "Rest Awhile" rest-awhile add-option
+}
+
+NODE rest-awhile {
+    >"How long would you like to rest for?"
+    "One hour" rest-awhile-doit 60 add-option-xtra
+    "Six hours" rest-awhile-doit 360 add-option-xtra
+    "Twelve hours" rest-awhile-doit 720 add-option-xtra
+    "Don't rest" 0 add-option
+}
+
+NODE rest-awhile-doit {
+    >"You rest for a while. "
+    do-rest
+    add-return
 }
 
 NODE hurt-self-health {
