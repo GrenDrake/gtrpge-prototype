@@ -72,6 +72,7 @@ const int propInternalName      = 26;
 const int propSex               = 27;
 const int propSpecies           = 28;
 const int propAi                = 29;
+const int propTarget            = 30;
 
 const int propFirstCustom       = 256;
 
@@ -84,6 +85,12 @@ const int ocCharacter       = 5;
 
 // DamageType Count
 const int damageTypeCount   = 8;
+
+// Ability combat targets
+const int targetNone        = 0;
+const int targetAlly        = 1;
+const int targetEnemy       = 2;
+const int targetAny         = 3;
 
 // Opcode/command numbers
 const int opEnd             = 0x00;

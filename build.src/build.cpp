@@ -127,6 +127,7 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("sex", propSex);
     ObjectDef::setPropertyIdent("species", propSpecies);
     ObjectDef::setPropertyIdent("ai", propAi);
+    ObjectDef::setPropertyIdent("target", propTarget);
 
     try {
         std::vector<SymbolDef> symbols;

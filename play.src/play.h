@@ -150,6 +150,7 @@ private:
     // combat methods                                                        //
     void doCombatLoop();
     void advanceCombatant();
+    void doCombatOptions();
 
     // ////////////////////////////////////////////////////////////////////////
     // node execution                                                        //

@@ -614,7 +614,7 @@ void Game::doCombatLoop() {
                 newNode(ai);
             } else {
                 say(toUpperFirst(getNameOf(combatants[currentCombatant])));
-                say(" takes a turn.\n");
+                say(" does nothing.\n");
             }
         }
         int status = combatStatus();
@@ -627,14 +627,7 @@ void Game::doCombatLoop() {
         advanceCombatant();
     }
 
-    auto actionList = getActions(combatants[currentCombatant]);
-    for (auto action : actionList) {
-        std::uint32_t node = getObjectProperty(action, propCombatNode);
-        if (node) {
-            options.push_back(Option(getObjectProperty(action, propName), node));
-        }
-    }
-    options.push_back(Option(readWord(headerWeaponSlot), 0));
+    doCombatOptions();
 
     say("What does ");
     say(getNameOf(combatants[currentCombatant]));
@@ -657,6 +650,17 @@ int Game::combatStatus() {
     return 0;
 }
 
+void Game::doCombatOptions() {
+    auto actionList = getActions(combatants[currentCombatant]);
+    for (auto action : actionList) {
+        std::uint32_t node = getObjectProperty(action, propCombatNode);
+        if (node) {
+            options.push_back(Option(getObjectProperty(action, propName), action));
+        }
+    }
+    options.push_back(Option(readWord(headerWeaponSlot), 0));
+}
+
 void Game::advanceCombatant() {
     ++currentCombatant;
     if (currentCombatant >= combatants.size()) {
@@ -674,20 +678,42 @@ void Game::doOption(int optionNumber) {
     }
 
     std::uint32_t dest = options[optionNumber].dest;
-    uint32_t nameAddr = options[optionNumber].name;
+    std::uint32_t nameAddr = options[optionNumber].name;
+    std::uint32_t extra = options[optionNumber].extra;
     clearOutput();
 
     if (inCombat) {
         options.clear();
+
         if (dest == 0) {
-            say(toUpperFirst(getNameOf(combatants[currentCombatant])));
-            say(" does nothing.\n");
-        } else {
-            setTemp(0, combatants[currentCombatant]);
-            newNode(dest);
+            // player cancelled target selection
+            doCombatOptions();
+            return;
         }
-        advanceCombatant();
-        doCombatLoop();
+
+        std::uint32_t targetType = getObjectProperty(dest, propTarget);
+        if (targetType == targetNone || extra != 0) {
+            dest = getObjectProperty(dest, propCombatNode);
+            if (dest == 0) {
+                say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+                say(" does nothing.\n");
+            } else {
+                setTemp(0, combatants[currentCombatant]);
+                setTemp(1, extra);
+                newNode(dest);
+            }
+            advanceCombatant();
+            doCombatLoop();
+
+        } else {
+            for (std::uint32_t whoRef : combatants) {
+                std::uint32_t faction = getObjectProperty(whoRef, propFaction);
+                if (faction == 0 && targetType == targetEnemy)  continue;
+                if (faction != 0 && targetType == targetAlly)   continue;
+                options.push_back(Option(getObjectProperty(whoRef, propName), dest, whoRef));
+            }
+            options.push_back(Option(2, 0));
+        }
 
     } else {
         if (dest == 0) {

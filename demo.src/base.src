@@ -2,6 +2,11 @@ CONSTANT title "Forest of the Gnoll";
 CONSTANT version "Alpha-1";
 CONSTANT byline "Gren Drake, 2017";
 
+CONSTANT target-none    0;
+CONSTANT target-ally    1;
+CONSTANT target-enemy   2;
+CONSTANT target-any     3;
+
 // constants that are used to refer to storage locations
 CONSTANT flg-took-key 0;
 CONSTANT flg-rescued-gnoll 1;
@@ -266,10 +271,11 @@ ACTION act-swing {
 
 ACTION act-thrust {
     name "thrust";
+    target target-enemy;
     combat-node {
+        >"\n"
         *_0 $faction get-property
-        random-not-faction
-        say-uf
+        *_1 say-uf
         " breaks into dance.\n" say
         *_0 $faction get-property
         random-of-faction
