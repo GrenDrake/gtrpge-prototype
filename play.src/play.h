@@ -108,6 +108,7 @@ public:
     // Player action commands                                                //
     bool actionAllowed() const;
     bool isInCombat() const;
+    int combatStatus();
     void doOption(int optionNumber);
     void useItem(int itemNumber);
     void equipItem(std::uint32_t whoIdent, int itemNumber);
@@ -197,6 +198,7 @@ private:
     std::string outputBuffer;
     unsigned gameTime;
     bool inCombat, startedCombat;
+    std::uint32_t afterCombatNode;
 };
 
 std::string toTitleCase(std::string text);

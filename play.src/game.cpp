@@ -585,14 +585,24 @@ void Game::newNode(std::uint32_t address) {
 }
 
 void Game::doCombatLoop() {
-    while (getObjectProperty(combatants[currentCombatant], propFaction) != 0) {
-        std::uint32_t ai = getObjectProperty(combatants[currentCombatant], propAi);
-        if (ai > 0) {
-            setTemp(0, combatants[currentCombatant]);
-            newNode(ai);
-        } else {
-            say(toUpperFirst(getNameOf(combatants[currentCombatant])));
-            say(" takes a turn.\n");
+    while (getObjectProperty(combatants[currentCombatant], propFaction) != 0 ||
+            isKOed(combatants[currentCombatant])) {
+        if (!isKOed(combatants[currentCombatant])) {
+            std::uint32_t ai = getObjectProperty(combatants[currentCombatant], propAi);
+            if (ai > 0) {
+                setTemp(0, combatants[currentCombatant]);
+                newNode(ai);
+            } else {
+                say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+                say(" takes a turn.\n");
+            }
+        }
+        int status = combatStatus();
+        if (status != 0) {
+            inCombat = false;
+            say("Combat is over.\n");
+            options.push_back(Option(1, afterCombatNode));
+            return;
         }
         advanceCombatant();
     }
@@ -609,6 +619,22 @@ void Game::doCombatLoop() {
     say("What does ");
     say(getNameOf(combatants[currentCombatant]));
     say(" do?\n");
+}
+
+int Game::combatStatus() {
+    int allies = 0, enemies = 0;
+    for (std::uint32_t whoRef : combatants) {
+        if (isKOed(whoRef)) continue;
+        if (getObjectProperty(whoRef, propFaction) == 0) {
+            ++allies;
+        } else {
+            ++enemies;
+        }
+    }
+
+    if (allies == 0)    return -1;
+    if (enemies == 0)   return 1;
+    return 0;
 }
 
 void Game::advanceCombatant() {

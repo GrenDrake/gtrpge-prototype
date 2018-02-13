@@ -244,7 +244,7 @@ ACTION act-swing {
 
         // a hit!
         *_8 say-uf " is hit! " say
-        *_8 13 skl-health dt-cutting do-damage
+        *_8 39 skl-health dt-cutting do-damage
         skip-me jump
 
         // missed!

@@ -385,6 +385,7 @@ void Game::doNode(std::uint32_t address) {
             }
 
             case opResetCombat:
+                afterCombatNode = pop();
                 inCombat = startedCombat = true;
                 combatants.clear();
                 currentCombatant = 0;
@@ -480,6 +481,9 @@ void Game::doNode(std::uint32_t address) {
                 break;}
             case opDoRest:
                 doRest(pop());
+                break;
+            case opCombatStatus:
+                push(combatStatus());
                 break;
 
             default: {

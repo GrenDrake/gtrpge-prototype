@@ -58,7 +58,11 @@ CHARACTER imp-2 {
     faction 1;
     skills skillset(
         defaults;
+        skl-melee 4;
     );
+    ai {
+        act-swing $combat-node get-property do-node
+    };
 }
 CHARACTER imp-3 {
     article "a ";
@@ -141,12 +145,23 @@ NODE examine-wall {
 
 NODE imp-fight {
     >"Three imps are gathered around a campfire, cackling and conversing."
-    reset-combat
+    imp-fight-after reset-combat
     imp-1 add-to-combat
     imp-2 add-to-combat
     imp-3 add-to-combat
 }
+NODE imp-fight-after {
+    add-return
+    combat-status 0 player-defeat jump-lt
 
+    LABEL player-victory
+    >"You have won the battle!\n"
+    end
+
+    LABEL player-defeat
+    >"You have been defeated and wake some time later alone in the forest.\n"
+
+}
 
 NODE town-gate {
     push "Outside the Town Gates"

@@ -159,6 +159,7 @@ const int opHasProperty     = 0xC7;
 const int opPartySize       = 0xC8;
 const int opPartyIsKOed     = 0xC9;
 const int opDoRest          = 0xCA;
+const int opCombatStatus    = 0xCB;
 
 // Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;
