@@ -1,0 +1,96 @@
+<html><head><title>GTRPGE Gamefile Structure</title>
+<style>
+table {
+    border-collapse: collapse;
+}
+th, td {
+    padding: 1px 4px;
+    vertical-align: top;
+}
+tr:nth-child(odd) {
+    background: #CCC;
+}
+th {
+    background: black;
+    color: white;
+}
+td.command {
+    font-weight: bold;
+}
+td.table-zone-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em;
+    background: #C55;
+}
+</style></head><body>
+<h1>GTRPGE Gamefile Structure</h1>
+
+<ul>
+    <li><a href='#header'>Header</a>
+    <li><a href='#strings'>String Table</a>
+    <li><a href='#skills'>Skill Table</a>
+    <li><a href='#damagetypes'>Damage Type Table</a>
+    <li><a href='#gamedata'>Game Data</a>
+    <li><a href='#nodes'>Node Data</a>
+</ul>
+
+<p>The gamefile is stored in little-endian format.
+
+<h2 id='header'>Header</h2>
+
+<p>The file begins with the header data; this is a 64 byte block of data containing general information required to begin and continue playing the game. All header fields are four bytes long.
+    out.put('G');   out.put('R');
+    out.put('P');   out.put('G');
+    out.put(0);     out.put(0);
+    out.put(1);     out.put(0);
+
+<table>
+    <tr><th>Address</th>    <th>Description</th></tr>
+    <tr><td>0x00</td>       <td>The File ID string; this consists of the letters <b>GRPG</b> (or 0x47525047)</td></tr>
+    <tr><td>0x04</td>       <td>The game file specification version (as distinct from the version of the game itself). The top two bytes form the major version, the next byte the minor version, and the last byte is the patchlevel.</td></tr>
+    <tr><td>0x08</td>       <td>The address of the node to run when the game begins. Typically, this will display a "welcome to the game" message and allow the player to start a new game.</td></tr>
+    <tr><td>0x0C</td>       <td>The address of the string containing the game's title.</td></tr>
+    <tr><td>0x10</td>       <td>The address of the string containing the game's byline (typically the author's name and development dates).</td></tr>
+    <tr><td>0x14</td>       <td>The address of the string containing the game's version.</td></tr>
+    <tr><td>0x18</td>       <td>The address of the beginning of the skill definition table.</td></tr>
+    <tr><td>0x1C</td>       <td>The address of the damage type table</td></tr>
+    <tr><td>0x20</td>       <td>The index of the weapon gear slot; in the current version, this is the address of the string "weapon".</td></tr>
+    <tr><td>0x24</td>       <td>The build number of the game; this is a number that increases with each build. Currently uses the date.</td></tr>
+</table>
+
+<h2 id='strings'>String Table</h2>
+
+<p>The string table consists of every string used in the game, each prepended with an ID byte (<i>idString</i>). In the current version, the string table is stored in plain UTF8, but this may change in future versions.
+
+<h2 id='skills'>Skill Table</h2>
+
+<p>The skill table is an array of <i>sklCount</i> skill definitions; although games are not required to use all of them, they must all be defined in the gamefile. Unused skills have a name string of 0.
+
+<table>
+    <tr><th>Relative<br>Address</th>    <th>Description</th></tr>
+    <tr><td>0x00</td>                   <td>Base skill; the value of the base skill is added to all skill rolls made using this skill.</td></tr>
+    <tr><td>0x04</td>                   <td>Skill name; the address of the string of this skill's name</td></tr>
+    <tr><td>0x08</td>                   <td>Four byte flagset for this skill. See below for individual flags.</td></tr>
+    <tr><td>0x12</td>                   <td>Default value; if a skillset with "defaults" set does not have this skill, it will be added with this value.</td></tr>
+    <tr><td>0x16</td>                   <td>Recovery rate. For variable skills, the current skill level increases (or decreases if negative) by 1/1000 of this value per minute rested.</td></tr>
+</table>
+
+<p>&nbsp;
+
+<table>
+    <tr><th>Flag</th>   <th>Name</th>           <th>Description</th></tr>
+    <tr><td>1</td>      <td>sklVariable</td>    <td>Variable skill; the current value of this skill varies between 0 and its value regularly during gameplay. Example skills are health and mana.</td></tr>
+    <tr><td>2</td>      <td>sklKOZero</td>      <td>If the current value of this skill reaches zero the character is considered to have been KOed.</td></tr>
+    <tr><td>4</td>      <td>sklKOFull</td>      <td>If the current value of this skill is equal to its maximum value, the character is considered KOed.</td></tr>
+    <tr><td>16</td>     <td>sklX5</td>          <td>The actual value of this skill is 50x the value stored in the gamefile.</td></tr>
+    <tr><td>32</td>     <td>sklOnTracker</td>   <td>This skill should be shown on the combat tracker when in combat.</td></tr>
+</table>
+
+<h2 id='damagetypes'>Damage Types Table</h2>
+
+<p>The damage type is an array of <i>damageTypeCount</i> damage type definitions.
+
+<h2 id='gamedata'>Game Data</h2>
+
+<h2 id='nodes'>Node Data</h2>
