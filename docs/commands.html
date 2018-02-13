@@ -191,6 +191,11 @@ td.table-zone-header {
 <tr>
     <td colspan='4' class='table-zone-header' id='toc-g'>G</td>
 </tr><tr>
+    <td>[character] [slot] </td>
+    <td class='command'>get-equip</td>
+    <td></td>
+    <td>Gets the item a character has in a particular gear slot; pushes 0 if the slot is empty.</td>
+</tr><tr>
     <td>[object] [property id]</td>
     <td class='command'>get-property</td>
     <td>[value]</td>
@@ -428,6 +433,11 @@ td.table-zone-header {
     <td class='command'>say-uf</td>
     <td></td>
     <td></td>
+</tr><tr>
+    <td>[character] [item] </td>
+    <td class='command'>set-equip</td>
+    <td></td>
+    <td>Set a character to have a specific item equipped; this effectively destroys the previous item, but see get-equip for saving the value.</td>
 </tr><tr>
     <td>[location name] </td>
     <td class='command'>set-location</td>

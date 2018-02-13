@@ -495,6 +495,37 @@ void Game::doNode(std::uint32_t address) {
                     push(party[a1]);
                 }
                 break;
+            case opGetEquip: {
+                a1 = pop(); // slot
+                a2 = pop(); // whoRef
+                Character *who = getCharacter(a2);
+                if (!who) {
+                    throw PlayError("Tried to get equipment on non-character");
+                    return;
+                }
+                if (who->gear.count(a1) > 0) {
+                    push(who->gear[a1]);
+                } else {
+                    push(0);
+                }
+                break; }
+            case opSetEquip: {
+                a1 = pop(); // itemRef
+                a2 = pop(); // whoRef
+                Character *who = getCharacter(a2);
+                if (!who) {
+                    throw PlayError("Tried to set equipment on non-character");
+                    return;
+                }
+                if (getObjectProperty(a1, propClass) != ocItem) {
+                    throw PlayError("Tried to equip non-item");
+                }
+                std::uint32_t slot = getObjectProperty(a1, propSlot);
+                if (slot == 0) {
+                    throw PlayError("Tried to equip non-equippable item");
+                }
+                who->gear[slot] = a1;
+                break; }
 
             default: {
                 std::stringstream ss;
