@@ -55,10 +55,12 @@ static void drawOptions(Game &game) {
     for (auto &option : game.options) {
         std::stringstream ss;
         ss << (num++) << ") ";
-        if (option.name == 1) {
+        if (option.name == optionNameContinue) {
             ss << "Continue";
+        } else if (option.name == optionNameCancel) {
+            ss << "Cancel";
         } else {
-            ss << game.getNameOf(option.name);
+            ss << toUpperFirst(game.getNameOf(option.name));
         }
         int x, y = 0;
         if (counter < 5) {

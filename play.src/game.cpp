@@ -712,7 +712,7 @@ void Game::doOption(int optionNumber) {
                 if (faction != 0 && targetType == targetAlly)   continue;
                 options.push_back(Option(getObjectProperty(whoRef, propName), dest, whoRef));
             }
-            options.push_back(Option(2, 0));
+            options.push_back(Option(optionNameCancel, 0));
         }
 
     } else {
@@ -721,7 +721,7 @@ void Game::doOption(int optionNumber) {
         }
 
         say("\n> ");
-        if (nameAddr == 1) {
+        if (nameAddr == optionNameContinue) {
             say("Continue");
         } else {
             say(getString(nameAddr));

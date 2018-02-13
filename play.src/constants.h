@@ -168,6 +168,9 @@ const int opPartyIsKOed     = 0xC9;
 const int opDoRest          = 0xCA;
 const int opCombatStatus    = 0xCB;
 
+const int optionNameContinue    = 1;
+const int optionNameCancel      = 2;
+
 // Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;
 const unsigned storageTempCount = 10;
