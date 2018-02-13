@@ -18,6 +18,9 @@ void addToOutput(const std::string &text) {
     if (transcript) {
         *transcript << text;
     }
+    if (outputBuffer[outputBuffer.size()-1] != '\n') {
+        outputBuffer += '\n';
+    }
     outputBuffer += text;
     if (outputBuffer.size() > maxOutputBuffer) {
         outputBuffer.erase(0, outputBuffer.size() - maxOutputBuffer);
