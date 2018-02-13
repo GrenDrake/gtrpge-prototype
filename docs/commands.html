@@ -131,6 +131,11 @@ td.table-zone-header {
     <td></td>
     <td></td>
 </tr><tr>
+    <td></td>
+    <td class='command'>combat-status</td>
+    <td>[value]</td>
+    <td>Returns the status of the currently in progress combat. If the player and allies are all defeated, returns less than 0; if all enemies are defeated, returns greater than 0, otherwise returns zero. Result is undefined if not in combat.</td>
+</tr><tr>
     <td>[combatant index]</td>
     <td class='command'>combatant</td>
     <td>[character]</td>
@@ -159,7 +164,11 @@ td.table-zone-header {
     <td class='command'>do-node</td>
     <td></td>
     <td>Evaluates the node located at <i>node-address</i>.</td>
-
+</tr></tr>
+    <td>[time-in-minutes]</td>
+    <td class='command'>do-rest</td>
+    <td></td>
+    <td>Advances the game clock and adjusts current level of variable skills of party members by their recovery rate.</td>
 
 <tr>
     <td colspan='4' class='table-zone-header' id='toc-e'>E</td>
@@ -376,10 +385,10 @@ td.table-zone-header {
     <td></td>
     <td></td>
 </tr><tr>
-    <td></td>
+    <td>[after-combat-node]</td>
     <td class='command'>reset-combat</td>
     <td></td>
-    <td></td>
+    <td>Resets the combat state and sets the node to run after combat.</td>
 
 
 <tr>
