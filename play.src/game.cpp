@@ -408,6 +408,19 @@ void Game::resetCharacter(std::uint32_t cRef) {
     }
 }
 
+void Game::restoreCharacter(std::uint32_t cRef) {
+    getCharacter(cRef);
+    for (int i = 0; i < sklCount; ++i) {
+        if (!testSkillFlags(i, sklVariable)) continue;
+        if (testSkillFlags(i, sklKOFull)) {
+            adjSkillCur(cRef, i, -getSkillMax(cRef, i));
+        }
+        if (testSkillFlags(i, sklKOZero)) {
+            adjSkillCur(cRef, i, getSkillMax(cRef, i));
+        }
+    }
+}
+
 void Game::doDamage(std::uint32_t cRef, int amount, int to, int type) {
     adjSkillCur(cRef, to, -amount);
 }

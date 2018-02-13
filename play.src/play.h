@@ -140,6 +140,7 @@ private:
     // ////////////////////////////////////////////////////////////////////////
     // Character Management                                                  //
     void resetCharacter(std::uint32_t cRef);
+    void restoreCharacter(std::uint32_t cRef);
     void doDamage(std::uint32_t cRef, int amount, int to, int type);
     int doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target);
     void adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment);

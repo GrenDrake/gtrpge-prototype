@@ -395,7 +395,9 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opAddToCombat:
-                combatants.push_back(pop());
+                a1 = pop();
+                restoreCharacter(a1);
+                combatants.push_back(a1);
                 break;
             case opCombatant:
                 a1 = pop();
