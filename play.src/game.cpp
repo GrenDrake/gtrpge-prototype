@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cctype>
 #include <cstring>
 #include <cstdlib>
 #include <ctime>
@@ -86,7 +87,13 @@ void Game::clearOutput() {
 }
 
 std::string Game::getOutput() const {
-    return outputBuffer;
+    std::string text = outputBuffer;
+    auto new_end =
+        std::unique(text.begin(), text.end(),
+            [](char lhs, char rhs){ return (lhs == rhs) && (lhs == ' ' || lhs == '\n'); }
+        );
+    text.erase(new_end, text.end());
+    return trim(text);
 }
 
 std::string Game::getTimeString(bool exact) {
@@ -802,6 +809,7 @@ bool Game::isInCombat() const {
 }
 
 void Game::say(const std::string &text) {
+    if (text.empty()) return;
     outputBuffer += text;
 }
 
