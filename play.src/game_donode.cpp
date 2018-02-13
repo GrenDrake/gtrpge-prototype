@@ -487,6 +487,14 @@ void Game::doNode(std::uint32_t address) {
             case opCombatStatus:
                 push(combatStatus());
                 break;
+            case opPartyAt:
+                a1 = pop();
+                if (a1 >= party.size()) {
+                    push(0);
+                } else {
+                    push(party[a1]);
+                }
+                break;
 
             default: {
                 std::stringstream ss;

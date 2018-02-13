@@ -167,6 +167,7 @@ const int opPartySize       = 0xC8;
 const int opPartyIsKOed     = 0xC9;
 const int opDoRest          = 0xCA;
 const int opCombatStatus    = 0xCB;
+const int opPartyAt         = 0xCC;
 
 const int optionNameContinue    = 1;
 const int optionNameCancel      = 2;
