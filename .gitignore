@@ -10,7 +10,4 @@ dbg_nodes.txt
 dbg_defs.txt
 transcript.txt
 
-Make.glkterm
-Make.gtkglk
-glkterm
-libglkterm.a
+.DS_Store
