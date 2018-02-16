@@ -20,17 +20,7 @@ void Game::doNode(std::uint32_t address) {
             case opEnd:
                 return;
             case opDoNode:
-                doNode(pop());
-                break;
-            case opSetLocation:
-                a1 = pop();
-                inLocation = true;
-                if (locationName != a1) {
-                    newLocation = true;
-                    locationName = a1;
-                    location = address;
-                }
-                break;
+                call(pop(), false, false);
             case opStartGame: // start-game;
                 gameStarted = true;
                 break;

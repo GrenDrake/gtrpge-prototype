@@ -29,6 +29,7 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
         { "action",    ocAction,    { "name" } },
         { "item",      ocItem,      { "article", "name", "plural" } },
         { "character", ocCharacter, { "article", "name", "sex", "species" } },
+        { "scene",     ocScene,     { "body" } },
         { "" }
     };
 
@@ -147,6 +148,7 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
     std::shared_ptr<ObjectDef> obj(new ObjectDef);
     obj->origin = origin;
     obj->name = cur->text;
+    checkSymbol(origin, cur->text, SymbolDef::ObjectDef);
     ++cur;
     require(Token::OpenBrace, true);
     while (!matches(Token::CloseBrace)) {

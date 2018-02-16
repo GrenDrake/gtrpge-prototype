@@ -73,6 +73,9 @@ const int propSex               = 27;
 const int propSpecies           = 28;
 const int propAi                = 29;
 const int propTarget            = 30;
+const int propBody              = 31;
+const int propLocation          = 32;
+const int propDuration          = 33;
 
 const int propFirstCustom       = 256;
 
@@ -82,6 +85,7 @@ const int ocSex             = 2;
 const int ocAction          = 3;
 const int ocItem            = 4;
 const int ocCharacter       = 5;
+const int ocScene           = 6;
 
 // DamageType Count
 const int damageTypeCount   = 8;

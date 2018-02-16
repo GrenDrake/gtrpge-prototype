@@ -292,45 +292,49 @@ ACTION act-thrust {
  * BASE GAME NODES                                                           *
  * ************************************************************************* */
 
-NODE start {
-    >"Welcome to the game!"
-    "Create a new character"
-    chargen-sex
-    add-option
-
-    forest-event-setup
-    do-node
+SCENE start {
+    body {
+        >"Welcome to the game!"
+        "Create a new character" chargen-sex add-option
+        forest-event-setup do-node
+    };
 }
 
-NODE chargen-sex {
-    >"What sex is your character?"
-    "Male" chargen-species sex-male add-option-xtra
-    "Female" chargen-species sex-female add-option-xtra
+SCENE chargen-sex {
+    body {
+        >"What sex is your character?"
+        "Male" chargen-species sex-male add-option-xtra
+        "Female" chargen-species sex-female add-option-xtra
+    };
 }
 
-NODE chargen-species {
-    the-player stk-swap set-sex
-    >"What species is your character?"
-    push "Human" chargen-done spc-human add-option-xtra
-    push "Gnoll" chargen-done spc-gnoll add-option-xtra
-    push "Dragon" chargen-done spc-dragon add-option-xtra
+SCENE chargen-species {
+    body {
+        the-player stk-swap set-sex
+        >"What species is your character?"
+        push "Human" chargen-done spc-human add-option-xtra
+        push "Gnoll" chargen-done spc-gnoll add-option-xtra
+        push "Dragon" chargen-done spc-dragon add-option-xtra
+    };
 }
 
-NODE chargen-done {
-    the-player stk-swap set-species  // set player species
-    the-player add-to-party
-    the-gnoll add-to-party
+SCENE chargen-done {
+    body {
+        the-player stk-swap set-species  // set player species
+        the-player add-to-party
+        the-gnoll add-to-party
 
-    teleport-crystal 20 add-items
-    gnoll-potion 2 add-items
-    loincloth 1 add-items
-    plate-armour 1 add-items
+        teleport-crystal 20 add-items
+        gnoll-potion 2 add-items
+        loincloth 1 add-items
+        plate-armour 1 add-items
 
-    >"You are a "
-    the-player get-sex say
-    >" "
-    the-player get-species say
-    >". Beginning the game now.\n* * * * * * * * * *\n"
-    start-game
-    forest-path do-node
+        >"You are a "
+        the-player get-sex say
+        >" "
+        the-player get-species say
+        >". Beginning the game now.\n* * * * * * * * * *\n"
+        start-game
+        forest-path do-node
+    };
 }

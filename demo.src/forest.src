@@ -79,283 +79,323 @@ CHARACTER imp-3 {
  * FOREST NODES                                                              *
  * ************************************************************************* */
 
-NODE forest-path {
-    push "On Forest Path"
-    set-location
-    >"You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
-    push "Follow the path north"
-    push forest-fork
-    add-option
-    push "Follow the path south"
-    push town-gate
-    add-option
-    push "Examine the stone wall"
-    push examine-wall
-    add-option
-    push "Take the overgrown trail"
-    push gnoll-cage
-    add-option
-    push "Hurt yourself"
-    push hurt-self-health
-    add-option
-    push "Inflict void on yourself"
-    push hurt-self-void
-    add-option
-    push "Fight some immps"
-    push imp-fight
-    add-option
+SCENE forest-path {
+    location "On Forest Path";
+    body {
+        >"You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
+        push "Follow the path north"
+        push forest-fork
+        add-option
+        push "Follow the path south"
+        push town-gate
+        add-option
+        push "Examine the stone wall"
+        push examine-wall
+        add-option
+        push "Take the overgrown trail"
+        push gnoll-cage
+        add-option
+        push "Hurt yourself"
+        push hurt-self-health
+        add-option
+        push "Inflict void on yourself"
+        push hurt-self-void
+        add-option
+        push "Fight some immps"
+        push imp-fight
+        add-option
 
-    "Rest Awhile" rest-awhile add-option
+        "Rest Awhile" rest-awhile add-option
+    };
 }
 
-NODE rest-awhile {
-    >"How long would you like to rest for?"
-    "One hour" rest-awhile-doit 60 add-option-xtra
-    "Six hours" rest-awhile-doit 360 add-option-xtra
-    "Twelve hours" rest-awhile-doit 720 add-option-xtra
-    "Don't rest" 0 add-option
+SCENE rest-awhile {
+    body {
+        >"How long would you like to rest for?"
+        "One hour" rest-awhile-doit 60 add-option-xtra
+        "Six hours" rest-awhile-doit 360 add-option-xtra
+        "Twelve hours" rest-awhile-doit 720 add-option-xtra
+        "Don't rest" 0 add-option
+    };
 }
 
-NODE rest-awhile-doit {
-    >"You rest for a while. "
-    do-rest
-    add-return
+SCENE rest-awhile-doit {
+    body {
+        >"You rest for a while. "
+        do-rest
+        add-return
+    };
 }
 
-NODE hurt-self-health {
-    0 56 skl-health dt-blunt do-damage
-    >"You hurt yourself."
-    add-return
+SCENE hurt-self-health {
+    body {
+        0 56 skl-health dt-blunt do-damage
+        >"You hurt yourself."
+        add-return
+    };
 }
 
-NODE hurt-self-void {
-    the-player -6 skl-void dt-blunt do-damage
-    >"You hurt yourself."
-    add-return
+SCENE hurt-self-void {
+    body {
+        the-player -6 skl-void dt-blunt do-damage
+        >"You hurt yourself."
+        add-return
+    };
 }
 
-NODE examine-wall {
-    "It looks much as one might expect." say
-    push 1
-    push 12
-    add-time
-    do-damage the-player 5 skl-health dt-blunt
-    add-return
+SCENE examine-wall {
+    body {
+        "It looks much as one might expect." say
+        push 1
+        push 12
+        add-time
+        do-damage the-player 5 skl-health dt-blunt
+        add-return
+    };
 }
 
-NODE imp-fight {
-    >"Three imps are gathered around a campfire, cackling and conversing."
-    imp-fight-after reset-combat
-    imp-1 add-to-combat
-    imp-2 add-to-combat
-    imp-3 add-to-combat
+SCENE imp-fight {
+    body {
+        >"Three imps are gathered around a campfire, cackling and conversing."
+        imp-fight-after reset-combat
+        imp-1 add-to-combat
+        imp-2 add-to-combat
+        imp-3 add-to-combat
+    };
 }
-NODE imp-fight-after {
-    add-return
-    combat-status 0 player-defeat jump-lt
+SCENE imp-fight-after {
+    body {
+        add-return
+        combat-status 0 player-defeat jump-lt
 
-    LABEL player-victory
-    >"You have won the battle!\n"
-    end
+        LABEL player-victory
+        >"You have won the battle!\n"
+        end
 
-    LABEL player-defeat
-    >"You have been defeated and wake some time later alone in the forest.\n"
-
-}
-
-NODE town-gate {
-    push "Outside the Town Gates"
-    set-location
-    >"You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
-    "Return to the forest" forest-path add-option
-
-    flg-took-key fetch
-    push no-key
-    jump-true
-    "\n\nA key can be seen glinting in the sun not far from the gate."
-    say
-    push "Take key"
-    push take-key
-    add-option
-    label no-key
+        LABEL player-defeat
+        >"You have been defeated and wake some time later alone in the forest.\n"
+    };
 }
 
-NODE take-key {
-    gnoll-cage-key 1 add-items
-    flg-took-key true store
-    "You pick up the key and stick it in your pocket." say
-    add-return
+SCENE town-gate {
+    location "Outside the Town Gates";
+    body {
+        >"You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
+        "Return to the forest" forest-path add-option
+
+        flg-took-key fetch
+        push no-key
+        jump-true
+        "\n\nA key can be seen glinting in the sun not far from the gate."
+        say
+        push "Take key"
+        push take-key
+        add-option
+        label no-key
+    };
 }
 
-NODE gnoll-cage {
-    push "By a Cage in the Forest"
-    set-location
-    "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage."
-    say
-    push "Return to the forest path"
-    push forest-path
-    add-option
-
-    flg-rescued-gnoll fetch
-    push no-gnoll
-    jump-true
-    " Inside the cage you can see a rather emaciated gnoll."
-    say
-    push "Open the cage"
-    push open-cage
-    add-option
-    push "Try to talk to the gnoll"
-    push talk-to-gnoll
-    add-option
-    end
-
-    label no-gnoll
-    " The cage stands empty and open."
-    say
+SCENE take-key {
+    body {
+        gnoll-cage-key 1 add-items
+        flg-took-key true store
+        "You pick up the key and stick it in your pocket." say
+        add-return
+    };
 }
 
-NODE talk-to-gnoll {
-    add-return
-    flg-talked-to-caged-gnoll fetch
-    push second-talk
-    jump-true
-    flg-talked-to-caged-gnoll true store
-    "You can barely make out the gnoll's words; \"Help me, please!\""
-    say
-    end
-    label second-talk
-    "The gnoll continues to plead for help in a barely audible voice."
-    say
+SCENE gnoll-cage {
+    location "By a Cage in the Forest";
+    body {
+        "You stand in a clearing in the forest. The area is dominated by a large, if rusty, cage."
+        say
+        push "Return to the forest path"
+        push forest-path
+        add-option
+
+        flg-rescued-gnoll fetch
+        push no-gnoll
+        jump-true
+        " Inside the cage you can see a rather emaciated gnoll."
+        say
+        push "Open the cage"
+        push open-cage
+        add-option
+        push "Try to talk to the gnoll"
+        push talk-to-gnoll
+        add-option
+        end
+
+        label no-gnoll
+        " The cage stands empty and open."
+        say
+    };
 }
 
-NODE open-cage {
-    add-return
-    gnoll-cage-key item-qty
-    push no-key
-    jump-false
-    "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\""
-    say
-    gnoll-cage-key 1 remove-items
-    flg-rescued-gnoll true store
-    end
-
-    label no-key
-    "You rattle the door of the cage, but it is firmly locked."
-    say
+SCENE talk-to-gnoll {
+    body {
+        add-return
+        flg-talked-to-caged-gnoll fetch
+        push second-talk
+        jump-true
+        flg-talked-to-caged-gnoll true store
+        "You can barely make out the gnoll's words; \"Help me, please!\""
+        say
+        end
+        label second-talk
+        "The gnoll continues to plead for help in a barely audible voice."
+        say
+    };
 }
 
-NODE forest-fork {
-    push "A Fork in the Path"
-    set-location
-    "The path through the forest branches here, one fork leading north, towards what appears to be a small cabin while another leads deeper into the forest. It is also possible to return to the south, towards the town."
-    say
-    push "Take the north path"
-    push outside-cabin
-    add-option
-    push "Go deeper into the forest"
-    push deep-forest
-    add-option
-    push "Return to the south"
-    push forest-path
-    add-option
+SCENE open-cage {
+    body {
+        add-return
+        gnoll-cage-key item-qty
+        push no-key
+        jump-false
+        "Using the key you found you are able to open the cage; as you do, both the key and the lock turn to ash. As you open the door, the gnoll rushes out surprisingly fast given his state.\n\n\"Thank you!\" he says. \"Please, come see me in my home. I live to the north of the town.\""
+        say
+        gnoll-cage-key 1 remove-items
+        flg-rescued-gnoll true store
+        end
+
+        label no-key
+        "You rattle the door of the cage, but it is firmly locked."
+        say
+    };
 }
 
-NODE outside-cabin {
-    push "A Cabin in the Forest"
-    set-location
-    "A small cabin has been built here, nestled between the trees."
-    say
-    flg-rescued-gnoll fetch
-    push no-gnoll
-    jump-false
-    " A trail of smoke can be seen curling up from the chimney; it appears someone is home!"
-    say
-    label no-gnoll
-    push "Re-eneter the forest"
-    push forest-fork
-    add-option
-    push "Try to enter the cabin."
-    push entering-cabin
-    add-option
+SCENE forest-fork {
+    location "A Fork in the Path";
+    body {
+        "The path through the forest branches here, one fork leading north, towards what appears to be a small cabin while another leads deeper into the forest. It is also possible to return to the south, towards the town."
+        say
+        push "Take the north path"
+        push outside-cabin
+        add-option
+        push "Go deeper into the forest"
+        push deep-forest
+        add-option
+        push "Return to the south"
+        push forest-path
+        add-option
+    };
 }
 
-NODE entering-cabin {
-    flg-rescued-gnoll fetch
-    push  gnoll-home
-    jump-true
-    "Try as you might, the door is quite secure."
-    say
-    add-return
-    end
-
-    label gnoll-home
-    flg-visited-gnoll true store
-    "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n"
-    say
-    push inside-cabin
-    do-node
+SCENE outside-cabin {
+    location "A Cabin in the Forest";
+    body {
+        "A small cabin has been built here, nestled between the trees."
+        say
+        flg-rescued-gnoll fetch
+        push no-gnoll
+        jump-false
+        " A trail of smoke can be seen curling up from the chimney; it appears someone is home!"
+        say
+        label no-gnoll
+        push "Re-eneter the forest"
+        push forest-fork
+        add-option
+        push "Try to enter the cabin."
+        push entering-cabin
+        add-option
+    };
 }
 
-NODE inside-cabin {
-    push "Inside the Gnoll's Cabin"
-    set-location
-    "The interior of the cabin is crampt, but cozy. You can see the gnoll slotched back on a wooden chair, a mug of some dark liquid in his hand.\n\n\"Good to see you again, my rescuer!\" he says as you enter."
-    say
-    push "Talk to the gnoll"
-    push gnoll-cabin-talk
-    add-option
-    push "Leave"
-    push outside-cabin
-    add-option
+SCENE entering-cabin {
+    body {
+        flg-rescued-gnoll fetch
+        push  gnoll-home
+        jump-true
+        "Try as you might, the door is quite secure."
+        say
+        add-return
+        end
+
+        label gnoll-home
+        flg-visited-gnoll true store
+        "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n"
+        say
+        push inside-cabin
+        do-node
+    };
 }
 
-NODE gnoll-cabin-talk {
-    "You have a nice chat with the gnoll." say
-    add-return
+SCENE inside-cabin {
+    location "Inside the Gnoll's Cabin";
+    body {
+        "The interior of the cabin is crampt, but cozy. You can see the gnoll slotched back on a wooden chair, a mug of some dark liquid in his hand.\n\n\"Good to see you again, my rescuer!\" he says as you enter."
+        say
+        push "Talk to the gnoll"
+        push gnoll-cabin-talk
+        add-option
+        push "Leave"
+        push outside-cabin
+        add-option
+    };
 }
 
-NODE deep-forest {
-    push "Deep in the Forest"
-    set-location
-    "You are deep within the forest. A path leads back out towards civilization, or you can take your chances exploring the forest."
-    say
-    push "Head towards civilization"
-    push forest-fork
-    add-option
-    push "Explore a while"
-    push forest-do-event
-    add-option
+SCENE gnoll-cabin-talk {
+    body {
+        "You have a nice chat with the gnoll." say
+        add-return
+    };
+}
+
+SCENE deep-forest {
+    location "Deep in the Forest";
+    body {
+        "You are deep within the forest. A path leads back out towards civilization, or you can take your chances exploring the forest."
+        say
+        push "Head towards civilization"
+        push forest-fork
+        add-option
+        push "Explore a while"
+        push forest-do-event
+        add-option
+    };
 }
 
 /* ************************************************************************* *
  * SOME RANDOM FOREST EVENTS                                                 *
  * ************************************************************************* */
 
-NODE forest-do-event {
-    forest-events fetch random-from-list
-    do-node
+SCENE forest-do-event {
+    body {
+        forest-events fetch random-from-list
+        do-node
+    };
 }
-NODE forest-event-setup {
-    forest-events create-list
-    forest-events fetch forest-event-imps add-to-list
-    forest-events fetch forest-event-nothing add-to-list
-    forest-events fetch forest-event-skeleton add-to-list
-}
-
-NODE forest-event-imps {
-    "You stumble across a pair of imps eating a meal. They wish you a good day and you carry on your way."
-    say
-    add-return
+SCENE forest-event-setup {
+    body {
+        forest-events create-list
+        forest-events fetch forest-event-imps add-to-list
+        forest-events fetch forest-event-nothing add-to-list
+        forest-events fetch forest-event-skeleton add-to-list
+    };
 }
 
-NODE forest-event-skeleton {
-    "You discover a menacing looking skeleton loitering around a grave. It fails to notice you entirely."
-    say
-    add-return
+SCENE forest-event-imps {
+    body {
+        "You stumble across a pair of imps eating a meal. They wish you a good day and you carry on your way."
+        say
+        add-return
+    };
 }
 
-NODE forest-event-nothing {
-    "You stumble around in the forest for a while, but eventually end up back were you started without finding anything."
-    say
-    add-return
+SCENE forest-event-skeleton {
+    body {
+        "You discover a menacing looking skeleton loitering around a grave. It fails to notice you entirely."
+        say
+        add-return
+    };
+}
+
+SCENE forest-event-nothing {
+    body {
+        "You stumble around in the forest for a while, but eventually end up back were you started without finding anything."
+        say
+        add-return
+    };
 }

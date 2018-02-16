@@ -128,6 +128,9 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("species", propSpecies);
     ObjectDef::setPropertyIdent("ai", propAi);
     ObjectDef::setPropertyIdent("target", propTarget);
+    ObjectDef::setPropertyIdent("body", propBody);
+    ObjectDef::setPropertyIdent("duration", propDuration);
+    ObjectDef::setPropertyIdent("location", propLocation);
 
     try {
         std::vector<SymbolDef> symbols;
@@ -146,10 +149,10 @@ int main(int argc, char *argv[]) {
         bool hasStartSymbol = false;
         for (const auto &symbol : symbols) {
             if (symbol.name == "start") {
-                if (symbol.type != SymbolDef::Node) {
-                    std::cerr << symbol.origin << " Start node must be node.\n";
-                    return 1;
-                }
+//                if (symbol.type != SymbolDef::Node) {
+//                    std::cerr << symbol.origin << " Start node must be node.\n";
+//                    return 1;
+//                }
                 hasStartSymbol = true;
             }
         }

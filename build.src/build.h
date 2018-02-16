@@ -144,7 +144,7 @@ private:
 class SymbolDef {
 public:
     enum Type {
-        Node, Constant, Item, Sex, Species, Skill, Character, DamageType
+        Node, Constant, Item, Sex, Species, Skill, Character, DamageType, ObjectDef
     };
 
     SymbolDef(const Origin &origin, const std::string &name, Type type)

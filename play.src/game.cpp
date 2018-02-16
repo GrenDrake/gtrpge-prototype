@@ -574,26 +574,19 @@ void Game::doGameSetup() {
     say(getString(readWord(headerByline)));
     say("\n\n");
     srand(time(nullptr));
-    newNode(readWord(headerStartNode));
+    doScene(readWord(headerStartNode));
 }
 
-void Game::newNode(std::uint32_t address) {
-    inLocation = false;
-    newLocation = false;
-    options.clear();
+void Game::doScene(std::uint32_t address) {
+    int objClass = getObjectProperty(address, propClass);
+    if (objClass != ocScene) {
+        throw PlayError("Tried to play non-scene");
+    }
+
     try {
-        doNode(address);
+        call(address, true, true);
     } catch (PlayError &e) {
         sayError(e.what());
-    }
-    stack.clear();
-
-    for (unsigned i = 0; i < storageTempCount; ++i) {
-        storage.erase(storageFirstTemp-i);
-    }
-
-    if (gameStarted && (!inLocation || newLocation) && !inCombat) {
-        gameTime += 2;
     }
 
     if (startedCombat) {
@@ -604,6 +597,44 @@ void Game::newNode(std::uint32_t address) {
     }
 }
 
+void Game::call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore) {
+
+    if (clearBefore) {
+        inLocation = false;
+        newLocation = false;
+        options.clear();
+    }
+
+    if (isType(sceneOrNode, idObject)) {
+        if (objectHasProperty(sceneOrNode, propLocation)) {
+            std::uint32_t thisLocation = getObjectProperty(sceneOrNode, propLocation);
+            inLocation = true;
+            if (locationName != thisLocation) {
+                newLocation = true;
+                locationName = thisLocation;
+                location = sceneOrNode;
+            }
+        }
+
+        std::uint32_t body = getObjectProperty(sceneOrNode, propBody);
+        doNode(body);
+
+        if (gameStarted && (!inLocation || newLocation) && !inCombat) {
+            gameTime += 2;
+        }
+    } else {
+        doNode(sceneOrNode);
+    }
+
+    if (clearAfter) {
+        stack.clear();
+    
+        for (unsigned i = 0; i < storageTempCount; ++i) {
+            storage.erase(storageFirstTemp-i);
+        }
+    }
+}
+
 void Game::doCombatLoop() {
     while (getObjectProperty(combatants[currentCombatant], propFaction) != 0 ||
             isKOed(combatants[currentCombatant])) {
@@ -611,7 +642,7 @@ void Game::doCombatLoop() {
             std::uint32_t ai = getObjectProperty(combatants[currentCombatant], propAi);
             if (ai > 0) {
                 setTemp(0, combatants[currentCombatant]);
-                newNode(ai);
+                call(ai, false, false);
             } else {
                 say(toUpperFirst(getNameOf(combatants[currentCombatant])));
                 say(" does nothing.\n");
@@ -700,7 +731,7 @@ void Game::doOption(int optionNumber) {
             } else {
                 setTemp(0, combatants[currentCombatant]);
                 setTemp(1, extra);
-                newNode(dest);
+                call(dest, false, false);
             }
             advanceCombatant();
             doCombatLoop();
@@ -731,7 +762,7 @@ void Game::doOption(int optionNumber) {
         if (options[optionNumber].extra) {
             push(options[optionNumber].extra);
         }
-        newNode(dest);
+        doScene(dest);
     }
 }
 
@@ -755,7 +786,7 @@ void Game::useItem(int itemNumber) {
     say(getString(name));
     say("\n\n");
 
-    newNode(onUse);
+    call(onUse, true, true);
 }
 
 void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
@@ -778,7 +809,7 @@ void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
         std::uint32_t oldItem = who->gear[slot];
         std::uint32_t onRemove = getObjectProperty(oldItem, propOnRemove);
         if (onRemove) {
-            doNode(onRemove);
+            call(onRemove, false, false);
         }
         addItems(1, oldItem);
         who->gear.erase(slot);
@@ -787,7 +818,7 @@ void Game::equipItem(std::uint32_t whoIdent, int itemNumber) {
     removeItems(1, item);
     std::uint32_t onEquip = getObjectProperty(item, propOnEquip);
     if (onEquip) {
-        doNode(onEquip);
+        call(onEquip, false, false);
     }
     who->gear.insert(std::make_pair(slot, item));
 }
@@ -823,7 +854,7 @@ void Game::doAction(std::uint32_t cRef, std::uint32_t action) {
     say(getNameOf(action));
     say(" ability\n\n");
 
-    newNode(peaceNode);
+    call(peaceNode, true, true);
 }
 
 bool Game::actionAllowed() const {
