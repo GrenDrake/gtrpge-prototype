@@ -627,8 +627,6 @@ void Game::call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore) {
     }
 
     if (clearAfter) {
-        stack.clear();
-    
         for (unsigned i = 0; i < storageTempCount; ++i) {
             storage.erase(storageFirstTemp-i);
         }
@@ -760,7 +758,7 @@ void Game::doOption(int optionNumber) {
         say("\n\n");
 
         if (options[optionNumber].extra) {
-            push(options[optionNumber].extra);
+            setTemp(0, options[optionNumber].extra);
         }
         doScene(dest);
     }
@@ -886,17 +884,6 @@ uint32_t Game::fetch(uint32_t key) const {
     }
     auto i = storage.find(key);
     return i->second;
-}
-
-void Game::push(uint32_t value) {
-    stack.push_back(value);
-}
-
-uint32_t Game::pop() {
-    if (stack.empty()) return 0;
-    uint32_t value = stack.back();
-    stack.pop_back();
-    return value;
 }
 
 void Game::setTemp(unsigned tempNo, std::uint32_t value) {

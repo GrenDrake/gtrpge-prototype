@@ -310,7 +310,7 @@ SCENE chargen-sex {
 
 SCENE chargen-species {
     body {
-        the-player stk-swap set-sex
+        the-player *_0 set-sex
         >"What species is your character?"
         push "Human" chargen-done spc-human add-option-xtra
         push "Gnoll" chargen-done spc-gnoll add-option-xtra
@@ -320,7 +320,7 @@ SCENE chargen-species {
 
 SCENE chargen-done {
     body {
-        the-player stk-swap set-species  // set player species
+        the-player *_0 set-species  // set player species
         the-player add-to-party
         the-gnoll add-to-party
 

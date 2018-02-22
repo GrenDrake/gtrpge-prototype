@@ -3,6 +3,42 @@
 
 #include "play.h"
 
+class Stack {
+public:
+    void push(std::uint32_t value) {
+        mStack.push_back(value);
+    }
+    std::uint32_t pop() {
+        std::uint32_t value = mStack.back();
+        mStack.pop_back();
+        return value;
+    }
+    std::uint32_t peek(unsigned position = 0) {
+        if (position >= mStack.size()) {
+            throw std::runtime_error("stack index out of bounds");
+        }
+        
+        return mStack[mStack.size() - 1 - position];
+    }
+    void swap(unsigned pos1 = 0, unsigned pos2 = 1) {
+        if (pos1 >= mStack.size() || pos2 >= mStack.size()) {
+            throw std::runtime_error("stack index out of bounds");
+        }
+        
+        std::uint32_t value = mStack[pos1];
+        mStack[pos1] = mStack[pos2];
+        mStack[pos2] = value;
+    }
+    
+    bool isEmpty() const {
+        return mStack.empty();
+    }
+    unsigned size() const {
+        return mStack.size();
+    }
+private:
+    std::vector<std::uint32_t> mStack;
+};
 
 void Game::doNode(std::uint32_t address) {
     std::uint32_t ip = address;
@@ -11,6 +47,7 @@ void Game::doNode(std::uint32_t address) {
         ss << "Tried to run non-node at " << std::hex << std::uppercase << (int)readByte(ip-1) << ".";
         throw PlayError(ss.str());
     }
+    Stack stack;
 
     std::uint32_t a1, a2, a3, a4;
     while (true) {
@@ -20,37 +57,37 @@ void Game::doNode(std::uint32_t address) {
             case opEnd:
                 return;
             case opDoNode:
-                call(pop(), false, false);
+                call(stack.pop(), false, false);
             case opStartGame: // start-game;
                 gameStarted = true;
                 break;
             case opAddTime: // add-time [hours] [minutes];
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 gameTime += a1 * minutesPerHour + a2;
                 break;
             case opPush:
                 a1 = readWord(ip);
                 ip += 4;
-                push(a1);
+                stack.push(a1);
                 break;
             case opPop:
-                pop();
+                stack.pop();
                 break;
 
             case opAddOption:
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 options.push_back(Option(a1, a2));
                 break;
             case opAddOptionXtra:
-                a3 = pop();
-                a2 = pop();
-                a1 = pop();
+                a3 = stack.pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 options.push_back(Option(a1, a2, a3));
                 break;
             case opAddContinue:
-                a1 = pop();
+                a1 = stack.pop();
                 options.push_back(Option(1, a1));
                 break;
             case opAddReturn:
@@ -58,97 +95,97 @@ void Game::doNode(std::uint32_t address) {
                 break;
 
             case opSay:
-                say(getNameOf(pop()));
+                say(getNameOf(stack.pop()));
                 break;
             case opSayUF:
-                say(toUpperFirst(getNameOf(pop())));
+                say(toUpperFirst(getNameOf(stack.pop())));
                 break;
             case opSayTC:
-                say(toTitleCase(getNameOf(pop())));
+                say(toTitleCase(getNameOf(stack.pop())));
                 break;
             case opSayPronoun:
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 say(getPronoun(a1, a2));
                 break;
             case opSayPronounUF:
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 say(toUpperFirst(getPronoun(a1, a2)));
                 break;
             case opSayNumber:
-                say(pop());
+                say(stack.pop());
                 break;
 
             case opJump:
-                ip = pop();
+                ip = stack.pop();
                 break;
             case opJumpTrue:
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 if (a1) {
                     ip = a2;
                 }
                 break;
             case opJumpFalse:
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 if (!a1) {
                     ip = a2;
                 }
                 break;
             case opJumpEq:
-                a3 = pop();
-                a1 = pop();
-                a2 = pop();
+                a3 = stack.pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (a1 == a2) {
                     ip = a3;
                 }
                 break;
             case opJumpNeq:
-                a3 = pop();
-                a1 = pop();
-                a2 = pop();
+                a3 = stack.pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (a1 != a2) {
                     ip = a3;
                 }
                 break;
             case opJumpLt:
-                a3 = pop();
-                a1 = pop();
-                a2 = pop();
+                a3 = stack.pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (static_cast<int>(a1) > static_cast<int>(a2)) {
                     ip = a3;
                 }
                 break;
             case opJumpLte:
-                a3 = pop();
-                a1 = pop();
-                a2 = pop();
+                a3 = stack.pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (static_cast<int>(a1) >= static_cast<int>(a2)) {
                     ip = a3;
                 }
                 break;
             case opJumpGt:
-                a3 = pop();
-                a1 = pop();
-                a2 = pop();
+                a3 = stack.pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (static_cast<int>(a1) < static_cast<int>(a2)) {
                     ip = a3;
                 }
                 break;
             case opJumpGte:
-                a3 = pop();
-                a1 = pop();
-                a2 = pop();
+                a3 = stack.pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (static_cast<int>(a1) <= static_cast<int>(a2)) {
                     ip = a3;
                 }
                 break;
 
             case opStore:
-                a2 = pop();
-                a1 = pop();
+                a2 = stack.pop();
+                a1 = stack.pop();
                 if (a2) {
                     storage[a1] = a2;
                 } else {
@@ -156,27 +193,27 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opFetch:
-                push(fetch(pop()));
+                stack.push(fetch(stack.pop()));
                 break;
 
             case opAddItems:
-                a2 = pop(); // qty
-                a1 = pop(); // itemIdent
-                push(addItems(a2, a1));
+                a2 = stack.pop(); // qty
+                a1 = stack.pop(); // itemIdent
+                stack.push(addItems(a2, a1));
                 break;
             case opRemoveItems:
-                a2 = pop(); // qty
-                a1 = pop(); // itemIDent
-                push(removeItems(a2, a1));
+                a2 = stack.pop(); // qty
+                a1 = stack.pop(); // itemIDent
+                stack.push(removeItems(a2, a1));
                 break;
             case opItemQty:
-                a1 = pop(); // itemIdent
-                push(itemQty(a1));
+                a1 = stack.pop(); // itemIdent
+                stack.push(itemQty(a1));
                 break;
 
             case opAddToList: {
-                a1 = pop(); // item to add
-                a2 = pop(); // list ident
+                a1 = stack.pop(); // item to add
+                a2 = stack.pop(); // list ident
                 std::shared_ptr<List> list = getList(a2);
                 if (list) {
                     list->add(a1, 1);
@@ -188,8 +225,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opRemoveFromList: {
-                a1 = pop(); // item to remove
-                a2 = pop(); // list ident
+                a1 = stack.pop(); // item to remove
+                a2 = stack.pop(); // list ident
                 std::shared_ptr<List> list = getList(a2);
                 if (list) {
                     list->remove(a1);
@@ -201,21 +238,21 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opIsInList: {
-                a1 = pop(); // item to check for
-                a2 = pop(); // list ident
+                a1 = stack.pop(); // item to check for
+                a2 = stack.pop(); // list ident
                 std::shared_ptr<List> list = getList(a3);
                 if (!list) {
-                    push(false);
+                    stack.push(false);
                 } else {
-                    push(list->contains(a1));
+                    stack.push(list->contains(a1));
                 }
                 break;
             }
             case opRandomFromList: {
-                a1 = pop(); // list ident
+                a1 = stack.pop(); // list ident
                 std::shared_ptr<List> list = getList(a1);
                 if (list) {
-                    push(list->random());
+                    stack.push(list->random());
                 } else {
                     std::stringstream ss;
                     ss << "Tried to get a random item from non-existant list " << a1 << '.';
@@ -224,7 +261,7 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opCreateList: {
-                a1 = pop(); // location to store list
+                a1 = stack.pop(); // location to store list
                 List *list = new List;
                 std::uint32_t ident = nextListIdent++;
                 addList(ident, std::shared_ptr<List>(list));
@@ -232,9 +269,9 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opAddToListChance: {
-                a2 = pop(); // item chance
-                a1 = pop(); // item to add
-                a3 = pop(); // list ident
+                a2 = stack.pop(); // item chance
+                a1 = stack.pop(); // item to add
+                a3 = stack.pop(); // list ident
                 std::shared_ptr<List> list = getList(a3);
                 if (list) {
                     list->add(a1, a2);
@@ -247,21 +284,21 @@ void Game::doNode(std::uint32_t address) {
             }
 
             case opResetCharacter:
-                resetCharacter(pop());
+                resetCharacter(stack.pop());
                 break;
             case opGetSex: {
-                Character *c = getCharacter(pop());
-                push(c->sex);
+                Character *c = getCharacter(stack.pop());
+                stack.push(c->sex);
                 break;
             }
             case opGetSpecies: {
-                Character *c = getCharacter(pop());
-                push(c->species);
+                Character *c = getCharacter(stack.pop());
+                stack.push(c->species);
                 break;
             }
             case opSetSex: {
-                a1 = pop();
-                a2 = pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (getObjectProperty(a1, propClass) != ocSex) {
                     throw PlayError("Tried to set character sex to non-sex.");
                 }
@@ -270,8 +307,8 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opSetSpecies: {
-                a1 = pop();
-                a2 = pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 if (getObjectProperty(a1, propClass) != ocSpecies) {
                     throw PlayError("Tried to set character species to non-species.");
                 }
@@ -280,89 +317,89 @@ void Game::doNode(std::uint32_t address) {
                 break;
             }
             case opGetSkill:
-                a1 = pop();
-                a2 = pop();
-                push(getSkillMax(a2, a1));
+                a1 = stack.pop();
+                a2 = stack.pop();
+                stack.push(getSkillMax(a2, a1));
                 break;
             case opAdjSkill:
-                a1 = pop();
-                a2 = pop();
-                a3 = pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
+                a3 = stack.pop();
                 adjSkillMax(a3, a2, a1);
                 break;
             case opGetSkillCur:
-                a1 = pop();
-                a2 = pop();
-                push(getSkillCur(a2, a1));
+                a1 = stack.pop();
+                a2 = stack.pop();
+                stack.push(getSkillCur(a2, a1));
                 break;
             case opAdjSkillCur:
-                a1 = pop();
-                a2 = pop();
-                a3 = pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
+                a3 = stack.pop();
                 adjSkillCur(a3, a2, a1);
                 break;
             case opSkillCheck:
-                a1 = pop(); // target
-                a2 = pop(); // modifier
-                a3 = pop(); // skill
-                a4 = pop(); // character
-                push(doSkillCheck(a4, a3, a2, a1));
+                a1 = stack.pop(); // target
+                a2 = stack.pop(); // modifier
+                a3 = stack.pop(); // skill
+                a4 = stack.pop(); // character
+                stack.push(doSkillCheck(a4, a3, a2, a1));
                 break;
             case opDoDamage:
-                a1 = pop();
-                a2 = pop();
-                a3 = pop();
-                a4 = pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
+                a3 = stack.pop();
+                a4 = stack.pop();
                 doDamage(a4, a3, a2, a1);
                 break;
 
             case opAdd:
-                push(pop()+pop());
+                stack.push(stack.pop()+stack.pop());
                 break;
             case opSubtract:
-                push(pop()-pop());
+                stack.push(stack.pop()-stack.pop());
                 break;
             case opMultiply:
-                push(pop()*pop());
+                stack.push(stack.pop()*stack.pop());
                 break;
             case opDivide:
-                push(pop()/pop());
+                stack.push(stack.pop()/stack.pop());
                 break;
             case opModulo:
-                push(pop()%pop());
+                stack.push(stack.pop()%stack.pop());
                 break;
             case opPower:
-                a1 = pop();
-                a2 = pop();
+                a1 = stack.pop();
+                a2 = stack.pop();
                 a3 = 1;
                 for (unsigned i = 0; i < a2; ++i) {
                     a3 *= a1;
                 }
-                push(a3);
+                stack.push(a3);
                 break;
             case opIncrement:
-                push(pop()+1);
+                stack.push(stack.pop()+1);
                 break;
             case opDecrement:
-                push(pop()-1);
+                stack.push(stack.pop()-1);
                 break;
 
             case opAddToParty:
-                party.push_back(pop());
+                party.push_back(stack.pop());
                 break;
             case opIsInParty: {
-                a1 = pop();
+                a1 = stack.pop();
                 bool found = false;
                 for (unsigned i = 0; i < party.size(); ++i) {
                     if (party[i] == a1) {
                         found = true;
                     }
                 }
-                push(found);
+                stack.push(found);
                 break;
             }
             case opRemoveFromParty: {
-                a1 = pop();
+                a1 = stack.pop();
                 auto i = party.begin();
                 while (i != party.end()) {
                     if (*i == a1) {
@@ -375,7 +412,7 @@ void Game::doNode(std::uint32_t address) {
             }
 
             case opResetCombat:
-                afterCombatNode = pop();
+                afterCombatNode = stack.pop();
                 inCombat = startedCombat = true;
                 combatants.clear();
                 currentCombatant = 0;
@@ -385,28 +422,28 @@ void Game::doNode(std::uint32_t address) {
                 }
                 break;
             case opAddToCombat:
-                a1 = pop();
+                a1 = stack.pop();
                 restoreCharacter(a1);
                 combatants.push_back(a1);
                 break;
             case opCombatant:
-                a1 = pop();
+                a1 = stack.pop();
                 if (a1 >= combatants.size()) {
-                    push(0);
+                    stack.push(0);
                 } else {
-                    push(combatants[a1]);
+                    stack.push(combatants[a1]);
                 }
                 break;
 
             case opGetProperty: {
-                a2 = pop();
-                a1 = pop();
-                push(getObjectProperty(a1, a2));
+                a2 = stack.pop();
+                a1 = stack.pop();
+                stack.push(getObjectProperty(a1, a2));
                 break; }
 
             case opRandomOfFaction: {
                 if (!inCombat) break;
-                a1 = pop();
+                a1 = stack.pop();
                 std::vector<std::uint32_t> options;
                 for (std::uint32_t who : combatants) {
                     if (getObjectProperty(who, propFaction) == a1) {
@@ -414,14 +451,14 @@ void Game::doNode(std::uint32_t address) {
                     }
                 }
                 if (options.empty()) {
-                    push(0);
+                    stack.push(0);
                 } else {
-                    push(options[rand() % options.size()]);
+                    stack.push(options[rand() % options.size()]);
                 }
                 break; }
             case opRandomNotFaction: {
                 if (!inCombat) break;
-                a1 = pop();
+                a1 = stack.pop();
                 std::vector<std::uint32_t> options;
                 for (std::uint32_t who : combatants) {
                     if (getObjectProperty(who, propFaction) != a1) {
@@ -429,37 +466,32 @@ void Game::doNode(std::uint32_t address) {
                     }
                 }
                 if (options.empty()) {
-                    push(0);
+                    stack.push(0);
                 } else {
-                    push(options[rand() % options.size()]);
+                    stack.push(options[rand() % options.size()]);
                 }
                 break; }
 
             case opStackSwap:
-                a1 = pop();
-                a2 = pop();
-                push(a1);
-                push(a2);
+                stack.swap();
                 break;
             case opStackDup:
-                a1 = pop();
-                push(a1);
-                push(a1);
+                stack.push(stack.peek());
                 break;
             case opStackCount:
-                push(stack.size());
+                stack.push(stack.size());
                 break;
 
             case opIsKOed: {
-                push(isKOed(pop()));
+                stack.push(isKOed(stack.pop()));
                 break; }
             case opHasProperty:
-                a2 = pop();
-                a1 = pop();
-                push(objectHasProperty(a1, a2));
+                a2 = stack.pop();
+                a1 = stack.pop();
+                stack.push(objectHasProperty(a1, a2));
                 break;
             case opPartySize:
-                push(party.size());
+                stack.push(party.size());
                 break;
             case opPartyIsKOed: {
                 bool partyIsKOed = true;
@@ -469,39 +501,39 @@ void Game::doNode(std::uint32_t address) {
                         break;
                     }
                 }
-                push(partyIsKOed);
+                stack.push(partyIsKOed);
                 break;}
             case opDoRest:
-                doRest(pop());
+                doRest(stack.pop());
                 break;
             case opCombatStatus:
-                push(combatStatus());
+                stack.push(combatStatus());
                 break;
             case opPartyAt:
-                a1 = pop();
+                a1 = stack.pop();
                 if (a1 >= party.size()) {
-                    push(0);
+                    stack.push(0);
                 } else {
-                    push(party[a1]);
+                    stack.push(party[a1]);
                 }
                 break;
             case opGetEquip: {
-                a1 = pop(); // slot
-                a2 = pop(); // whoRef
+                a1 = stack.pop(); // slot
+                a2 = stack.pop(); // whoRef
                 Character *who = getCharacter(a2);
                 if (!who) {
                     throw PlayError("Tried to get equipment on non-character");
                     return;
                 }
                 if (who->gear.count(a1) > 0) {
-                    push(who->gear[a1]);
+                    stack.push(who->gear[a1]);
                 } else {
-                    push(0);
+                    stack.push(0);
                 }
                 break; }
             case opSetEquip: {
-                a1 = pop(); // itemRef
-                a2 = pop(); // whoRef
+                a1 = stack.pop(); // itemRef
+                a2 = stack.pop(); // whoRef
                 Character *who = getCharacter(a2);
                 if (!who) {
                     throw PlayError("Tried to set equipment on non-character");

@@ -180,8 +180,6 @@ private:
     // ////////////////////////////////////////////////////////////////////////
     // stack and stored data management                                      //
     uint32_t fetch(uint32_t key) const;
-    void push(uint32_t value);
-    uint32_t pop();
     void setTemp(unsigned tempNo, std::uint32_t value);
 
 
@@ -194,7 +192,6 @@ private:
     bool newLocation;
     uint8_t *data;
     size_t dataSize;
-    std::vector<uint32_t> stack;
     uint32_t nextListIdent;
     std::map<std::uint32_t, std::shared_ptr<List> > dynamicLists;
     std::map<std::uint32_t, Character*> characters;
