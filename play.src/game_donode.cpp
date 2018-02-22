@@ -17,19 +17,19 @@ public:
         if (position >= mStack.size()) {
             throw std::runtime_error("stack index out of bounds");
         }
-        
+
         return mStack[mStack.size() - 1 - position];
     }
     void swap(unsigned pos1 = 0, unsigned pos2 = 1) {
         if (pos1 >= mStack.size() || pos2 >= mStack.size()) {
             throw std::runtime_error("stack index out of bounds");
         }
-        
+
         std::uint32_t value = mStack[pos1];
         mStack[pos1] = mStack[pos2];
         mStack[pos2] = value;
     }
-    
+
     bool isEmpty() const {
         return mStack.empty();
     }
@@ -40,7 +40,7 @@ private:
     std::vector<std::uint32_t> mStack;
 };
 
-void Game::doNode(std::uint32_t address) {
+std::uint32_t Game::doNode(std::uint32_t address) {
     std::uint32_t ip = address;
     if (!isType(ip++, idNode)) {
         std::stringstream ss;
@@ -55,9 +55,15 @@ void Game::doNode(std::uint32_t address) {
 
         switch(cmdCode) {
             case opEnd:
-                return;
+                if (stack.isEmpty()) {
+                    return 0;
+                } else {
+                    return stack.pop();
+                }
             case opDoNode:
-                call(stack.pop(), false, false);
+                a1 = call(stack.pop(), false, false);
+                stack.push(a1);
+                break;
             case opStartGame: // start-game;
                 gameStarted = true;
                 break;
@@ -523,7 +529,6 @@ void Game::doNode(std::uint32_t address) {
                 Character *who = getCharacter(a2);
                 if (!who) {
                     throw PlayError("Tried to get equipment on non-character");
-                    return;
                 }
                 if (who->gear.count(a1) > 0) {
                     stack.push(who->gear[a1]);
@@ -537,7 +542,6 @@ void Game::doNode(std::uint32_t address) {
                 Character *who = getCharacter(a2);
                 if (!who) {
                     throw PlayError("Tried to set equipment on non-character");
-                    return;
                 }
                 if (getObjectProperty(a1, propClass) != ocItem) {
                     throw PlayError("Tried to equip non-item");

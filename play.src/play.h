@@ -155,8 +155,8 @@ private:
     // ////////////////////////////////////////////////////////////////////////
     // node execution                                                        //
     void doScene(std::uint32_t address);
-    void call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore);
-    void doNode(std::uint32_t address);
+    std::uint32_t call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore);
+    std::uint32_t doNode(std::uint32_t address);
 
     // ////////////////////////////////////////////////////////////////////////
     // Output manipulation                                                   //

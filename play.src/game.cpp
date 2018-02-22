@@ -597,7 +597,8 @@ void Game::doScene(std::uint32_t address) {
     }
 }
 
-void Game::call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore) {
+std::uint32_t Game::call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore) {
+    std::uint32_t result;
 
     if (clearBefore) {
         inLocation = false;
@@ -617,13 +618,13 @@ void Game::call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore) {
         }
 
         std::uint32_t body = getObjectProperty(sceneOrNode, propBody);
-        doNode(body);
+        result = doNode(body);
 
         if (gameStarted && (!inLocation || newLocation) && !inCombat) {
             gameTime += 2;
         }
     } else {
-        doNode(sceneOrNode);
+        result = doNode(sceneOrNode);
     }
 
     if (clearAfter) {
@@ -631,6 +632,8 @@ void Game::call(std::uint32_t sceneOrNode, bool clearAfter, bool clearBefore) {
             storage.erase(storageFirstTemp-i);
         }
     }
+
+    return result;
 }
 
 void Game::doCombatLoop() {
