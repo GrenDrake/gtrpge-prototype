@@ -59,6 +59,8 @@ static void drawOptions(Game &game) {
             ss << "Continue";
         } else if (option.name == optionNameCancel) {
             ss << "Cancel";
+        } else if (option.name == optionDoNothing) {
+            ss << "Do nothing";
         } else {
             ss << toUpperFirst(game.getNameOf(option.name));
         }

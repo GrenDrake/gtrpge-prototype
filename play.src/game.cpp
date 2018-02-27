@@ -690,7 +690,7 @@ void Game::doCombatOptions() {
             options.push_back(Option(getObjectProperty(action, propName), action));
         }
     }
-    options.push_back(Option(readWord(headerWeaponSlot), 0));
+    options.push_back(Option(optionDoNothing, optionDoNothing));
 }
 
 void Game::advanceCombatant() {
@@ -717,6 +717,14 @@ void Game::doOption(int optionNumber) {
     if (inCombat) {
         options.clear();
 
+        if (dest == optionDoNothing) {
+            say(toUpperFirst(getNameOf(combatants[currentCombatant])));
+            say(" does nothing.\n");
+            advanceCombatant();
+            doCombatLoop();
+            return;
+        }
+
         if (dest == 0) {
             // player cancelled target selection
             doCombatOptions();
@@ -726,14 +734,9 @@ void Game::doOption(int optionNumber) {
         std::uint32_t targetType = getObjectProperty(dest, propTarget);
         if (targetType == targetNone || extra != 0) {
             dest = getObjectProperty(dest, propCombatNode);
-            if (dest == 0) {
-                say(toUpperFirst(getNameOf(combatants[currentCombatant])));
-                say(" does nothing.\n");
-            } else {
-                setTemp(0, combatants[currentCombatant]);
-                setTemp(1, extra);
-                call(dest, false, false);
-            }
+            setTemp(0, combatants[currentCombatant]);
+            setTemp(1, extra);
+            call(dest, false, false);
             advanceCombatant();
             doCombatLoop();
 

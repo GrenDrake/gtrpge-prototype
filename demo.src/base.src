@@ -125,7 +125,6 @@ CHARACTER the-player {
     );
     extra-abilities list(
         act-fireball
-        act-nothing
     );
 }
 
@@ -282,14 +281,6 @@ ACTION act-thrust {
         // missed!
         LABEL hit-missed
         *_1 say-uf >" avoids the strike!\n"
-    };
-}
-
-ACTION act-nothing {
-    name "do nothing";
-    target target-none;
-    combat-node {
-        *_0 say-uf >" does nothing.\n"
     };
 }
 

@@ -32,7 +32,6 @@ CHARACTER the-gnoll {
         act-punch
     );
     extra-abilities list(
-        act-nothing
     );
     gear list(
         common-sword

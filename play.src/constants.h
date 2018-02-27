@@ -178,6 +178,7 @@ const int opRandom          = 0xCF;
 
 const int optionNameContinue    = 1;
 const int optionNameCancel      = 2;
+const int optionDoNothing       = 3;
 
 // Temporary Storage Indexes
 const unsigned storageFirstTemp = 0xFFFFFFFF;
