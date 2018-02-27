@@ -84,6 +84,10 @@ static void drawOutput(Game &game) {
     const int maxLines = maxY-6;
     int lineCount = 0;
 
+    while (!lines.empty() && lines.back().empty()) {
+        lines.pop_back();
+    }
+
     for (int i = lines.size() - 1; i >= 0 && lineCount < maxLines; --i) {
         auto paragraph = wrapString(lines[i], maxX);
         for (int j = paragraph.size() - 1; j >= 0 && lineCount < maxLines; --j) {
