@@ -28,8 +28,11 @@ CHARACTER the-gnoll {
         skl-toughness 14;
         skl-void-magic 4;
     );
-    baseAbilities list(
+    base-abilities list(
         act-punch
+    );
+    extra-abilities list(
+        act-nothing
     );
     gear list(
         common-sword
@@ -46,9 +49,16 @@ CHARACTER imp-1 {
         defaults;
     );
     ai {
+        // 1-in-3 chance of performing a whirlwind attack
+        0 2 random do-whirl jump-false
+
         *_0 $faction get-property random-not-faction
         _1 stk-swap store
         act-thrust $combat-node get-property do-node
+        end
+
+        LABEL do-whirl
+        act-swing $combat-node get-property do-node
     };
 }
 CHARACTER imp-2 {
@@ -62,24 +72,20 @@ CHARACTER imp-2 {
         skl-melee 4;
     );
     ai {
-        *_0 $faction get-property random-not-faction
-        _1 stk-swap store
-        act-thrust $combat-node get-property do-node
+        imp-1 $ai get-property do-node
     };
 }
 CHARACTER imp-3 {
     article "a ";
     name "female imp";
-    sex sex-male;
+    sex sex-female;
     species spc-human;
     faction 1;
     skills skillset(
         defaults;
     );
     ai {
-        *_0 $faction get-property random-not-faction
-        _1 stk-swap store
-        act-thrust $combat-node get-property do-node
+        imp-1 $ai get-property do-node
     };
 }
 

@@ -120,11 +120,12 @@ CHARACTER the-player {
         common-sword
         loincloth
     );
-    baseAbilities list(
+    base-abilities list(
         act-punch
     );
-    extraAbilities list(
+    extra-abilities list(
         act-fireball
+        act-nothing
     );
 }
 
@@ -243,7 +244,6 @@ ACTION act-swing {
         *_8 $faction get-property *_7 skip-me jump-eq
 
         // do skill check
-        "\n" say
         _0 fetch skl-melee 0 25 skill-check
         0 hit-missed jump-lt
 
@@ -262,10 +262,6 @@ ACTION act-swing {
         _8 *_9 combatant store    // check if combatant valid
         *_8 swing-start jump-true // if so, restart loop
         "\n" say                  // otherwise, all done
-    };
-    peace-node {
-        "You brandish the sword wildly." say
-        add-return
     };
 }
 
@@ -287,9 +283,13 @@ ACTION act-thrust {
         LABEL hit-missed
         *_1 say-uf >" avoids the strike!\n"
     };
-    peace-node {
-        >"You brandish the sword wildly."
-        add-return
+}
+
+ACTION act-nothing {
+    name "do nothing";
+    target target-none;
+    combat-node {
+        *_0 say-uf >" does nothing.\n"
     };
 }
 
