@@ -273,17 +273,22 @@ ACTION act-thrust {
     name "thrust";
     target target-enemy;
     combat-node {
-        >"\n"
-        *_0 $faction get-property
-        *_1 say-uf
-        " breaks into dance.\n" say
-        *_0 $faction get-property
-        random-of-faction
-        say-uf
-        " appluads loudly.\n" say
+        *_0 say-uf >" thrusts " *_0 pro-adject say-pronoun >" sword at " *_1 say >". "
+
+        *_0 fetch skl-melee 0 25 skill-check
+        0 hit-missed jump-lt
+
+        // a hit!
+        *_1 say-uf >" is hit!\n"
+        *_1 39 skl-health dt-cutting do-damage
+        end
+
+        // missed!
+        LABEL hit-missed
+        *_1 say-uf >" avoids the strike!\n"
     };
     peace-node {
-        "You brandish the sword wildly." say
+        >"You brandish the sword wildly."
         add-return
     };
 }

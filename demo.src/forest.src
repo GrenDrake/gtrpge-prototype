@@ -46,8 +46,9 @@ CHARACTER imp-1 {
         defaults;
     );
     ai {
-        *_0 say-uf
-        " sings \"Dance magic, dance!\"\n" say
+        *_0 $faction get-property random-not-faction
+        _1 stk-swap store
+        act-thrust $combat-node get-property do-node
     };
 }
 CHARACTER imp-2 {
@@ -61,7 +62,9 @@ CHARACTER imp-2 {
         skl-melee 4;
     );
     ai {
-        act-swing $combat-node get-property do-node
+        *_0 $faction get-property random-not-faction
+        _1 stk-swap store
+        act-thrust $combat-node get-property do-node
     };
 }
 CHARACTER imp-3 {
@@ -73,6 +76,11 @@ CHARACTER imp-3 {
     skills skillset(
         defaults;
     );
+    ai {
+        *_0 $faction get-property random-not-faction
+        _1 stk-swap store
+        act-thrust $combat-node get-property do-node
+    };
 }
 
 /* ************************************************************************* *
