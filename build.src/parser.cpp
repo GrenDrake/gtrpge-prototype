@@ -171,7 +171,20 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
     }
     ++cur;
 
-
+    auto identIter = obj->properties.find(propIdent);
+    if (identIter == obj->properties.end()) {
+        obj->properties.insert(std::make_pair(propIdent, Value(ObjectDef::nextIdent)));
+        ++ObjectDef::nextIdent;
+    } else {
+        if (identIter->second.type != Value::Integer) {
+            throw BuildError(origin, "Ident property must be integer.");
+        }
+        std::uint32_t identValue = identIter->second.value;
+        if (identValue < ObjectDef::nextIdent) {
+            throw BuildError(origin, "Manual ident property too low.");
+        }
+        ObjectDef::nextIdent = identValue + 1;
+    }
     obj->properties.insert(std::make_pair(propInternalName, Value(gameData.addString(obj->name))));
     return obj;
 }

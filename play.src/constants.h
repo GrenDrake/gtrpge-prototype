@@ -76,6 +76,7 @@ const int propTarget            = 30;
 const int propBody              = 31;
 const int propLocation          = 32;
 const int propDuration          = 33;
+const int propIdent             = 34;
 
 const int propFirstCustom       = 256;
 

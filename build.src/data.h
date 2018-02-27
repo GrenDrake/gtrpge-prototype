@@ -96,6 +96,8 @@ public:
     static void setPropertyIdent(const std::string &name, std::uint16_t id);
     static std::uint16_t getPropertyIdent(const std::string &propertyName);
 
+    static std::uint32_t nextIdent;
+
     virtual size_t getSize() const {
         // idObject + propCount + (properties * 6)
         return 3 + properties.size() * 6;

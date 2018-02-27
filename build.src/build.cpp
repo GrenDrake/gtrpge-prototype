@@ -131,6 +131,7 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("body", propBody);
     ObjectDef::setPropertyIdent("duration", propDuration);
     ObjectDef::setPropertyIdent("location", propLocation);
+    ObjectDef::setPropertyIdent("ident", propIdent);
 
     try {
         std::vector<SymbolDef> symbols;

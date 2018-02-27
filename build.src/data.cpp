@@ -18,6 +18,8 @@ void writeLabelValue(std::ostream &out, const std::string &labelName);
 std::unordered_map<std::string, std::uint16_t> ObjectDef::propertyNames;
 std::uint16_t ObjectDef::nextProperty = propFirstCustom;
 
+std::uint32_t ObjectDef::nextIdent = 1;
+
 void ObjectDef::setPropertyIdent(const std::string &name, std::uint16_t id) {
     auto iter = propertyNames.find(name);
     if (iter != propertyNames.end()) {
