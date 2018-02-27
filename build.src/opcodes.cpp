@@ -87,6 +87,7 @@ Command commands[] = {
     { "party-at",           opPartyAt,          0 },
     { "get-equip",          opGetEquip,         0 },
     { "set-equip",          opSetEquip,         0 },
+    { "random",             opRandom,           0 },
 };
 
 const Command* getCommand(const std::string name) {

@@ -174,6 +174,7 @@ const int opCombatStatus    = 0xCB;
 const int opPartyAt         = 0xCC;
 const int opGetEquip        = 0xCD;
 const int opSetEquip        = 0xCE;
+const int opRandom          = 0xCF;
 
 const int optionNameContinue    = 1;
 const int optionNameCancel      = 2;

@@ -553,6 +553,13 @@ std::uint32_t Game::doNode(std::uint32_t address) {
                 who->gear[slot] = a1;
                 break; }
 
+            case opRandom:
+                a2 = stack.pop();
+                a1 = stack.pop();
+                a3 = a2 - a1;
+                stack.push(a1 + rand() % (a3 + 1));
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;
