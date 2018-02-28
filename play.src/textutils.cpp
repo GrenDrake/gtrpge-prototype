@@ -82,3 +82,27 @@ std::vector<std::string> wrapString(const std::string &text, unsigned width) {
 
     return results;
 }
+
+std::string& tidyString(std::string &text) {
+
+    size_t cur = 1;
+
+    while (cur < text.size()) {
+        if (text[cur] == '\t') text[cur] = ' ';
+        if (text[cur] == '\r') text[cur] = '\n';
+        
+        if (isspace(text[cur]) && text[cur] == text[cur - 1]) {
+            text.erase(cur, 1);
+        } else if (text[cur - 1] == '\n' && isspace(text[cur])) {
+            text.erase(cur, 1);
+        } else if (text[cur] == '\n' && isspace(text[cur - 1])) {
+            text.erase(cur - 1, 1);
+            --cur;
+        } else {
+            ++cur;
+        }
+    }
+
+    return text;
+}
+

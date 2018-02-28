@@ -206,6 +206,7 @@ std::string toUpperFirst(std::string text);
 std::string trim(std::string text);
 std::vector<std::string> explodeString(const std::string &text, int onChar = '\n');
 std::vector<std::string> wrapString(const std::string &text, unsigned width);
+std::string& tidyString(std::string &text);
 
 const int hoursPerDay = 24;
 const int minutesPerDay = 1440;
