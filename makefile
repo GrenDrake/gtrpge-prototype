@@ -5,9 +5,13 @@ BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o \
 		   build.src/opcodes.o
 BUILD_TARGET=./build
 
-PLAY_LIBS=-lncurses
-PLAY_NCURSES=play.src/nc_play.o play.src/nc_inv.o play.src/nc_char.o play.src/nc_util.o
-PLAY_OBJS=$(PLAY_NCURSES) play.src/textutils.o play.src/game.o play.src/game_donode.o
+NCURSES_LIBS=-lncurses
+NCURSES=play.src/curses/core.o play.src/curses/inventory.o play.src/curses/charsheet.o play.src/curses/utility.o
+
+PLAY_LIBS=$(NCURSES_LIBS)
+PLAY_UI=$(NCURSES)
+
+PLAY_OBJS=$(PLAY_UI) play.src/textutils.o play.src/game.o play.src/game_donode.o
 PLAY_TARGET=./play
 
 all: $(BUILD_TARGET) $(PLAY_TARGET) game.bin

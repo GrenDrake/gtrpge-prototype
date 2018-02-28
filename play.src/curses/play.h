@@ -2,7 +2,7 @@
 #define NC_PLAY_H
 
 #include <string>
-#include "play.h"
+#include "../play.h"
 
 void drawStatus(Game &game);
 void doCharacter(Game &game);

@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include <sstream>
 
-#include "nc_play.h"
+#include "play.h"
 
 const int modeStats   = 0;
 const int modeGear    = 1;

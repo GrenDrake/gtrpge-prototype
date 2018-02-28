@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include <string>
 
-#include "nc_play.h"
+#include "play.h"
 
 bool getYesNo(const std::string &prompt, bool defaultAnswer) {
     int maxX = 0, maxY = 0;

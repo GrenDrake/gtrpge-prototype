@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include <sstream>
 
-#include "nc_play.h"
+#include "play.h"
 
 const int invPerPage = 9;
 

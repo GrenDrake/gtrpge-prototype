@@ -6,7 +6,7 @@
 #include <sstream>
 #include <vector>
 
-#include "nc_play.h"
+#include "play.h"
 
 const int maxOutputBuffer = 4096;
 char gamefile[64] = "game.bin";
