@@ -88,11 +88,7 @@ void Game::clearOutput() {
 
 std::string Game::getOutput() const {
     std::string text = outputBuffer;
-    auto new_end =
-        std::unique(text.begin(), text.end(),
-            [](char lhs, char rhs){ return (lhs == rhs) && (lhs == ' ' || lhs == '\n'); }
-        );
-    text.erase(new_end, text.end());
+    tidyString(text);
     return trim(text);
 }
 
