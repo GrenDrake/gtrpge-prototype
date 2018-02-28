@@ -4,7 +4,13 @@
 #include <string>
 #include "../play.h"
 
+void addToOutput(const std::string &text);
+const std::string& getOutput();
 void drawStatus(Game &game);
+
+void drawOutput(Game &game);
+void drawOptions(Game &game);
+
 void doCharacter(Game &game);
 void doInventory(Game &game);
 
