@@ -292,7 +292,7 @@ SCENE start {
     body {
         >"Welcome to the game!"
         "Create a new character" chargen-sex add-option
-        forest-event-setup do-node
+        0 forest-event-setup call
     };
 }
 
@@ -331,6 +331,6 @@ SCENE chargen-done {
         the-player get-species say
         >". Beginning the game now.\n* * * * * * * * * *\n"
         start-game
-        forest-path do-node
+        0 forest-path call
     };
 }

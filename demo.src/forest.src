@@ -52,12 +52,12 @@ CHARACTER imp-1 {
         0 2 random do-whirl jump-false
 
         *_0 $faction get-property random-not-faction
-        _1 stk-swap store
-        act-thrust $combat-node get-property do-node
+        *_0 2 act-thrust $combat-node get-property call
         end
 
         LABEL do-whirl
-        act-swing $combat-node get-property do-node
+        *_0 1 
+        act-swing $combat-node get-property call
     };
 }
 CHARACTER imp-2 {
@@ -71,7 +71,7 @@ CHARACTER imp-2 {
         skl-melee 4;
     );
     ai {
-        imp-1 $ai get-property do-node
+        *_0 1 imp-1 $ai get-property call
     };
 }
 CHARACTER imp-3 {
@@ -84,7 +84,7 @@ CHARACTER imp-3 {
         defaults;
     );
     ai {
-        imp-1 $ai get-property do-node
+        *_0 1 imp-1 $ai get-property call
     };
 }
 
@@ -330,8 +330,7 @@ SCENE entering-cabin {
         flg-visited-gnoll true store
         "You hear the voice of the gnoll call out from inside. \"Come on in!\"\n\n"
         say
-        push inside-cabin
-        do-node
+        0 inside-cabin call
     };
 }
 
@@ -376,8 +375,9 @@ SCENE deep-forest {
 
 SCENE forest-do-event {
     body {
-        forest-events fetch random-from-list
-        do-node
+        0
+        *forest-events random-from-list
+        call
     };
 }
 SCENE forest-event-setup {

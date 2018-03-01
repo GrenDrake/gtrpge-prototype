@@ -126,6 +126,11 @@ td.table-zone-header {
 <tr>
     <td colspan='4' class='table-zone-header' id='toc-c'>C</td>
 </tr><tr>
+    <td>[...] [arg count] [node-address]</td>
+    <td class='command'>call</td>
+    <td></td>
+    <td>Evaluates the node located at <i>node-address</i>, setting the first arg-count temp storage values to those provided for the duration of the call. Values are assigned from right to left (so _0 becomes the rightmost argument).</td>
+</tr><tr>
     <td>[list id]</td>
     <td class='command'>create-list</td>
     <td></td>
@@ -159,11 +164,6 @@ td.table-zone-header {
     <td class='command'>do-damage</td>
     <td></td>
     <td></td>
-</tr><tr>
-    <td>[node-address]</td>
-    <td class='command'>do-node</td>
-    <td></td>
-    <td>Evaluates the node located at <i>node-address</i>.</td>
 </tr></tr>
     <td>[time-in-minutes]</td>
     <td class='command'>do-rest</td>

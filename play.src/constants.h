@@ -99,7 +99,7 @@ const int targetAny         = 3;
 
 // Opcode/command numbers
 const int opEnd             = 0x00;
-const int opDoNode          = 0x01;
+const int opCallNode        = 0x01;
 const int opSetLocation     = 0x02;
 const int opStartGame       = 0x04;
 const int opAddTime         = 0x05;

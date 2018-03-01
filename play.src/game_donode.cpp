@@ -60,10 +60,24 @@ std::uint32_t Game::doNode(std::uint32_t address) {
                 } else {
                     return stack.pop();
                 }
-            case opDoNode:
-                a1 = call(stack.pop(), false, false);
+            case opCallNode: {
+                a2 = stack.pop();
+                a1 = stack.pop();
+                std::uint32_t curTemp[storageTempCount];
+                for (unsigned i = 0; i < storageTempCount; ++i) {
+                    curTemp[i] = storage[storageFirstTemp - i];
+                    if (i < a1) {
+                        setTemp(i, stack.pop());
+                    } else {
+                        setTemp(i, 0);
+                    }
+                }
+                a1 = call(a2, false, false);
                 stack.push(a1);
-                break;
+                for (unsigned i = 0; i < storageTempCount; ++i) {
+                    storage[storageFirstTemp - i] = curTemp[i];
+                }
+                break; }
             case opStartGame: // start-game;
                 gameStarted = true;
                 break;
