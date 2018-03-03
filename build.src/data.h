@@ -148,7 +148,7 @@ public:
     }
     virtual void write(std::ostream &out);
     virtual std::string getTypeName() const {
-        return "SKILLSET";
+        return "MAP";
     }
 
     std::unordered_map<std::string, Value> skillMap;

@@ -22,7 +22,7 @@ CHARACTER the-gnoll {
     sex sex-male;
     species spc-gnoll;
     faction 0;
-    skills skillset(
+    skills map(
         defaults;
         skl-strength 12;
         skl-toughness 14;
@@ -44,7 +44,7 @@ CHARACTER imp-1 {
     sex sex-male;
     species spc-human;
     faction 1;
-    skills skillset(
+    skills map(
         defaults;
     );
     ai {
@@ -56,7 +56,7 @@ CHARACTER imp-1 {
         end
 
         LABEL do-whirl
-        *_0 1 
+        *_0 1
         act-swing $combat-node get-property call
     };
 }
@@ -66,7 +66,7 @@ CHARACTER imp-2 {
     sex sex-male;
     species spc-human;
     faction 1;
-    skills skillset(
+    skills map(
         defaults;
         skl-melee 4;
     );
@@ -80,7 +80,7 @@ CHARACTER imp-3 {
     sex sex-female;
     species spc-human;
     faction 1;
-    skills skillset(
+    skills map(
         defaults;
     );
     ai {

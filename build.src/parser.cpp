@@ -229,7 +229,7 @@ std::string Parser::doList() {
 std::string Parser::doSkillSet(bool setDefaults) {
     const Origin &origin = cur->origin;
     std::stringstream ss;
-    ss << "__an_skillset_" << anonymousCounter;
+    ss << "__an_map_" << anonymousCounter;
     ++anonymousCounter;
 
     require(Token::OpenParan, true);
@@ -307,7 +307,7 @@ Value Parser::doProperty(const std::string &forName) {
         if (matches(Token::OpenParan)) {
             if (name == "list") {
                 name = doList();
-            } else if (name == "skillset") {
+            } else if (name == "map") {
                 name = doSkillSet();
             } else if (name == "flags") {
                 Value flagSet(Value::FlagSet);

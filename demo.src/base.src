@@ -109,7 +109,7 @@ CHARACTER the-player {
     sex sex-neuter;
     species spc-human;
     faction 0;
-    skills skillset(
+    skills map(
         defaults;
         skl-strength 12;
         skl-toughness 14;
@@ -168,7 +168,7 @@ ITEM plate-armour {
     name    "suit of plate armour";
     plural  "suits of plate armour";
     slot    "body";
-    skills skillset(
+    skills map(
         skl-strength 50;
         skl-dexterity -3;
     );
