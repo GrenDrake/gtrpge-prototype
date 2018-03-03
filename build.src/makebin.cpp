@@ -28,7 +28,7 @@ static uint32_t processValue(const Origin &origin, const std::map<std::string, u
         case Value::Integer:
             return value.value;
         case Value::Global:
-        case Value::Identifier:
+        case Value::Identifier: {
             const auto &v = labels.find(value.text);
             if (v != labels.end()) {
                 return v->second;
@@ -42,7 +42,17 @@ static uint32_t processValue(const Origin &origin, const std::map<std::string, u
                 }
             }
             std::cerr << "WARNING: " << origin << " Unknown symbol " << value.text << '\n';
-            return 0;
+            return 0; }
+        case Value::FlagSet: {
+            std::uint32_t result = 0;
+
+            if (!value.mFlagSet.empty()) {
+                for (auto &flg : value.mFlagSet) {
+                    std::uint32_t value = processValue(origin, labels, flg, "");
+                    result |= value;
+                }
+            }
+            return result; }
     }
     return 0;
 }

@@ -20,7 +20,7 @@ public:
 class Value {
 public:
     enum Type {
-        Identifier, Global, Integer
+        Identifier, Global, Integer, FlagSet
     };
 
     Value()
@@ -35,12 +35,16 @@ public:
     explicit Value(int value)
     : type(Integer), value(value)
     { }
+    explicit Value(Type type)
+    : type(type), value(0)
+    { }
 
     bool operator==(const Value &rhs) const;
 
     Type type;
     std::string text;
     int value;
+    std::vector<Value> mFlagSet;
 };
 
 class Statement {

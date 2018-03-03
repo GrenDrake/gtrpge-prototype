@@ -309,6 +309,11 @@ Value Parser::doProperty(const std::string &forName) {
                 name = doList();
             } else if (name == "skillset") {
                 name = doSkillSet();
+            } else if (name == "flags") {
+                Value flagSet(Value::FlagSet);
+                flagSet.mFlagSet = doFlags();
+                require(Token::Semicolon, true);
+                return flagSet;
             } else {
                 throw BuildError(origin, "Unknown property type name " + name + ".");
             }
