@@ -17,8 +17,8 @@ public:
     struct Character {
         std::uint32_t def;
         std::uint32_t sex, species;
-        std::array<std::int8_t, sklCount> skillAdj;
-        std::array<std::uint8_t, sklCount> skillCur;
+        std::array<std::int16_t, sklCount> skillAdj;
+        std::array<std::uint16_t, sklCount> skillCur;
         std::map<std::uint32_t, std::uint32_t> gear;
     };
 
@@ -96,6 +96,7 @@ public:
     bool isKOed(std::uint32_t cRef);
     int skillRecoveryRate(int skillNo);
     bool testSkillFlags(int skillNo, uint32_t flags);
+    std::uint32_t getSkillDefault(int skillNo);
     int getSkillMax(std::uint32_t cRef, int skillNo);
     int getSkillCur(std::uint32_t cRef, int skillNo);
     std::vector<std::uint32_t> getActions(std::uint32_t cRef);
@@ -136,6 +137,8 @@ private:
     int getType(std::uint32_t address) const;
     bool isType(std::uint32_t address, uint8_t type) const;
     const char *getString(std::uint32_t address) const;
+    std::uint32_t getFromMap(std::uint32_t address, std::uint32_t value) const;
+    bool mapHasValue(std::uint32_t address, std::uint32_t value) const;
 
     // ////////////////////////////////////////////////////////////////////////
     // Character Management                                                  //

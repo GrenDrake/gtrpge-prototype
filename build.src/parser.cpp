@@ -236,18 +236,8 @@ std::string Parser::doSkillSet(bool setDefaults) {
     std::shared_ptr<SkillSet> skillset(new SkillSet);
     skillset->origin = origin;
     skillset->name = ss.str();
-    skillset->setDefaults = setDefaults;
     while (!matches(Token::CloseParan)) {
-        require(Token::Identifier);
-        const std::string &name = cur->text;
-        ++cur;
-
-        if (name == "defaults") {
-            skillset->setDefaults = true;
-            require(Token::Semicolon, true);
-            continue;
-        }
-
+        const Value &name = doValue();
         const Value &v = doValue();
         require(Token::Semicolon, true);
         skillset->skillMap.insert(std::make_pair(name, v));

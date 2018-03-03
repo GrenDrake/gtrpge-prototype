@@ -30,9 +30,12 @@ const int sklDefault        = 12;
 const int sklRecovery       = 16;
 const int sklSize           = 20;
 const int sklCount          = 20;
-const int sklSetSize        = 1 + sklCount * 2;
-
 const int sklX5Multiplier   = 50;
+
+// Map structure
+const int gmapCount         = 1;
+const int gmapHeader        = 5;
+const int gmapEntrySize     = 8;
 
 // SkillDef Flags
 const int sklVariable       = 0x01; // variable stat (like health, energy, mana, corruption, etc.)

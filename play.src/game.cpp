@@ -167,6 +167,36 @@ const char *Game::getString(std::uint32_t address) const {
     return reinterpret_cast<const char*>(&data[address+1]);
 }
 
+std::uint32_t Game::getFromMap(std::uint32_t address, std::uint32_t value) const {
+    if (!isType(address, idSkillSet)) {
+        throw PlayError("Tried to get value from non-map");
+    }
+
+    std::uint32_t mapSize = readWord(address + gmapCount);
+    for (unsigned int i = 0; i < mapSize; ++i) {
+        std::uint32_t key = readWord(address + gmapHeader + i * gmapEntrySize);
+        if (key == value) {
+            return readWord(address + 5 + i * 8 + 4);
+        }
+    }
+    return 0;
+}
+
+bool Game::mapHasValue(std::uint32_t address, std::uint32_t value) const {
+    if (!isType(address, idSkillSet)) {
+        throw PlayError("Tried to check for key in non-map");
+    }
+
+    std::uint32_t mapSize = readWord(address + gmapCount);
+    for (unsigned int i = 0; i < mapSize; ++i) {
+        std::uint32_t key = readWord(address + gmapHeader + i * gmapEntrySize);
+        if (key == value) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::uint32_t Game::getObjectProperty(std::uint32_t objRef, std::uint16_t propId) {
     if (!isType(objRef, idObject)) {
         throw PlayError("Tried to get property of non-object");
@@ -387,7 +417,11 @@ void Game::resetCharacter(std::uint32_t cRef) {
                 if (testSkillFlags(i, sklKOFull)) {
                     c->skillCur[i] = 0;
                 } else {
-                    c->skillCur[i] = readShort(skillSet + 1 + i * 2);
+                    if (mapHasValue(skillSet, i)) {
+                        c->skillCur[i] = getFromMap(skillSet, i);
+                    } else {
+                        c->skillCur[i] = getSkillDefault(i);
+                    }
                     if (testSkillFlags(i, sklX5)) {
                         c->skillCur[i] *= sklX5Multiplier;
                     }
@@ -466,14 +500,20 @@ bool Game::testSkillFlags(int skillNo, uint32_t flags) {
     return (flags & theFlags) == flags;
 }
 
+std::uint32_t Game::getSkillDefault(int skillNo) {
+    return readWord(readWord(headerSkillTable) + sklSize * skillNo + sklDefault);
+}
+
 int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     Character *c = getCharacter(cRef);
     if (!c) return 0;
 
     std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
     int base = 0;
-    if (skillSet != 0) {
-        base = readShort(skillSet + 1 + skillNo * 2);
+    if (skillSet == 0 || !mapHasValue(skillSet, skillNo)) {
+        base = getSkillDefault(skillNo);
+    } else {
+        base = getFromMap(skillSet, skillNo);
     }
 
     for (auto item : c->gear) {

@@ -23,7 +23,6 @@ CHARACTER the-gnoll {
     species spc-gnoll;
     faction 0;
     skills map(
-        defaults;
         skl-strength 12;
         skl-toughness 14;
         skl-void-magic 4;
@@ -45,7 +44,6 @@ CHARACTER imp-1 {
     species spc-human;
     faction 1;
     skills map(
-        defaults;
     );
     ai {
         // 1-in-3 chance of performing a whirlwind attack
@@ -67,7 +65,6 @@ CHARACTER imp-2 {
     species spc-human;
     faction 1;
     skills map(
-        defaults;
         skl-melee 4;
     );
     ai {
@@ -81,7 +78,6 @@ CHARACTER imp-3 {
     species spc-human;
     faction 1;
     skills map(
-        defaults;
     );
     ai {
         *_0 1 imp-1 $ai get-property call

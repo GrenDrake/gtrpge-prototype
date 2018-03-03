@@ -110,7 +110,6 @@ CHARACTER the-player {
     species spc-human;
     faction 0;
     skills map(
-        defaults;
         skl-strength 12;
         skl-toughness 14;
         skl-melee 4;

@@ -2,6 +2,7 @@
 #define DATA_H
 
 #include <array>
+#include <functional>
 #include <memory>
 #include <unordered_map>
 #include <string>
@@ -46,6 +47,31 @@ public:
     int value;
     std::vector<Value> mFlagSet;
 };
+
+namespace std {
+    template <>
+    struct hash<Value> {
+        std::size_t operator()(const Value& k) const {
+            std::size_t result = 0;
+            switch(k.type) {
+                case Value::Identifier:
+                case Value::Global: {
+                    std::hash<std::string> stringHash;
+                    return stringHash(k.text); }
+                case Value::Integer:
+                    return k.value;
+                case Value::FlagSet: {
+                    std::hash<Value> valueHash;
+                    for (const Value &outer : k.mFlagSet) {
+                        result ^= valueHash(outer);
+                    }
+                    return result; }
+                default:
+                    return 0;
+            }
+        }
+    };
+}
 
 class Statement {
 public:
@@ -141,19 +167,18 @@ public:
 class SkillSet : public DataType {
 public:
     SkillSet()
-    : setDefaults(false)
     { }
     virtual size_t getSize() const {
-        return sklSetSize;
+        return 5 + 8 * skillMap.size();
     }
     virtual void write(std::ostream &out);
     virtual std::string getTypeName() const {
         return "MAP";
     }
 
-    std::unordered_map<std::string, Value> skillMap;
-    std::array<std::uint16_t, sklCount> skills;
-    bool setDefaults;
+    std::unordered_map<Value, Value> skillMap;
+    // std::array<std::uint16_t, sklCount> skills;
+    // bool setDefaults;
 };
 
 std::ostream& operator<<(std::ostream &out, const Value &type);

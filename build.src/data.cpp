@@ -57,6 +57,20 @@ bool Value::operator==(const Value &rhs) const {
     if (type == Integer && rhs.value != value) {
         return false;
     }
+    if (type == FlagSet) {
+        if (mFlagSet.size() != rhs.mFlagSet.size()) {
+            return false;
+        }
+        for (const auto &outer : mFlagSet) {
+            for (const auto &inner : mFlagSet) {
+                if (inner == outer) {
+                    continue;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
     return rhs.text == text;
 }
 
@@ -97,9 +111,11 @@ void DataList::write(std::ostream &out) {
 
 void SkillSet::write(std::ostream &out) {
     writeByte(out, idSkillSet);
+    writeWord(out, skillMap.size());
 
-    for (std::uint16_t val : skills) {
-        writeShort(out, val);
+    for (auto iter : skillMap) {
+        writeValue(out, origin, iter.first);
+        writeValue(out, origin, iter.second);
     }
 }
 
