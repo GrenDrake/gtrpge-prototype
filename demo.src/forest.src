@@ -131,7 +131,7 @@ SCENE rest-awhile {
 SCENE rest-awhile-doit {
     body {
         >"You rest for a while. "
-        do-rest
+        *_0 do-rest
         add-return
     };
 }
