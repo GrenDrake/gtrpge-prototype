@@ -9,20 +9,23 @@ public:
         mStack.push_back(value);
     }
     std::uint32_t pop() {
+        if (mStack.empty()) {
+            throw PlayError("stack underflow in VM");
+        }
         std::uint32_t value = mStack.back();
         mStack.pop_back();
         return value;
     }
     std::uint32_t peek(unsigned position = 0) {
         if (position >= mStack.size()) {
-            throw std::runtime_error("stack index out of bounds");
+            throw PlayError("stack index out of bounds in VM");
         }
 
         return mStack[mStack.size() - 1 - position];
     }
     void swap(unsigned pos1 = 0, unsigned pos2 = 1) {
         if (pos1 >= mStack.size() || pos2 >= mStack.size()) {
-            throw std::runtime_error("stack index out of bounds");
+            throw PlayError("stack index out of bounds in VM");
         }
 
         std::uint32_t value = mStack[pos1];
