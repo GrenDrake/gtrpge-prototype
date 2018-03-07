@@ -78,7 +78,7 @@ void Parser::doConstant() {
     if (matches(Token::Integer)) {
         gameData.constants.insert(std::make_pair(name, Value(cur->value)));
     } else if (matches(Token::String)) {
-        std::string labelName = gameData.addString(cur->text);
+        std::string labelName = gameData.addString(cur->text, symbols);
         gameData.constants.insert(std::make_pair(name, Value(labelName)));
     } else {
         throw BuildError(origin, "Constant value must be integer literal or string.");
@@ -115,7 +115,7 @@ void Parser::doDamageTypes() {
         const std::string &typeName = cur->text;
         ++cur;
         require(Token::String);
-        std::string typeRef = gameData.addString(cur->text);
+        std::string typeRef = gameData.addString(cur->text, symbols);
         ++cur;
 
         symbols.add(origin, typeName, SymbolDef::DamageType);
@@ -175,7 +175,7 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
         }
         ObjectDef::nextIdent = identValue + 1;
     }
-    obj->properties.insert(std::make_pair(propInternalName, Value(gameData.addString(obj->name))));
+    obj->properties.insert(std::make_pair(propInternalName, Value(gameData.addString(obj->name, symbols))));
     return obj;
 }
 
@@ -256,7 +256,7 @@ void Parser::doSkill() {
     skill->statSkill = doValue();
 
     require(Token::String);
-    skill->displayName = gameData.addString(cur->text);
+    skill->displayName = gameData.addString(cur->text, symbols);
     ++cur;
 
     require(Token::Integer);
@@ -277,7 +277,7 @@ void Parser::doSkill() {
 Value Parser::doProperty(const std::string &forName) {
     const Origin &origin = cur->origin;
     if (matches(Token::String)) {
-        std::string label = gameData.addString(cur->text);
+        std::string label = gameData.addString(cur->text, symbols);
         ++cur;
         require(Token::Semicolon, true);
         return Value(label);
@@ -406,7 +406,7 @@ void Parser::doStatement(std::shared_ptr<Block> forBlock) {
 
 Value Parser::doValue() {
     if (matches(Token::String)) {
-        std::string label = gameData.addString(cur->text);
+        std::string label = gameData.addString(cur->text, symbols);
         ++cur;
         return Value(label);
     } else if (matches(Token::Identifier)) {

@@ -8,7 +8,7 @@
 class SymbolDef {
 public:
     enum Type {
-        Node, Constant, Item, Sex, Species, Skill, Character, DamageType, ObjectDef, Integer, None
+        Node, Constant, Item, Sex, Species, Skill, Character, DamageType, ObjectDef, Integer, None, String
     };
 
     SymbolDef(const Origin &origin, const std::string &name, Type type)

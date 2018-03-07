@@ -29,13 +29,14 @@ const char* BuildError::what() const throw() {
     return errorMessage;
 }
 
-std::string GameData::addString(const std::string &text) {
+std::string GameData::addString(const std::string &text, SymbolTable &symbols) {
     if (strings.count(text) > 0) {
         return strings[text];
     } else {
         std::stringstream name;
         name << "__s" << nextString++;
         strings.insert(std::make_pair(text, name.str()));
+        symbols.add(Origin(), name.str(), SymbolDef::String);
         return name.str();
     }
 }
@@ -183,7 +184,7 @@ int main(int argc, char *argv[]) {
             // }
         // }
 
-        make_bin(gameData, project->outputFile);
+        make_bin(gameData, project->outputFile, symbols);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
     }

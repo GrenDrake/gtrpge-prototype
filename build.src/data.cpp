@@ -4,6 +4,7 @@
 #include <ostream>
 
 #include "build.h"
+#include "symboltable.h"
 
 void writeByte(std::ostream &out, std::uint8_t value);
 void writeShort(std::ostream &out, std::uint16_t value);
@@ -103,7 +104,7 @@ void DataType::prettyPrint(std::ostream &out) const {
 }
 
 
-void DataList::write(std::ostream &out) {
+void DataList::write(std::ostream &out, const SymbolTable &symbols) {
     writeByte(out, idList);
     writeByte(out, values.size());
     for (const Value &value : values) {
@@ -112,7 +113,7 @@ void DataList::write(std::ostream &out) {
 }
 
 
-void SkillSet::write(std::ostream &out) {
+void SkillSet::write(std::ostream &out, const SymbolTable &symbols) {
     writeByte(out, idSkillSet);
     writeWord(out, skillMap.size());
 
@@ -122,7 +123,7 @@ void SkillSet::write(std::ostream &out) {
     }
 }
 
-void ObjectDef::write(std::ostream &out) {
+void ObjectDef::write(std::ostream &out, const SymbolTable &symbols) {
     writeByte(out, idObject);
     // writeShort(out, properties.size());
 

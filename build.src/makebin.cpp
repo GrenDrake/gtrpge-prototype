@@ -6,6 +6,7 @@
 #include <map>
 
 #include "build.h"
+#include "symboltable.h"
 #include "../play.src/constants.h"
 
 static std::string mangleLabel(const std::string &nodeName, const std::string &original) {
@@ -101,7 +102,7 @@ static void doPositioning(std::map<std::string, unsigned> &labels, std::uint32_t
     }
 }
 
-void make_bin(GameData &gameData, const std::string &outputFile) {
+void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTable &symbols) {
     // if (gameData.nodes.count("start") == 0) {
     //     throw BuildError("Game lacks \"start\" node.");
     // }
@@ -217,7 +218,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
 
     // write remaining game data
     for (auto &dataItem : gameData.dataItems) {
-        dataItem->write(out);
+        dataItem->write(out, symbols);
     }
 
     idByte = idNode;
@@ -250,7 +251,8 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
     writeLabelValue(out, "version");
     writeLabelValue(out, "__skill_table");
     writeLabelValue(out, "__damage_types");
-    writeLabelValue(out, gameData.addString("weapon"));
+    SymbolTable junkTable;
+    writeLabelValue(out, gameData.addString("weapon", junkTable));
 
     time_t theTime = time(nullptr);
     struct tm *aTime = localtime(&theTime);

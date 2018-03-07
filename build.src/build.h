@@ -25,7 +25,7 @@ public:
         skills.push_back(std::shared_ptr<SkillDef>(new SkillDef));
     }
 
-    std::string addString(const std::string &text);
+    std::string addString(const std::string &text, SymbolTable &symbols);
 
     std::unordered_map<std::string, Value> constants;
     std::unordered_map<std::string, std::string> strings;
@@ -176,7 +176,7 @@ std::ostream& operator<<(std::ostream &out, const Token::Type &type);
 std::ostream& operator<<(std::ostream &out, const Token &token);
 
 const Command* getCommand(const std::string name);
-void make_bin(GameData &gameData, const std::string &outputFile);
+void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTable &symbols);
 
 std::string toLowercase(std::string text);
 

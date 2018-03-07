@@ -11,6 +11,8 @@
 
 #include "../play.src/constants.h"
 
+class SymbolTable;
+
 class Command {
 public:
     const char *text;
@@ -110,7 +112,7 @@ public:
 
     }
     virtual size_t getSize() const = 0;
-    virtual void write(std::ostream &out) = 0;
+    virtual void write(std::ostream &out, const SymbolTable &symbols) = 0;
     virtual std::string getTypeName() const = 0;
     void prettyPrint(std::ostream &out) const;
 
@@ -132,7 +134,7 @@ public:
         // idObject + (properties * 6)
         return 1 + properties.size() * objPropSize;
     }
-    virtual void write(std::ostream &out);
+    virtual void write(std::ostream &out, const SymbolTable &symbols);
     virtual std::string getTypeName() const {
         return "OBJECT";
     }
@@ -156,7 +158,7 @@ public:
     virtual size_t getSize() const {
         return 2 + values.size() * 4;
     }
-    virtual void write(std::ostream &out);
+    virtual void write(std::ostream &out, const SymbolTable &symbols);
     virtual std::string getTypeName() const {
         return "LIST";
     }
@@ -171,7 +173,7 @@ public:
     virtual size_t getSize() const {
         return 5 + 8 * skillMap.size();
     }
-    virtual void write(std::ostream &out);
+    virtual void write(std::ostream &out, const SymbolTable &symbols);
     virtual std::string getTypeName() const {
         return "MAP";
     }
