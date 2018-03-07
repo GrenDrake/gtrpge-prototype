@@ -16,4 +16,6 @@ public:
     int line, column;
 };
 
+std::ostream& operator<<(std::ostream &out, const Origin &origin);
+
 #endif

@@ -12,16 +12,9 @@
 
 #include "errorlog.h"
 #include "origin.h"
+#include "builderror.h"
 
-class BuildError : public std::runtime_error {
-public:
-    BuildError(const std::string &msg);
-    BuildError(const Origin &origin, const std::string &msg);
-    virtual const char* what() const throw();
-private:
-    static const int errorMessageLength = 128;
-    char errorMessage[errorMessageLength];
-};
+class SymbolTable;
 
 #include "data.h"
 class GameData {
@@ -141,25 +134,10 @@ private:
     int line, column;
 };
 
-class SymbolDef {
-public:
-    enum Type {
-        Node, Constant, Item, Sex, Species, Skill, Character, DamageType, ObjectDef
-    };
-
-    SymbolDef(const Origin &origin, const std::string &name, Type type)
-    : origin(origin), name(name), type(type)
-    { }
-
-    Origin origin;
-    std::string name;
-    Type type;
-};
-
 struct ObjectDefSpecialization;
 class Parser {
 public:
-    Parser(GameData &gameData, std::vector<SymbolDef> &symbols)
+    Parser(GameData &gameData, SymbolTable &symbols)
     : symbols(symbols), gameData(gameData), anonymousCounter(0), skillCounter(1)
     { }
 
@@ -186,9 +164,7 @@ private:
     bool matches(Token::Type type);
     bool matches(const std::string &text);
 
-    void checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type);
-
-    std::vector<SymbolDef> &symbols;
+    SymbolTable &symbols;
     std::list<Token>::iterator cur;
     GameData &gameData;
     int anonymousCounter;
@@ -197,7 +173,6 @@ private:
 
 std::string readFile(const std::string &file);
 std::ostream& operator<<(std::ostream &out, const Token::Type &type);
-std::ostream& operator<<(std::ostream &out, const Origin &origin);
 std::ostream& operator<<(std::ostream &out, const Token &token);
 
 const Command* getCommand(const std::string name);

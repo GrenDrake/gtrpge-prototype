@@ -3,17 +3,7 @@
 #include <sstream>
 
 #include "build.h"
-
-void Parser::checkSymbol(const Origin &origin, const std::string &name, SymbolDef::Type type) {
-    for (const auto &i : symbols) {
-        if (i.name == name) {
-            std::stringstream ss;
-            ss << "Symbol " << name << " was already defined at " << i.origin << ".";
-            throw BuildError(origin, ss.str());
-        }
-    }
-    symbols.push_back(SymbolDef(origin, name, type));
-}
+#include "symboltable.h"
 
 struct ObjectDefSpecialization {
     std::string name;
@@ -82,7 +72,7 @@ void Parser::doConstant() {
     require("constant");
     require(Token::Identifier);
     const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Constant);
+    symbols.add(origin, name, SymbolDef::Constant);
     ++cur;
 
     if (matches(Token::Integer)) {
@@ -103,7 +93,7 @@ void Parser::doNode() {
     require(Token::Identifier);
 
     std::string nodeName = cur->text;
-    checkSymbol(origin, nodeName, SymbolDef::Node);
+    symbols.add(origin, nodeName, SymbolDef::Node);
 
     ++cur;
     std::shared_ptr<Block> block(doBlock());
@@ -128,7 +118,7 @@ void Parser::doDamageTypes() {
         std::string typeRef = gameData.addString(cur->text);
         ++cur;
 
-        checkSymbol(origin, typeName, SymbolDef::DamageType);
+        symbols.add(origin, typeName, SymbolDef::DamageType);
         gameData.constants.insert(std::make_pair(typeName, Value(typeNumber++)));
         gameData.damageTypes.push_back(typeRef);
     }
@@ -148,7 +138,7 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
     std::shared_ptr<ObjectDef> obj(new ObjectDef);
     obj->origin = origin;
     obj->name = cur->text;
-    checkSymbol(origin, cur->text, SymbolDef::ObjectDef);
+    symbols.add(origin, cur->text, SymbolDef::ObjectDef);
     ++cur;
     require(Token::OpenBrace, true);
     while (!matches(Token::CloseBrace)) {
@@ -253,7 +243,7 @@ void Parser::doSkill() {
     require("skill");
     require(Token::Identifier);
     const std::string &name = cur->text;
-    checkSymbol(origin, name, SymbolDef::Skill);
+    symbols.add(origin, name, SymbolDef::Skill);
     ++cur;
 
     // create constant with skill name

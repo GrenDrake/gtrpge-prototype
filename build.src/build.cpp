@@ -10,7 +10,7 @@
 #include "project.h"
 #include "build.h"
 #include "data.h"
-
+#include "symboltable.h"
 
 BuildError::BuildError(const std::string &msg)
 : std::runtime_error(msg), errorMessage("")
@@ -133,9 +133,8 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("location", propLocation);
     ObjectDef::setPropertyIdent("ident", propIdent);
 
+    SymbolTable symbols;
     try {
-        std::vector<SymbolDef> symbols;
-
         Parser parser(gameData, symbols);
         for (const std::string &file : project->sourceFiles) {
             lexer.doFile(file);
@@ -147,17 +146,7 @@ int main(int argc, char *argv[]) {
             parser.parseTokens(lexer.tokens.begin(), lexer.tokens.end());
         }
 
-        bool hasStartSymbol = false;
-        for (const auto &symbol : symbols) {
-            if (symbol.name == "start") {
-//                if (symbol.type != SymbolDef::Node) {
-//                    std::cerr << symbol.origin << " Start node must be node.\n";
-//                    return 1;
-//                }
-                hasStartSymbol = true;
-            }
-        }
-        if (!hasStartSymbol) {
+        if (!symbols.exists("start")) {
             std::cerr << "FATAL: No start node defined.\n";
             delete project;
             return 1;
