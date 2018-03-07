@@ -1,9 +1,9 @@
 CXXFLAGS=-Wall -g -std=c++11 -pedantic
 
 BUILD_OBJS=build.src/build.o build.src/lexer.o build.src/parser.o \
-           build.src/makebin.o build.src/data.o build.src/project.o \
-BUILD_TARGET=./build
+		   build.src/makebin.o build.src/data.o build.src/project.o \
 		   build.src/opcodes.o build.src/symboltable.o
+BUILD_TARGET=./build
 
 NCURSES_LIBS=-lncurses
 NCURSES=play.src/curses/core.o play.src/curses/inventory.o \
@@ -45,6 +45,6 @@ tests/game_tests: tests/game_tests.o play.src/game.o play.src/game_donode.o
 
 
 clean:
-	$(RM) build.src/*.o play.src/*.o tests/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)
+	$(RM) build.src/*.o play.src/*.o play.src/curses/*.o tests/*.o game.bin $(BUILD_TARGET) $(PLAY_TARGET)
 
 .PHONY: all clean tests
