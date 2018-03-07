@@ -1,5 +1,6 @@
 #include <array>
 #include <iomanip>
+#include <iostream>
 #include <ostream>
 
 #include "build.h"
@@ -11,6 +12,8 @@ void writeWord(std::ostream &out, std::uint32_t value);
 void writeValue(std::ostream &out, const Origin &origin, const Value &value);
 void writeFlags(std::ostream &out, const Origin &origin, const std::vector<Value> &flags);
 void writeLabelValue(std::ostream &out, const std::string &labelName);
+
+uint32_t processValue(const Origin &origin, const Value &value, const std::string &nodeName);
 
 /* ************************************************************************
  * OBJECT DEF STUFF                                                       */
@@ -121,9 +124,23 @@ void SkillSet::write(std::ostream &out) {
 
 void ObjectDef::write(std::ostream &out) {
     writeByte(out, idObject);
-    writeShort(out, properties.size());
-    for (auto prop : properties) {
+    // writeShort(out, properties.size());
+
+    for (auto iter = properties.begin(); iter != properties.end(); ++iter) {
+    // for (auto prop : properties) {
+        auto prop = *iter;
+        std::uint32_t nextPos = 0;
+        if (std::next(iter) != properties.end()) {
+            nextPos = out.tellp();
+            nextPos += objPropSize;
+        }
+
+        //  prop-id  type-id  padd  next  value
+        //  0/2      2/1      3/1   4/4   8/4
         writeShort(out, prop.first);
+        writeByte(out, 0); // type ID
+        writeByte(out, 0); // padding
+        writeWord(out, nextPos);
         writeValue(out, origin, prop.second);
     }
 }

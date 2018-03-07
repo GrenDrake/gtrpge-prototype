@@ -23,7 +23,7 @@ unsigned getLabel(const std::string &name) {
     return 0;
 }
 
-static uint32_t processValue(const Origin &origin, const std::map<std::string, unsigned> &labels, const Value &value, const std::string &nodeName) {
+uint32_t processValue(const Origin &origin, const Value &value, const std::string &nodeName) {
     switch(value.type) {
         case Value::Integer:
             return value.value;
@@ -48,7 +48,7 @@ static uint32_t processValue(const Origin &origin, const std::map<std::string, u
 
             if (!value.mFlagSet.empty()) {
                 for (auto &flg : value.mFlagSet) {
-                    std::uint32_t value = processValue(origin, labels, flg, "");
+                    std::uint32_t value = processValue(origin, flg, "");
                     result |= value;
                 }
             }
@@ -70,7 +70,7 @@ void writeWord(std::ostream &out, std::uint32_t value) {
 }
 
 void writeValue(std::ostream &out, const Origin &origin, const Value &value) {
-    std::uint32_t result = processValue(origin, labels, value, "");
+    std::uint32_t result = processValue(origin, value, "");
     writeWord(out, result);
 }
 
@@ -79,7 +79,7 @@ void writeFlags(std::ostream &out, const Origin &origin, const std::vector<Value
 
     if (!flags.empty()) {
         for (auto &flg : flags) {
-            std::uint32_t value = processValue(origin, labels, flg, "");
+            std::uint32_t value = processValue(origin, flg, "");
             result |= value;
         }
     }
@@ -236,7 +236,7 @@ void make_bin(GameData &gameData, const std::string &outputFile) {
             auto cur = stmt->parts.begin();
             ++cur;
             while (cur != stmt->parts.end()) {
-                uint32_t v = processValue(stmt->origin, labels, *cur, nodeName);
+                uint32_t v = processValue(stmt->origin, *cur, nodeName);
                 out.write((const char *)&v, 4);
                 ++cur;
             }

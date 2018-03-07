@@ -202,16 +202,15 @@ std::uint32_t Game::getObjectProperty(std::uint32_t objRef, std::uint16_t propId
         throw PlayError("Tried to get property of non-object");
     }
 
-    const std::uint16_t propCount = readShort(objRef + 1);
-    std::uint32_t propValue = 0;
-    for (std::uint16_t i = 0; i < propCount; ++i) {
-        std::uint16_t idHere = readShort(objRef + 3 + i * 6);
-        if (idHere == propId) {
-            propValue = readWord(objRef + 5 + i * 6);
-            break;
+    const std::uint32_t firstProperty = objRef + 1;
+    std::uint32_t currentProperty = firstProperty;
+    while (currentProperty) {
+        if (propId == readShort(currentProperty + objPropId)) {
+            return readWord(currentProperty + objPropValue);
         }
+        currentProperty = readWord(currentProperty + objPropNext);
     }
-    return propValue;
+    return 0;
 }
 
 bool Game::objectHasProperty(std::uint32_t objRef, std::uint16_t propId) {
@@ -219,12 +218,13 @@ bool Game::objectHasProperty(std::uint32_t objRef, std::uint16_t propId) {
         throw PlayError("Tried to test property of non-object");
     }
 
-    const std::uint16_t propCount = readShort(objRef + 1);
-    for (std::uint16_t i = 0; i < propCount; ++i) {
-        std::uint16_t idHere = readShort(objRef + 3 + i * 6);
-        if (idHere == propId) {
+    const std::uint32_t firstProperty = objRef + 1;
+    std::uint32_t currentProperty = firstProperty;
+    while (currentProperty) {
+        if (propId == readShort(currentProperty + objPropId)) {
             return true;
         }
+        currentProperty = readWord(currentProperty + objPropNext);
     }
     return false;
 }

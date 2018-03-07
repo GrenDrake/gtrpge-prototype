@@ -32,6 +32,13 @@ const int sklSize           = 20;
 const int sklCount          = 20;
 const int sklX5Multiplier   = 50;
 
+// Object Property Structure
+const int objPropId         = 0;
+const int objPropType       = 2;
+const int objPropNext       = 4;
+const int objPropValue      = 8;
+const int objPropSize       = 12;
+
 // Map structure
 const int gmapCount         = 1;
 const int gmapHeader        = 5;

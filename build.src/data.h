@@ -129,8 +129,8 @@ public:
     static std::uint32_t nextIdent;
 
     virtual size_t getSize() const {
-        // idObject + propCount + (properties * 6)
-        return 3 + properties.size() * 6;
+        // idObject + (properties * 6)
+        return 1 + properties.size() * objPropSize;
     }
     virtual void write(std::ostream &out);
     virtual std::string getTypeName() const {
