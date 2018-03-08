@@ -135,6 +135,9 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("ident", propIdent);
 
     SymbolTable symbols;
+    symbols.add(Origin(), "true", SymbolDef::Constant);
+    symbols.add(Origin(), "false", SymbolDef::Constant);
+
     try {
         Parser parser(gameData, symbols);
         for (const std::string &file : project->sourceFiles) {

@@ -206,6 +206,7 @@ std::string Parser::doList() {
     std::shared_ptr<DataList> list(new DataList);
     list->origin = origin;
     list->name = ss.str();
+    symbols.add(origin, list->name, SymbolDef::List);
     while (!matches(Token::CloseParan)) {
         Value v = doValue();
         list->values.push_back(v);
@@ -226,6 +227,7 @@ std::string Parser::doSkillSet(bool setDefaults) {
     std::shared_ptr<SkillSet> skillset(new SkillSet);
     skillset->origin = origin;
     skillset->name = ss.str();
+    symbols.add(origin, skillset->name, SymbolDef::Map);
     while (!matches(Token::CloseParan)) {
         const Value &name = doValue();
         const Value &v = doValue();
@@ -313,6 +315,7 @@ Value Parser::doProperty(const std::string &forName) {
         node->name = ss.str();
         gameData.nodes.push_back(node);
         require(Token::Semicolon, true);
+        symbols.add(origin, node->name, SymbolDef::Node);
         return Value(node->name);
     } else if (matches(Token::Integer)) {
         int v = cur->value;
