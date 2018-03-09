@@ -195,10 +195,10 @@ ITEM gnoll-potion {
     on-use {
         gnoll-potion 1 remove-items
         add-return
-        get-species the-player
+        the-player get-species
         spc-gnoll already-gnoll jump-eq
 
-        set-species the-player spc-gnoll
+        the-player spc-gnoll set-species
         "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll."
         say
         end
