@@ -9,15 +9,15 @@
 
 int SymbolDef::toId(Type type) {
     switch(type) {
-        case Node:      return idNode;
-        case Constant:  return 99;
-        case Map:       return idSkillSet;
-        case List:      return idList;
-        case Skill:     return 99;
-        case DamageType:return 99;
-        case ObjectDef: return idObject;
-        case Unknown:   return 255;
-        case String:    return idString;
+        case Node:      return pidReference;
+        case Constant:  return pidInteger;
+        case Map:       return pidReference;
+        case List:      return pidReference;
+        case Skill:     return pidInteger;
+        case DamageType:return pidInteger;
+        case ObjectDef: return pidReference;
+        case Unknown:   return pidInteger;
+        case String:    return pidReference;
     }
 }
 const char* SymbolDef::typeName(Type type) {

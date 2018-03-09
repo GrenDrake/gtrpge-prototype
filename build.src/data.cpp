@@ -128,7 +128,6 @@ void ObjectDef::write(std::ostream &out, const SymbolTable &symbols) {
     writeShort(out, properties.size());
 
     for (auto iter = properties.begin(); iter != properties.end(); ++iter) {
-    // for (auto prop : properties) {
         auto prop = *iter;
         std::uint32_t nextPos = 0;
         if (std::next(iter) != properties.end()) {
@@ -136,10 +135,17 @@ void ObjectDef::write(std::ostream &out, const SymbolTable &symbols) {
             nextPos += objPropSize;
         }
 
-        //  prop-id  type-id  padd  next  value
-        //  0/2      2/1      3/1   4/4   8/4
         writeShort(out, prop.first);
-        writeByte(out, 0); // type ID
+        if (prop.second.type == Value::Identifier) {
+            const SymbolDef *symbol = symbols.get(prop.second.text);
+            if (symbol) {
+                writeByte(out, SymbolDef::toId(symbol->type));
+            } else {
+                writeByte(out, pidUndefined);
+            }
+        } else {
+            writeByte(out, pidInteger);
+        }
         writeByte(out, 0); // padding
         writeValue(out, origin, prop.second);
     }

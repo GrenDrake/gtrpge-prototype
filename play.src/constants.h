@@ -22,6 +22,11 @@ const int idList            = 0xF9;
 const int idSkillSet        = 0xF8;
 const int idObject          = 0xF6;
 
+// Property Type IDs
+const int pidInteger        = 0x7F;
+const int pidReference      = 0x7E;
+const int pidUndefined      = 0x7D;
+
 // SkillDef Structure
 const int sklBaseSkill      = 0;
 const int sklName           = 4;
