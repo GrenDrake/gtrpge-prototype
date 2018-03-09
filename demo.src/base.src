@@ -131,6 +131,13 @@ CHARACTER the-player {
  * GENERAL ITEM DEFINITIONS                                                  *
  * ************************************************************************* */
 
+ITEM gold {
+    article "a ";
+    name "gold piece";
+    plural "gold pieces";
+    description "The coin of the realm.";
+}
+
 ITEM common-sword {
     article "a ";
     name    "common sword";

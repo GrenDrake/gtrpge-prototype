@@ -92,29 +92,15 @@ SCENE forest-path {
     location "On Forest Path";
     body {
         >"You are on a path leading through a forest. The crumbling remains of a stone wall can be seen on one side, partially hiding an overgrown side trail."
-        push "Follow the path north"
-        push forest-fork
-        add-option
-        push "Follow the path south"
-        push town-gate
-        add-option
-        push "Examine the stone wall"
-        push examine-wall
-        add-option
-        push "Take the overgrown trail"
-        push gnoll-cage
-        add-option
-        push "Hurt yourself"
-        push hurt-self-health
-        add-option
-        push "Inflict void on yourself"
-        push hurt-self-void
-        add-option
+        "Follow the path north"    forest-fork  add-option
+        "Follow the path south"    town-gate    add-option
+        "Examine the stone wall"   examine-wall add-option
+        "Take the overgrown trail" gnoll-cage   add-option
+        "Rest Awhile"              rest-awhile  add-option
+
         push "Fight some immps"
         push imp-fight
         add-option
-
-        "Rest Awhile" rest-awhile add-option
     };
 }
 
@@ -136,29 +122,10 @@ SCENE rest-awhile-doit {
     };
 }
 
-SCENE hurt-self-health {
-    body {
-        0 56 skl-health dt-blunt do-damage
-        >"You hurt yourself."
-        add-return
-    };
-}
-
-SCENE hurt-self-void {
-    body {
-        the-player -6 skl-void dt-blunt do-damage
-        >"You hurt yourself."
-        add-return
-    };
-}
-
 SCENE examine-wall {
     body {
         "It looks much as one might expect." say
-        push 1
-        push 12
-        add-time
-        do-damage the-player 5 skl-health dt-blunt
+        1 12 add-time
         add-return
     };
 }
@@ -189,7 +156,8 @@ SCENE imp-fight-after {
 SCENE town-gate {
     location "Outside the Town Gates";
     body {
-        >"You stand before a gate built into the large, wooden pallisade that surronds the town. The gate, alas, is closed."
+        >"You stand before a gate built into the large, wooden pallisade that surronds the town. The gate is open, ready to admit you to the market bzzaar within."
+        "Head into town" in-town add-option
         "Return to the forest" forest-path add-option
 
         flg-took-key fetch
@@ -210,6 +178,14 @@ SCENE take-key {
         flg-took-key true store
         "You pick up the key and stick it in your pocket." say
         add-return
+    };
+}
+
+SCENE in-town {
+    location "In Town";
+    body {
+        >"You are inside the bazaar of the town; colourful stalls surrond you and the sound of voices fills the air. The gate out of town is to the north while several stalls may be of interest."
+        "Leave town" town-gate add-option
     };
 }
 
@@ -395,11 +371,45 @@ SCENE forest-event-imps {
 
 SCENE forest-event-skeleton {
     body {
-        "You discover a menacing looking skeleton loitering around a grave. It fails to notice you entirely."
-        say
-        add-return
+        >"You discover a menacing looking skeleton loitering around a grave. It stares at you with empty eye-sockets for a moment then charges with a soundless cry."
+        forest-event-skeleton-after reset-combat
+        enemy-skeleton add-to-combat
     };
 }
+CHARACTER enemy-skeleton {
+    article "a ";
+    name "long-dead skeleton";
+    sex sex-male;
+    species spc-human;
+    faction 1;
+    skills map(
+    );
+    ai {
+        *_0 $faction get-property random-not-faction
+        *_0 2 act-thrust $combat-node get-property call
+        end
+    };
+}
+SCENE forest-event-skeleton-after {
+    body {
+        add-return
+        combat-status 0 player-defeat jump-lt
+
+        LABEL player-victory
+        _5 0 20 random store
+        gold *_5 add-items
+        >"You have won the battle!"
+        *_5 no-reward jump-false
+        >" You found " *_5 say-number >" gold pieces!"
+        LABEL no-reward
+        >"\n"
+        end
+
+        LABEL player-defeat
+        >"You have been defeated and wake some time later alone in the forest.\n"
+    };
+}
+
 
 SCENE forest-event-nothing {
     body {
