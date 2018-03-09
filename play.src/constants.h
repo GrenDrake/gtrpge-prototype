@@ -35,9 +35,8 @@ const int sklX5Multiplier   = 50;
 // Object Property Structure
 const int objPropId         = 0;
 const int objPropType       = 2;
-const int objPropNext       = 4;
-const int objPropValue      = 8;
-const int objPropSize       = 12;
+const int objPropValue      = 4;
+const int objPropSize       = 8;
 
 // Map structure
 const int gmapCount         = 1;

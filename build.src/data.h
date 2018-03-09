@@ -132,7 +132,7 @@ public:
 
     virtual size_t getSize() const {
         // idObject + (properties * 6)
-        return 1 + properties.size() * objPropSize;
+        return 3 + properties.size() * objPropSize;
     }
     virtual void write(std::ostream &out, const SymbolTable &symbols);
     virtual std::string getTypeName() const {

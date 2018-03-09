@@ -125,7 +125,7 @@ void SkillSet::write(std::ostream &out, const SymbolTable &symbols) {
 
 void ObjectDef::write(std::ostream &out, const SymbolTable &symbols) {
     writeByte(out, idObject);
-    // writeShort(out, properties.size());
+    writeShort(out, properties.size());
 
     for (auto iter = properties.begin(); iter != properties.end(); ++iter) {
     // for (auto prop : properties) {
@@ -141,7 +141,6 @@ void ObjectDef::write(std::ostream &out, const SymbolTable &symbols) {
         writeShort(out, prop.first);
         writeByte(out, 0); // type ID
         writeByte(out, 0); // padding
-        writeWord(out, nextPos);
         writeValue(out, origin, prop.second);
     }
 }
