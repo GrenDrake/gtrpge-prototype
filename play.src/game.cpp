@@ -519,15 +519,15 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
     int base = 0;
     if (skillSet == 0 || !mapHasValue(skillSet, skillNo)) {
-        base = getSkillDefault(skillNo);
+        base = static_cast<int>(getSkillDefault(skillNo));
     } else {
-        base = getFromMap(skillSet, skillNo);
+        base = static_cast<int>(getFromMap(skillSet, skillNo));
     }
 
     for (auto item : c->gear) {
         std::uint32_t itemSkills = getObjectProperty(item.second, propSkills);
         if (itemSkills) {
-            base += static_cast<short>(readShort(itemSkills + 1 + skillNo * 2));
+            base += static_cast<int>(getFromMap(itemSkills, skillNo));
         }
     }
 
