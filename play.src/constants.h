@@ -147,7 +147,9 @@ enum Opcodes {
     opAddItems        = 0x1C,
     opRemoveItems     = 0x1D,
     opItemQty         = 0x1E,
-/*  unused              0x1F - 0x24 */
+    opListSize        = 0x1F,
+    opListGet         = 0x20,
+/*  unused              0x21 - 0x24 */
     opResetCharacter  = 0x25,
     opGetSex          = 0x26,
     opSetSex          = 0x27,

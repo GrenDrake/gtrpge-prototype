@@ -85,6 +85,8 @@ Command commands[] = {
     { "get-resistance",     opGetResistance,    0 },
     { "adj-resistance",     opAdjResistance,    0 },
     { "random-event",       opRandomEvent,      0 },
+    { "list-size",          opListSize,         0 },
+    { "list-get",           opListGet,          0 },
 };
 
 const Command* getCommand(const std::string name) {

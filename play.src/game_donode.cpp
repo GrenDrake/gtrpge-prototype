@@ -541,6 +541,27 @@ std::uint32_t Game::doNode(std::uint32_t address) {
                 stack.push(result);
                 break;}
 
+            case opListSize:
+                a1 = stack.pop(); // list address
+                if (!isType(a1, idList)) {
+                    throw PlayError("Tried to get size of non-list");
+                }
+                stack.push(readByte(a1+1));
+                break;
+            case opListGet:
+                a2 = stack.pop(); // list index
+                a1 = stack.pop(); // list address
+                if (!isType(a1, idList)) {
+                    throw PlayError("Tried to get size of non-list");
+                }
+                a3 = readByte(a1+1);
+                if (a2 >= a3) {
+                    // index out of range
+                    throw PlayError("Index out of range in list-get");
+                }
+                stack.push(readWord(a1 + 2 + a2 * 4));
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;
