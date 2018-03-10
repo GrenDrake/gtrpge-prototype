@@ -263,7 +263,7 @@ bool Game::removeItems(int qty, std::uint32_t itemIdent) {
     return false;
 }
 
-bool Game::itemQty(std::uint32_t itemIdent) {
+int Game::itemQty(std::uint32_t itemIdent) {
     for (CarriedItem &ci : inventory) {
         if (ci.itemIdent == itemIdent) {
             return ci.qty;

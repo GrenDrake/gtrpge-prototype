@@ -158,7 +158,7 @@ private:
     // inventory management                                                  //
     bool addItems(int qty, std::uint32_t itemIdent);
     bool removeItems(int qty, std::uint32_t itemIdent);
-    bool itemQty(std::uint32_t itemIdent);
+    int itemQty(std::uint32_t itemIdent);
 
     // ////////////////////////////////////////////////////////////////////////
     // stack and stored data management                                      //
