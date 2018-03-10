@@ -1,2 +1,2 @@
-files demo.src/base.src demo.src/forest.src
+files demo.src/base.src demo.src/forest.src demo.src/town.src
 output game.bin

@@ -181,14 +181,6 @@ SCENE take-key {
     };
 }
 
-SCENE in-town {
-    location "In Town";
-    body {
-        >"You are inside the bazaar of the town; colourful stalls surrond you and the sound of voices fills the air. The gate out of town is to the north while several stalls may be of interest."
-        "Leave town" town-gate add-option
-    };
-}
-
 SCENE gnoll-cage {
     location "By a Cage in the Forest";
     body {

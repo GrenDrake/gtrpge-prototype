@@ -138,82 +138,11 @@ ITEM gold {
     description "The coin of the realm.";
 }
 
-ITEM common-sword {
-    article "a ";
-    name    "common sword";
-    plural  "common swords";
-    description "A perfectly ordinary sword.";
-    slot    "weapon";
-    can-equip {
-        push true
-    };
-    on-equip {
-    };
-    on-remove {
-    };
-    action-list list(
-        act-swing
-        act-thrust
-    );
-}
-
-ITEM common-helmet {
-    article "a ";
-    name    "common helmet";
-    plural  "common helmets";
-    slot    "head";
-}
 ITEM loincloth {
     article "a ";
     name    "loincloth";
     plural  "loincloths";
     slot    "body";
-}
-ITEM plate-armour {
-    article "a ";
-    name    "suit of plate armour";
-    plural  "suits of plate armour";
-    slot    "body";
-    skills map(
-        skl-strength 50;
-        skl-dexterity -3;
-    );
-}
-
-ITEM teleport-crystal {
-    article "a ";
-    name    "teleport crystal";
-    plural  "teleport crystals";
-    description "A crystal devised by Arnold of Va-Katr for the purpose of reaching the town quickly without the use of undue magic.";
-    on-use {
-        teleport-crystal 1 remove-items
-        "Light flashes and you vision goes blank. Moments later, the world returns."
-        say
-        town-gate
-        add-continue
-    };
-}
-
-ITEM gnoll-potion {
-    article "a ";
-    name    "potion of gnoll";
-    plural  "potions of gnoll";
-    description "A potion of transformation intended to make one more gnoll-like.";
-    on-use {
-        gnoll-potion 1 remove-items
-        add-return
-        the-player get-species
-        spc-gnoll already-gnoll jump-eq
-
-        the-player spc-gnoll set-species
-        "You feel your body twist and change under the influence of the potion. Moments later, you have the body of a gnoll."
-        say
-        end
-
-        label already-gnoll
-        "Nothing happens. Perhaps you can't become any more gnoll-like then you are?"
-        say
-    };
 }
 
 /* ************************************************************************* *
@@ -329,6 +258,9 @@ SCENE chargen-done {
         gnoll-potion 2 add-items
         loincloth 1 add-items
         plate-armour 1 add-items
+
+        // some starting cash so the player can do stuff in town without grinding first
+        gold 30 add-items
 
         >"You are a "
         the-player get-sex say
