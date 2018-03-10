@@ -97,20 +97,15 @@ td.table-zone-header {
     <td></td>
     <td></td>
 </tr><tr>
-    <td>[list id] [value]</td>
-    <td class='command'>add-to-list</td>
-    <td></td>
-    <td></td>
-</tr><tr>
-    <td>[list id] [value] [chance]</td>
-    <td class='command'>add-to-list-chance</td>
-    <td></td>
-    <td></td>
-</tr><tr>
     <td>[character]</td>
     <td class='command'>add-to-party</td>
     <td></td>
     <td></td>
+</tr><tr>
+    <td>[character] [damage type] [amount]</td>
+    <td class='command'>adj-resistance</td>
+    <td></td>
+    <td>Give a character a penalty or bonus to their resistance to a particular type of damage.</td>
 </tr><tr>
     <td>[character] [skill] [amount]</td>
     <td class='command'>adj-skill</td>
@@ -130,11 +125,6 @@ td.table-zone-header {
     <td class='command'>call</td>
     <td></td>
     <td>Evaluates the node located at <i>node-address</i>, setting the first arg-count temp storage values to those provided for the duration of the call. Values are assigned from right to left (so _0 becomes the rightmost argument).</td>
-</tr><tr>
-    <td>[list id]</td>
-    <td class='command'>create-list</td>
-    <td></td>
-    <td></td>
 </tr><tr>
     <td></td>
     <td class='command'>combat-status</td>
@@ -201,6 +191,11 @@ td.table-zone-header {
     <td>[value]</td>
     <td></td>
 </tr><tr>
+    <td>[character] [damage type]</td>
+    <td class='command'>get-resistance</td>
+    <td></td>
+    <td>Get a character's resistance percentage to a particular type of damage.</td>
+</tr><tr>
     <td>[character]</td>
     <td class='command'>get-sex</td>
     <td>[sex]</td>
@@ -243,11 +238,6 @@ td.table-zone-header {
     <td class='command'>is-koed</td>
     <td>[value]</td>
     <td>Pushes a true value if the character is KOed. a false value otherwise</td>
-</tr><tr>
-    <td>[list id] [value]</td>
-    <td class='command'>is-in-list</td>
-    <td>[in list?]</td>
-    <td></td>
 </tr><tr>
     <td>[character]</td>
     <td class='command'>is-in-party</td>
@@ -365,10 +355,10 @@ td.table-zone-header {
     <td>[result]</td>
     <td>Generates a random number between the min and max values (inclusive).</td>
 </tr><tr>
-    <td>[list id]</td>
-    <td class='command'>random-from-list</td>
-    <td>[value]</td>
+    <td>[datalist of events]</td>
+    <td class='command'>random-event</td>
     <td></td>
+    <td>Randomly selects an event from the provided datalist; each event will have its <i>count</i> property called to determine its chances of being chosen.</td>
 </tr><tr>
     <td>[faction number]</td>
     <td class='command'>random-of-faction</td>
@@ -383,11 +373,6 @@ td.table-zone-header {
     <td>[item] [qty]</td>
     <td class='command'>remove-items</td>
     <td>[succeeded?]</td>
-    <td></td>
-</tr><tr>
-    <td>[list id] [value]</td>
-    <td class='command'>remove-from-list</td>
-    <td></td>
     <td></td>
 </tr><tr>
     <td>[character]</td>
