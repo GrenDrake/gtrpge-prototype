@@ -195,10 +195,6 @@ bool Game::objectHasProperty(std::uint32_t objRef, std::uint16_t propId) {
     return false;
 }
 
-std::uint32_t Game::hasFlag(std::uint32_t address, std::uint32_t flags) const {
-    return 0; // TODO
-}
-
 std::string Game::getNameOf(std::uint32_t address) {
     std::stringstream ss;
 

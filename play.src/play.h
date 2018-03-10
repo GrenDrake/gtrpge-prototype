@@ -71,7 +71,6 @@ public:
 
     std::uint32_t getObjectProperty(std::uint32_t objRef, std::uint16_t propId);
     bool objectHasProperty(std::uint32_t objRef, std::uint16_t propId);
-    std::uint32_t hasFlag(std::uint32_t address, std::uint32_t flags) const;
     std::string getNameOf(std::uint32_t address);
     std::string getPronoun(std::uint32_t cRef, int pronounType);
 
