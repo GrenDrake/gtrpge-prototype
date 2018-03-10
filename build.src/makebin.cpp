@@ -10,7 +10,7 @@
 #include "../play.src/constants.h"
 
 static std::string mangleLabel(const std::string &nodeName, const std::string &original) {
-    std::string labelName = "__n_"+nodeName+"_"+original;
+    std::string labelName = "__lbl_"+nodeName+"_"+original;
     return labelName;
 }
 
