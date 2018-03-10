@@ -20,6 +20,7 @@ void Parser::parseTokens(std::list<Token>::iterator start, std::list<Token>::ite
         { "item",      ocItem,      { "article", "name", "plural" } },
         { "character", ocCharacter, { "article", "name", "sex", "species" } },
         { "scene",     ocScene,     { "body" } },
+        { "event",     ocEvent,     { "count", "body" } },
         { "" }
     };
 

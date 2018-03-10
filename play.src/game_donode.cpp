@@ -234,78 +234,6 @@ std::uint32_t Game::doNode(std::uint32_t address) {
                 stack.push(itemQty(a1));
                 break;
 
-            case opAddToList: {
-                a1 = stack.pop(); // item to add
-                a2 = stack.pop(); // list ident
-                std::shared_ptr<List> list = getList(a2);
-                if (list) {
-                    list->add(a1, 1);
-                } else {
-                    std::stringstream ss;
-                    ss << "Tried to add to non-existant list " << a2 << '.';
-                    throw PlayError(ss.str());
-                }
-                break;
-            }
-            case opRemoveFromList: {
-                a1 = stack.pop(); // item to remove
-                a2 = stack.pop(); // list ident
-                std::shared_ptr<List> list = getList(a2);
-                if (list) {
-                    list->remove(a1);
-                } else {
-                    std::stringstream ss;
-                    ss << "Tried to remove from non-existant list " << a2 << '.';
-                    throw PlayError(ss.str());
-                }
-                break;
-            }
-            case opIsInList: {
-                a1 = stack.pop(); // item to check for
-                a2 = stack.pop(); // list ident
-                std::shared_ptr<List> list = getList(a3);
-                if (!list) {
-                    stack.push(false);
-                } else {
-                    stack.push(list->contains(a1));
-                }
-                break;
-            }
-            case opRandomFromList: {
-                a1 = stack.pop(); // list ident
-                std::shared_ptr<List> list = getList(a1);
-                if (list) {
-                    stack.push(list->random());
-                } else {
-                    std::stringstream ss;
-                    ss << "Tried to get a random item from non-existant list " << a1 << '.';
-                    throw PlayError(ss.str());
-                }
-                break;
-            }
-            case opCreateList: {
-                a1 = stack.pop(); // location to store list
-                List *list = new List;
-                std::uint32_t ident = nextListIdent++;
-                addList(ident, std::shared_ptr<List>(list));
-                storage[a1] = ident;
-                break;
-            }
-            case opAddToListChance: {
-                a2 = stack.pop(); // item chance
-                a1 = stack.pop(); // item to add
-                a3 = stack.pop(); // list ident
-                std::shared_ptr<List> list = getList(a3);
-                if (list) {
-                    list->add(a1, a2);
-                } else {
-                    std::stringstream ss;
-                    ss << "Tried to add to non-existant list " << a3 << '.';
-                    throw PlayError(ss.str());
-                }
-                break;
-            }
-
             case opResetCharacter:
                 resetCharacter(stack.pop());
                 break;
@@ -588,6 +516,30 @@ std::uint32_t Game::doNode(std::uint32_t address) {
                 a3 = stack.pop(); // who
                 stack.push(getResistance(a3, a2));
                 break;
+
+            case opRandomEvent: {
+                a1 = stack.pop(); // datalist address
+                const int listSize = readByte(a1+1);
+                std::vector<std::uint32_t> deck;
+
+                for (int i = 0; i < listSize; ++i) {
+                    const std::uint32_t listItem = readWord(a1 + 2 + i * 4);
+                    if (listItem == 0) continue;
+                    const std::uint32_t countNode = getObjectProperty(listItem, propCount);
+
+                    int count = 1;
+                    if (countNode) {
+                        count = call(countNode, false, false);
+                    }
+
+                    for (int j = 0; j < count; ++j) {
+                        deck.push_back(listItem);
+                    }
+                }
+
+                const std::uint32_t result = deck[rand() % deck.size()];
+                stack.push(result);
+                break;}
 
             default: {
                 std::stringstream ss;

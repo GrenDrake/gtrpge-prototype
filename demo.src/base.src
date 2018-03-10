@@ -298,7 +298,6 @@ SCENE start {
     body {
         >"Welcome to the game!"
         "Create a new character" chargen-sex add-option
-        0 forest-event-setup call
     };
 }
 

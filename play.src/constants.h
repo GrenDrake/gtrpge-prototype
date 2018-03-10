@@ -92,6 +92,7 @@ const int propLocation          = 32;
 const int propDuration          = 33;
 const int propIdent             = 34;
 const int propResistances       = 35;
+const int propCount             = 36;
 
 const int propFirstCustom       = 256;
 
@@ -102,6 +103,7 @@ const int ocAction          = 3;
 const int ocItem            = 4;
 const int ocCharacter       = 5;
 const int ocScene           = 6;
+const int ocEvent           = 7;
 
 // DamageType Count
 const int damageTypeCount   = 8;
@@ -145,12 +147,7 @@ enum Opcodes {
     opAddItems        = 0x1C,
     opRemoveItems     = 0x1D,
     opItemQty         = 0x1E,
-    opAddToList       = 0x1F,
-    opRemoveFromList  = 0x20,
-    opIsInList        = 0x21,
-    opRandomFromList  = 0x22,
-    opCreateList      = 0x23,
-    opAddToListChance = 0x24,
+/*  unused              0x1F - 0x24 */
     opResetCharacter  = 0x25,
     opGetSex          = 0x26,
     opSetSex          = 0x27,
@@ -194,6 +191,7 @@ enum Opcodes {
     opRandom          = 0x53,
     opGetResistance   = 0x54,
     opAdjResistance   = 0x55,
+    opRandomEvent     = 0x56,
 };
 
 const int optionNameContinue    = 1;

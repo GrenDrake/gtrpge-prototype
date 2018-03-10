@@ -345,23 +345,24 @@ SCENE deep-forest {
  * SOME RANDOM FOREST EVENTS                                                 *
  * ************************************************************************* */
 
+OBJECT forest-event-data {
+    events list(
+        forest-event-imps
+        forest-event-skeleton
+        forest-event-nothing
+    );
+}
+
 SCENE forest-do-event {
     body {
         0
-        *forest-events random-from-list
+        forest-event-data $events get-property random-event
         call
     };
 }
-SCENE forest-event-setup {
-    body {
-        forest-events create-list
-        forest-events fetch forest-event-imps add-to-list
-        forest-events fetch forest-event-nothing add-to-list
-        forest-events fetch forest-event-skeleton add-to-list
-    };
-}
 
-SCENE forest-event-imps {
+EVENT forest-event-imps {
+    count { 1 };
     body {
         "You stumble across a pair of imps eating a meal. They wish you a good day and you carry on your way."
         say
@@ -369,7 +370,8 @@ SCENE forest-event-imps {
     };
 }
 
-SCENE forest-event-skeleton {
+EVENT forest-event-skeleton {
+    count { 1 };
     body {
         >"You discover a menacing looking skeleton loitering around a grave. It stares at you with empty eye-sockets for a moment then charges with a soundless cry."
         forest-event-skeleton-after reset-combat
@@ -411,7 +413,8 @@ SCENE forest-event-skeleton-after {
 }
 
 
-SCENE forest-event-nothing {
+EVENT forest-event-nothing {
+    count { 1 };
     body {
         "You stumble around in the forest for a while, but eventually end up back were you started without finding anything."
         say

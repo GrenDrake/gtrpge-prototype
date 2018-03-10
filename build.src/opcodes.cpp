@@ -41,12 +41,6 @@ Command commands[] = {
     { "add-items",       opAddItems,        0 },
     { "remove-items",    opRemoveItems,     0 },
     { "item-qty",        opItemQty,         0 },
-    { "add-to-list",        opAddToList,        0 },
-    { "is-in-list",         opIsInList,         0 },
-    { "remove-from-list",   opRemoveFromList,   0 },
-    { "random-from-list",   opRandomFromList,   0 },
-    { "create-list",        opCreateList,       0 },
-    { "add-to-list-chance", opAddToListChance,  0 },
     { "reset-character",    opResetCharacter,   0 },
     { "get-sex",            opGetSex,           0 },
     { "set-sex",            opSetSex,           0 },
@@ -90,6 +84,7 @@ Command commands[] = {
     { "random",             opRandom,           0 },
     { "get-resistance",     opGetResistance,    0 },
     { "adj-resistance",     opAdjResistance,    0 },
+    { "random-event",       opRandomEvent,      0 },
 };
 
 const Command* getCommand(const std::string name) {
