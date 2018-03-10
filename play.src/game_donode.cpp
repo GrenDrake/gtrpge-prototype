@@ -577,6 +577,18 @@ std::uint32_t Game::doNode(std::uint32_t address) {
                 stack.push(a1 + rand() % (a3 + 1));
                 break;
 
+            case opAdjResistance:
+                a1 = stack.pop(); // amount
+                a2 = stack.pop(); // resistance
+                a3 = stack.pop(); // who
+                adjResistance(a3, a2, a1);
+                break;
+            case opGetResistance:
+                a2 = stack.pop(); // resistance
+                a3 = stack.pop(); // who
+                stack.push(getResistance(a3, a2));
+                break;
+
             default: {
                 std::stringstream ss;
                 ss << std::hex;

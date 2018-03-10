@@ -410,6 +410,9 @@ void Game::resetCharacter(std::uint32_t cRef) {
     characters.insert(std::make_pair(cRef, c));
 
     std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
+    for (int i = 0; i < damageTypeCount; ++i) {
+        c->resistAdj[i] = 0;
+    }
     for (int i = 0; i < sklCount; ++i) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
@@ -461,6 +464,9 @@ void Game::restoreCharacter(std::uint32_t cRef) {
 }
 
 void Game::doDamage(std::uint32_t cRef, int amount, int to, int type) {
+    int resist = -getResistance(cRef, type);
+    resist += 100;
+    amount = amount * resist / 100;
     adjSkillCur(cRef, to, -amount);
 }
 
@@ -562,6 +568,35 @@ void Game::adjSkillCur(std::uint32_t cRef, int skillNo, int adjustment) {
     if (cur > max)  cur = max;
 
     c->skillCur[skillNo] = cur;
+}
+
+void Game::adjResistance(std::uint32_t cRef, int damageType, int amount) {
+    Character *c = getCharacter(cRef);
+    if (!c) return;
+
+    c->resistAdj[damageType] += amount;
+}
+
+int Game::getResistance(std::uint32_t cRef, int damageType) {
+    Character *c = getCharacter(cRef);
+    if (!c) return 0;
+
+    std::uint32_t resistancesMap = getObjectProperty(c->def, propResistances);
+    int base = 0;
+    if (resistancesMap != 0) {
+        base = static_cast<int32_t>(getFromMap(resistancesMap, damageType));
+    }
+
+    for (auto item : c->gear) {
+        std::uint32_t itemResistances = getObjectProperty(item.second, propResistances);
+        if (itemResistances) {
+            base += static_cast<int32_t>(getFromMap(itemResistances, damageType));
+        }
+    }
+
+    base += c->resistAdj[damageType];
+
+    return base;
 }
 
 std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {

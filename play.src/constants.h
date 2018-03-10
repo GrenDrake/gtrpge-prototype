@@ -91,6 +91,7 @@ const int propBody              = 31;
 const int propLocation          = 32;
 const int propDuration          = 33;
 const int propIdent             = 34;
+const int propResistances       = 35;
 
 const int propFirstCustom       = 256;
 
@@ -191,6 +192,8 @@ enum Opcodes {
     opGetEquip        = 0x51,
     opSetEquip        = 0x52,
     opRandom          = 0x53,
+    opGetResistance   = 0x54,
+    opAdjResistance   = 0x55,
 };
 
 const int optionNameContinue    = 1;

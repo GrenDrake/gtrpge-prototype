@@ -88,6 +88,8 @@ Command commands[] = {
     { "get-equip",          opGetEquip,         0 },
     { "set-equip",          opSetEquip,         0 },
     { "random",             opRandom,           0 },
+    { "get-resistance",     opGetResistance,    0 },
+    { "adj-resistance",     opAdjResistance,    0 },
 };
 
 const Command* getCommand(const std::string name) {

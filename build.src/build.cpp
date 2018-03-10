@@ -133,6 +133,7 @@ int main(int argc, char *argv[]) {
     ObjectDef::setPropertyIdent("duration", propDuration);
     ObjectDef::setPropertyIdent("location", propLocation);
     ObjectDef::setPropertyIdent("ident", propIdent);
+    ObjectDef::setPropertyIdent("resistances", propResistances);
 
     SymbolTable symbols;
     symbols.add(Origin(), "true", SymbolDef::Constant);

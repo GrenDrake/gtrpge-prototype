@@ -17,6 +17,7 @@ public:
     struct Character {
         std::uint32_t def;
         std::uint32_t sex, species;
+        std::array<std::int16_t, damageTypeCount> resistAdj;
         std::array<std::int16_t, sklCount> skillAdj;
         std::array<std::uint16_t, sklCount> skillCur;
         std::map<std::uint32_t, std::uint32_t> gear;
@@ -99,6 +100,8 @@ public:
     std::uint32_t getSkillDefault(int skillNo);
     int getSkillMax(std::uint32_t cRef, int skillNo);
     int getSkillCur(std::uint32_t cRef, int skillNo);
+    void adjResistance(std::uint32_t cRef, int damageType, int amount);
+    int getResistance(std::uint32_t cRef, int damageType);
     std::vector<std::uint32_t> getActions(std::uint32_t cRef);
 
     std::uint8_t readByte(std::uint32_t pos) const;

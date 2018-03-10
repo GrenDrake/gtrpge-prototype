@@ -38,7 +38,7 @@ void doCharacter(Game &game) {
                 break;
             case modeGear:
                 helpLine << "  <U>nequip";
-                infoLine << "   - Equipped Gear";
+                infoLine << "   - Equipped Gear & Resistances";
                 break;
             case modeActions:
                 infoLine << "   - Actions";
@@ -103,6 +103,17 @@ void doCharacter(Game &game) {
                     // mvprintw(y, 40, "Equipment Stats");
                     bkgdset(A_NORMAL);
                     ++counter;
+                }
+            }
+
+            const int damageTypeTable = game.readWord(headerDamageTypes);
+            int dtCounter = 0;
+            for (int i = 0; i < damageTypeCount; ++i) {
+                const int thisType = game.readWord(damageTypeTable + 4 * i);
+                if (thisType != 0) {
+                    int resistance = game.getResistance(curChar, i);
+                    mvprintw(maxY-15+dtCounter, 5, "%s: %d", game.getNameOf(thisType).c_str(), resistance);
+                    ++dtCounter;
                 }
             }
 
