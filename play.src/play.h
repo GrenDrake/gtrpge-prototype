@@ -23,22 +23,6 @@ public:
         std::map<std::uint32_t, std::uint32_t> gear;
     };
 
-    struct ListItem {
-        ListItem(std::uint32_t value, std::uint32_t chance)
-        : value(value), chance(chance)
-        { }
-
-        std::uint32_t value;
-        std::uint32_t chance;
-    };
-    struct List {
-        void add(std::uint32_t value, std::uint32_t chance);
-        void remove(std::uint32_t value);
-        bool contains(std::uint32_t value) const;
-        std::uint32_t random() const;
-
-        std::vector<ListItem> items;
-    };
 
     class Option {
     public:
@@ -69,7 +53,7 @@ public:
 
     Game()
     : gameStarted(false), locationName(0), isRunning(false), data(nullptr),
-      nextListIdent(1), gameTime(0), inCombat(false), startedCombat(false)
+      gameTime(0), inCombat(false), startedCombat(false)
     { }
     ~Game() {
         delete[] data;
@@ -178,12 +162,6 @@ private:
     bool itemQty(std::uint32_t itemIdent);
 
     // ////////////////////////////////////////////////////////////////////////
-    // dynamic list management                                               //
-    void addList(std::uint32_t ident, std::shared_ptr<List> list);
-    std::shared_ptr<List> getList(std::uint32_t ident);
-    void freeList(std::uint32_t ident);
-
-    // ////////////////////////////////////////////////////////////////////////
     // stack and stored data management                                      //
     uint32_t fetch(uint32_t key) const;
     void setTemp(unsigned tempNo, std::uint32_t value);
@@ -198,8 +176,6 @@ private:
     bool newLocation;
     uint8_t *data;
     size_t dataSize;
-    uint32_t nextListIdent;
-    std::map<std::uint32_t, std::shared_ptr<List> > dynamicLists;
     std::map<std::uint32_t, Character*> characters;
     std::string outputBuffer;
     unsigned gameTime;

@@ -9,42 +9,6 @@
 
 #include "play.h"
 
-void Game::List::add(std::uint32_t value, std::uint32_t chance) {
-    for (ListItem &item : items) {
-        if (item.value == value) {
-            item.chance = chance;
-            return;
-        }
-    }
-    items.push_back(ListItem(value, chance));
-}
-void Game::List::remove(std::uint32_t value) {
-    for (auto item = items.begin(); item != items.end(); ++item) {
-        if (item->value == value) {
-            items.erase(item);
-            return;
-        }
-    }
-}
-bool Game::List::contains(std::uint32_t value) const {
-    for (const ListItem &item : items) {
-        if (item.value == value) {
-            return true;
-        }
-    }
-    return false;
-}
-std::uint32_t Game::List::random() const {
-    std::vector<std::uint32_t> deck;
-    for (const ListItem &item : items) {
-        for (unsigned i = 0; i < item.chance; ++i) {
-            deck.push_back(item.value);
-        }
-    }
-    unsigned i = rand() % deck.size();
-    return deck[i];
-}
-
 
 int Game::roll(int dice, int sides) {
     int result = 0;
@@ -970,23 +934,4 @@ void Game::setTemp(unsigned tempNo, std::uint32_t value) {
         throw PlayError("Tried to update bad temp storage position");
     }
     storage[storageFirstTemp - tempNo] = value;
-}
-
-void Game::addList(std::uint32_t ident, std::shared_ptr<List> list) {
-    dynamicLists.insert(std::make_pair(ident, std::shared_ptr<List>(list)));
-}
-
-std::shared_ptr<Game::List> Game::getList(std::uint32_t ident) {
-    auto i = dynamicLists.find(ident);
-    if (i != dynamicLists.end()) {
-        return i->second;
-    }
-    return nullptr;
-}
-
-void Game::freeList(std::uint32_t ident) {
-    auto i = dynamicLists.find(ident);
-    if (i != dynamicLists.end()) {
-        dynamicLists.erase(i);
-    }
 }
