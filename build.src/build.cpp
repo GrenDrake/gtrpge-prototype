@@ -164,31 +164,6 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        // for (std::shared_ptr<DataType> i : gameData.dataItems) {
-            // std::shared_ptr<SkillSet> cd = std::dynamic_pointer_cast<SkillSet>(i);
-            // if (cd) {
-            //     for (unsigned i = 0; i < sklCount; ++i) {
-            //         if (cd->setDefaults) {
-            //             if (i >= gameData.skills.size()) {
-            //                 cd->skills[i] = 0;
-            //             } else {
-            //                 cd->skills[i] = gameData.skills[i]->defaultValue;
-            //             }
-            //         } else {
-            //             cd->skills[i] = 0;
-            //         }
-            //     }
-
-            //     for (auto &i : cd->skillMap) {
-            //         const auto &v = gameData.constants.find(i.first);
-            //         if (v != gameData.constants.end()) {
-            //             cd->skills[v->second.value] = i.second.value;
-            //         }
-            //     }
-            //     cd->skillMap.clear();
-            // }
-        // }
-
         make_bin(gameData, project->outputFile, symbols);
     } catch (BuildError &e) {
         std::cerr << e.what() << "\n";
