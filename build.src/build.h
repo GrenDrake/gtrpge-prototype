@@ -138,7 +138,7 @@ struct ObjectDefSpecialization;
 class Parser {
 public:
     Parser(GameData &gameData, SymbolTable &symbols)
-    : symbols(symbols), gameData(gameData), anonymousCounter(0), skillCounter(1)
+    : symbols(symbols), gameData(gameData), skillCounter(1)
     { }
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);
@@ -151,9 +151,9 @@ private:
     std::shared_ptr<ObjectDef> doObjectCore(const Origin &origin);
     void doObjectClass(const Origin &origin, const ObjectDefSpecialization &requiredProperties);
 
-    std::string doList();
-    std::string doMap(bool setDefaults = false);
-    Value doProperty(const std::string &forName);
+    void doList(const std::string &myName);
+    void doMap(const std::string &myName);
+    Value doProperty(const std::string &forName, const std::string &propName);
     std::vector<Value> doFlags();
     std::shared_ptr<Block> doBlock();
     void doStatement(std::shared_ptr<Block> forBlock);
@@ -167,7 +167,6 @@ private:
     SymbolTable &symbols;
     std::list<Token>::iterator cur;
     GameData &gameData;
-    int anonymousCounter;
     int skillCounter;
 };
 

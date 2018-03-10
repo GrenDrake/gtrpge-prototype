@@ -147,7 +147,7 @@ std::shared_ptr<ObjectDef> Parser::doObjectCore(const Origin &origin) {
         const std::string &propName = cur->text;
         ++cur;
 
-        Value value = doProperty(obj->name);
+        Value value = doProperty(obj->name, propName);
 
         std::uint32_t propId = ObjectDef::getPropertyIdent(propName);
         if (propId == propInternalName) {
@@ -197,16 +197,13 @@ void Parser::doObjectClass(const Origin &origin, const ObjectDefSpecialization &
 }
 
 
-std::string Parser::doList() {
+void Parser::doList(const std::string &myName) {
     const Origin &origin = cur->origin;
-    std::stringstream ss;
-    ss << "__an_list_" << anonymousCounter;
-    ++anonymousCounter;
 
     require(Token::OpenParan, true);
     std::shared_ptr<DataList> list(new DataList);
     list->origin = origin;
-    list->name = ss.str();
+    list->name = myName;
     symbols.add(origin, list->name, SymbolDef::List);
     while (!matches(Token::CloseParan)) {
         Value v = doValue();
@@ -215,19 +212,15 @@ std::string Parser::doList() {
     ++cur;
 
     gameData.dataItems.push_back(list);
-    return ss.str();
 }
 
-std::string Parser::doMap(bool setDefaults) {
+void Parser::doMap(const std::string &myName) {
     const Origin &origin = cur->origin;
-    std::stringstream ss;
-    ss << "__an_map_" << anonymousCounter;
-    ++anonymousCounter;
 
     require(Token::OpenParan, true);
     std::shared_ptr<DataMap> skillMap(new DataMap);
     skillMap->origin = origin;
-    skillMap->name = ss.str();
+    skillMap->name = myName;
     symbols.add(origin, skillMap->name, SymbolDef::Map);
     while (!matches(Token::CloseParan)) {
         const Value &name = doValue();
@@ -238,7 +231,6 @@ std::string Parser::doMap(bool setDefaults) {
     ++cur;
 
     gameData.dataItems.push_back(skillMap);
-    return ss.str();
 }
 
 void Parser::doSkill() {
@@ -277,8 +269,11 @@ void Parser::doSkill() {
     gameData.skills.push_back(skill);
 }
 
-Value Parser::doProperty(const std::string &forName) {
+Value Parser::doProperty(const std::string &forName, const std::string &propName) {
     const Origin &origin = cur->origin;
+    std::stringstream anonymousName;
+    anonymousName << "__prop_" << forName << "__" << propName;
+
     if (matches(Token::String)) {
         std::string label = gameData.addString(cur->text, symbols);
         ++cur;
@@ -289,9 +284,11 @@ Value Parser::doProperty(const std::string &forName) {
         ++cur;
         if (matches(Token::OpenParan)) {
             if (name == "list") {
-                name = doList();
+                name = anonymousName.str();
+                doList(name);
             } else if (name == "map") {
-                name = doMap();
+                name = anonymousName.str();
+                doMap(name);
             } else if (name == "flags") {
                 Value flagSet(Value::FlagSet);
                 flagSet.mFlagSet = doFlags();
@@ -308,12 +305,9 @@ Value Parser::doProperty(const std::string &forName) {
         require(Token::Semicolon, true);
         return Value(name);
     } else if (matches(Token::OpenBrace)) {
-        std::stringstream ss;
-        ss << "__an_" << forName << "_" << anonymousCounter;
-        ++anonymousCounter;
         std::shared_ptr<Node> node(new Node);
         node->block = std::shared_ptr<Block>(doBlock());
-        node->name = ss.str();
+        node->name = anonymousName.str();
         gameData.nodes.push_back(node);
         require(Token::Semicolon, true);
         symbols.add(origin, node->name, SymbolDef::Node);
