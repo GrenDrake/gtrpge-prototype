@@ -184,7 +184,15 @@ void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTab
 
             unsigned size = 0;
             if (stmt->parts.front().text == "label") {
-                labels.insert(std::make_pair(mangleLabel(nodeName, stmt->parts.back().text), pos));
+                std::string mangledName = mangleLabel(nodeName, stmt->parts.back().text);
+                if (labels.find(mangledName) == labels.end()) {
+                    labels.insert(std::make_pair(mangledName, pos));
+                } else {
+                    std::stringstream errorMessage;
+                    errorMessage << "Duplicate label ~" << stmt->parts.back().text;
+                    errorMessage << "~ in node ~" << nodeName << "~.";
+                    throw BuildError(node->origin, errorMessage.str());
+                }
             } else {
                 size = 1 + (stmt->parts.size() - 1) * 4;
             }
