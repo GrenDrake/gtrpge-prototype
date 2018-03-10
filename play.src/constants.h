@@ -19,7 +19,7 @@ const int headerSize        = 64;
 const int idString          = 0xFF;
 const int idNode            = 0xFE;
 const int idList            = 0xF9;
-const int idSkillSet        = 0xF8;
+const int idMap             = 0xF8;
 const int idObject          = 0xF6;
 
 // Property Type IDs

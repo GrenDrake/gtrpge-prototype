@@ -113,11 +113,11 @@ void DataList::write(std::ostream &out, const SymbolTable &symbols) {
 }
 
 
-void SkillSet::write(std::ostream &out, const SymbolTable &symbols) {
-    writeByte(out, idSkillSet);
-    writeWord(out, skillMap.size());
+void DataMap::write(std::ostream &out, const SymbolTable &symbols) {
+    writeByte(out, idMap);
+    writeWord(out, mapData.size());
 
-    for (auto iter : skillMap) {
+    for (auto iter : mapData) {
         writeValue(out, origin, iter.first);
         writeValue(out, origin, iter.second);
     }

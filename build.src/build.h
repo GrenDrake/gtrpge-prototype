@@ -152,7 +152,7 @@ private:
     void doObjectClass(const Origin &origin, const ObjectDefSpecialization &requiredProperties);
 
     std::string doList();
-    std::string doSkillSet(bool setDefaults = false);
+    std::string doMap(bool setDefaults = false);
     Value doProperty(const std::string &forName);
     std::vector<Value> doFlags();
     std::shared_ptr<Block> doBlock();

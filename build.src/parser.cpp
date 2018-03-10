@@ -218,26 +218,26 @@ std::string Parser::doList() {
     return ss.str();
 }
 
-std::string Parser::doSkillSet(bool setDefaults) {
+std::string Parser::doMap(bool setDefaults) {
     const Origin &origin = cur->origin;
     std::stringstream ss;
     ss << "__an_map_" << anonymousCounter;
     ++anonymousCounter;
 
     require(Token::OpenParan, true);
-    std::shared_ptr<SkillSet> skillset(new SkillSet);
-    skillset->origin = origin;
-    skillset->name = ss.str();
-    symbols.add(origin, skillset->name, SymbolDef::Map);
+    std::shared_ptr<DataMap> skillMap(new DataMap);
+    skillMap->origin = origin;
+    skillMap->name = ss.str();
+    symbols.add(origin, skillMap->name, SymbolDef::Map);
     while (!matches(Token::CloseParan)) {
         const Value &name = doValue();
         const Value &v = doValue();
         require(Token::Semicolon, true);
-        skillset->skillMap.insert(std::make_pair(name, v));
+        skillMap->mapData.insert(std::make_pair(name, v));
     }
     ++cur;
 
-    gameData.dataItems.push_back(skillset);
+    gameData.dataItems.push_back(skillMap);
     return ss.str();
 }
 
@@ -291,7 +291,7 @@ Value Parser::doProperty(const std::string &forName) {
             if (name == "list") {
                 name = doList();
             } else if (name == "map") {
-                name = doSkillSet();
+                name = doMap();
             } else if (name == "flags") {
                 Value flagSet(Value::FlagSet);
                 flagSet.mFlagSet = doFlags();

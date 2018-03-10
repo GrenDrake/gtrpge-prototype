@@ -166,19 +166,19 @@ public:
     std::vector<Value> values;
 };
 
-class SkillSet : public DataType {
+class DataMap : public DataType {
 public:
-    SkillSet()
+    DataMap()
     { }
     virtual size_t getSize() const {
-        return 5 + 8 * skillMap.size();
+        return 5 + 8 * mapData.size();
     }
     virtual void write(std::ostream &out, const SymbolTable &symbols);
     virtual std::string getTypeName() const {
         return "MAP";
     }
 
-    std::unordered_map<Value, Value> skillMap;
+    std::unordered_map<Value, Value> mapData;
     // std::array<std::uint16_t, sklCount> skills;
     // bool setDefaults;
 };

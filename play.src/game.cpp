@@ -132,7 +132,7 @@ const char *Game::getString(std::uint32_t address) const {
 }
 
 std::uint32_t Game::getFromMap(std::uint32_t address, std::uint32_t value) const {
-    if (!isType(address, idSkillSet)) {
+    if (!isType(address, idMap)) {
         throw PlayError("Tried to get value from non-map");
     }
 
@@ -147,7 +147,7 @@ std::uint32_t Game::getFromMap(std::uint32_t address, std::uint32_t value) const
 }
 
 bool Game::mapHasValue(std::uint32_t address, std::uint32_t value) const {
-    if (!isType(address, idSkillSet)) {
+    if (!isType(address, idMap)) {
         throw PlayError("Tried to check for key in non-map");
     }
 
@@ -369,7 +369,7 @@ void Game::resetCharacter(std::uint32_t cRef) {
     c->species = getObjectProperty(cRef, propSpecies);
     characters.insert(std::make_pair(cRef, c));
 
-    std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
+    std::uint32_t skillsMap = getObjectProperty(c->def, propSkills);
     for (int i = 0; i < damageTypeCount; ++i) {
         c->resistAdj[i] = 0;
     }
@@ -377,13 +377,13 @@ void Game::resetCharacter(std::uint32_t cRef) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
 
-        if (skillSet != 0) {
+        if (skillsMap != 0) {
             if (testSkillFlags(i, sklVariable)) {
                 if (testSkillFlags(i, sklKOFull)) {
                     c->skillCur[i] = 0;
                 } else {
-                    if (mapHasValue(skillSet, i)) {
-                        c->skillCur[i] = getFromMap(skillSet, i);
+                    if (mapHasValue(skillsMap, i)) {
+                        c->skillCur[i] = getFromMap(skillsMap, i);
                     } else {
                         c->skillCur[i] = getSkillDefault(i);
                     }
@@ -476,12 +476,12 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
     Character *c = getCharacter(cRef);
     if (!c) return 0;
 
-    std::uint32_t skillSet = getObjectProperty(c->def, propSkills);
+    std::uint32_t skillsMap = getObjectProperty(c->def, propSkills);
     int base = 0;
-    if (skillSet == 0 || !mapHasValue(skillSet, skillNo)) {
+    if (skillsMap == 0 || !mapHasValue(skillsMap, skillNo)) {
         base = static_cast<int>(getSkillDefault(skillNo));
     } else {
-        base = static_cast<int>(getFromMap(skillSet, skillNo));
+        base = static_cast<int>(getFromMap(skillsMap, skillNo));
     }
 
     for (auto item : c->gear) {
