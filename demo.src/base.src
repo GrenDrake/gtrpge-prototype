@@ -8,7 +8,6 @@ CONSTANT target-enemy   2;
 CONSTANT target-any     3;
 
 // constants that are used to refer to storage locations
-CONSTANT flg-took-key 0;
 CONSTANT flg-rescued-gnoll 1;
 CONSTANT flg-talked-to-caged-gnoll 2;
 CONSTANT flg-visited-gnoll 3;
@@ -123,6 +122,7 @@ CHARACTER the-player {
         act-punch
     );
     extra-abilities list(
+        debug-kill
         act-fireball
     );
 }
@@ -148,6 +148,31 @@ ITEM loincloth {
 /* ************************************************************************* *
  * GENERAL SKILL DEFINITIONS                                                  *
  * ************************************************************************* */
+
+ACTION debug-kill {
+    name "debug kill";
+    combat-node {
+        *_0 say-uf >" kills " *_0 pro-adject say-pronoun >" opponents! "
+
+        _9 0 store
+        _8 0 combatant store
+        _7 *_0 $faction get-property store
+
+        label swing-start
+        // skip characters of the same faction
+        *_8 $faction get-property *_7 skip-me jump-eq
+
+        // a hit!
+        *_8 99999 skl-health dt-void do-damage
+
+        // done with this target
+        label skip-me
+        _9 *_9 increment store    // get next combatant
+        _8 *_9 combatant store    // check if combatant valid
+        *_8 swing-start jump-true // if so, restart loop
+        "\n" say                  // otherwise, all done
+    };
+}
 
 ACTION act-punch {
     name "punch";
@@ -269,5 +294,27 @@ SCENE chargen-done {
         >". Beginning the game now.\n* * * * * * * * * *\n"
         start-game
         0 forest-path call
+    };
+}
+
+/* ************************************************************************* *
+ * GENERIC NODE FOR RESTING                                                  *
+ * ************************************************************************* */
+
+SCENE rest-awhile {
+    body {
+        >"How long would you like to rest for?"
+        "One hour" rest-awhile-doit 60 add-option-xtra
+        "Six hours" rest-awhile-doit 360 add-option-xtra
+        "Twelve hours" rest-awhile-doit 720 add-option-xtra
+        "Don't rest" 0 add-option
+    };
+}
+
+SCENE rest-awhile-doit {
+    body {
+        >"You rest for a while. "
+        *_0 do-rest
+        add-return
     };
 }
