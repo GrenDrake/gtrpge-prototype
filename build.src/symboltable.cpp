@@ -18,6 +18,7 @@ int SymbolDef::toId(Type type) {
         case ObjectDef: return pidReference;
         case Unknown:   return pidInteger;
         case String:    return pidReference;
+        default:        return pidUndefined;
     }
 }
 const char* SymbolDef::typeName(Type type) {
@@ -31,6 +32,7 @@ const char* SymbolDef::typeName(Type type) {
         case ObjectDef: return "ObjectDef";
         case Unknown:   return "Unknown";
         case String:    return "String";
+        default:        return "Unahndled Type Name";
     }
 }
 
