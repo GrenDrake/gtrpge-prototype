@@ -107,6 +107,7 @@ const int ocEvent           = 7;
 
 // DamageType Count
 const int damageTypeCount   = 8;
+const int damageTypeSize    = 4;
 
 // Ability combat targets
 const int targetNone        = 0;

@@ -66,6 +66,22 @@ void Game::doGameSetup() {
         skillDefs.push_back(std::move(skillDef));
     }
 
+    const int damageTypeTable = readWord(headerDamageTypes);
+    for (unsigned i = 0; i < damageTypeCount; ++i) {
+        const int typeSrc = damageTypeTable + i * damageTypeSize;
+        DamageType dType;
+        dType.nameAddress = readWord(typeSrc);
+        if (dType.nameAddress) {
+            damageTypes.push_back(std::move(dType));
+        }
+    }
+
+    for (DamageType &t : damageTypes) {
+        say(getString(t.nameAddress));
+        say("  ");
+    }
+    say("\n");
+
     location = 0;
     isRunning = true;
     say(getString(readWord(headerTitle)));
@@ -88,6 +104,13 @@ const SkillDef* Game::getSkillDef(unsigned skillNo) const {
         return nullptr;
     }
     return &skillDefs[skillNo];
+}
+
+const DamageType* Game::getDamageType(unsigned damageTypeNo) const {
+    if (damageTypeNo >= damageTypes.size()) {
+        return nullptr;
+    }
+    return &damageTypes[damageTypeNo];
 }
 
 /* ************************************************************************* *

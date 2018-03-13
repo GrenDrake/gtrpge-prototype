@@ -24,6 +24,10 @@ struct SkillDef {
     }
 };
 
+struct DamageType {
+    unsigned nameAddress;
+};
+
 class Game {
 public:
     struct Character {
@@ -79,6 +83,7 @@ public:
     // ////////////////////////////////////////////////////////////////////////
     // Fetching game data                                                    //
     const SkillDef* getSkillDef(unsigned skillNo) const;
+    const DamageType* getDamageType(unsigned damageTypeNo) const;
 
     // ////////////////////////////////////////////////////////////////////////
     // Fetching game state                                                   //
@@ -198,6 +203,7 @@ private:
     std::uint32_t afterCombatNode;
 
     std::vector<SkillDef> skillDefs;
+    std::vector<DamageType> damageTypes;
 };
 
 std::string toTitleCase(std::string text);
