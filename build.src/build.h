@@ -22,7 +22,6 @@ public:
     GameData()
     : nextString(0)
     {
-        skills.push_back(std::shared_ptr<SkillDef>(new SkillDef));
     }
 
     std::string addString(const std::string &text, SymbolTable &symbols);

@@ -206,7 +206,7 @@ void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTab
         if (i < static_cast<int>(gameData.skills.size())) {
             skill = gameData.skills[i];
         } else {
-            skill = gameData.skills[0];
+            skill = std::shared_ptr<SkillDef>(new SkillDef);
         }
         writeValue(out, skill->origin, skill->statSkill);
         writeLabelValue(out, skill->displayName);
