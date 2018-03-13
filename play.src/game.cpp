@@ -18,6 +18,11 @@ int Game::roll(int dice, int sides) {
     return result;
 }
 
+
+/* ************************************************************************* *
+ * LOADING DATA FROM GAME FILE                                               *
+ * ************************************************************************* */
+
 void Game::loadDataFromFile(const std::string &filename) {
     std::ifstream inf(filename, std::ios::binary | std::ios::in | std::ios::ate);
     if (!inf) {
@@ -45,6 +50,22 @@ void Game::setDataAs(uint8_t *data, size_t size) {
     doGameSetup();
 }
 
+void Game::doGameSetup() {
+    location = 0;
+    isRunning = true;
+    say(getString(readWord(headerTitle)));
+    say(" (");
+    say(getString(readWord(headerVersion)));
+    say(")\n");
+    say(getString(readWord(headerByline)));
+    say("\n\n");
+    srand(time(nullptr));
+    doScene(readWord(headerStartNode));
+}
+
+/* ************************************************************************* *
+ * MAIN GAME EXECUTION FUNCTIONS                                             *
+ * ************************************************************************* */
 
 void Game::clearOutput() {
     outputBuffer = "";
@@ -595,19 +616,6 @@ std::vector<std::uint32_t> Game::getActions(std::uint32_t cRef) {
     }
 
     return actions;
-}
-
-void Game::doGameSetup() {
-    location = 0;
-    isRunning = true;
-    say(getString(readWord(headerTitle)));
-    say(" (");
-    say(getString(readWord(headerVersion)));
-    say(")\n");
-    say(getString(readWord(headerByline)));
-    say("\n\n");
-    srand(time(nullptr));
-    doScene(readWord(headerStartNode));
 }
 
 void Game::doScene(std::uint32_t address) {
