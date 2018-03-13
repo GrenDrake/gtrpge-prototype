@@ -378,11 +378,12 @@ void Game::doRest(int forTime) {
 
     for (std::uint32_t whoRef : party) {
         for (unsigned skillNumber = 0; skillNumber < sklCount; ++skillNumber) {
-            if (!testSkillFlags(skillNumber, sklVariable)) continue;
-            int rate = skillRecoveryRate(skillNumber);
-            if (rate == 0) continue;
+            const SkillDef *skillDef = getSkillDef(skillNumber);
+            if (skillDef == nullptr || !skillDef->testFlags(sklVariable) || skillDef->recoveryRate) {
+                continue;
+            }
 
-            int result = rate * forTime / 100;
+            int result = skillDef->recoveryRate * forTime / 100;
             if (result % 10 >= 5) {
                 result = result / 10 + 1;
             } else {
@@ -392,7 +393,7 @@ void Game::doRest(int forTime) {
             adjSkillCur(whoRef, skillNumber, result);
 
             if (whoRef == party[0]) {
-                if (rate > 0) {
+                if (skillDef->recoveryRate > 0) {
                     say("Gained ");
                     say(result);
                 } else {
@@ -410,13 +411,15 @@ void Game::doRest(int forTime) {
 
 bool Game::isKOed(std::uint32_t cRef) {
     for (unsigned i = 0; i < sklCount; ++i) {
-        if (!testSkillFlags(i, sklVariable)) {
+        const SkillDef *skillDef = getSkillDef(i);
+        if (skillDef == nullptr) continue;
+        if (!skillDef->testFlags(sklVariable)) {
             continue;
         }
-        if (testSkillFlags(i, sklKOFull) && getSkillCur(cRef, i) == getSkillMax(cRef, i)) {
+        if (skillDef->testFlags(sklKOFull) && getSkillCur(cRef, i) == getSkillMax(cRef, i)) {
             return true;
         }
-        if (testSkillFlags(i, sklKOZero) && getSkillCur(cRef, i) == 0) {
+        if (skillDef->testFlags(sklKOZero) && getSkillCur(cRef, i) == 0) {
             return true;
         }
     }
@@ -448,17 +451,20 @@ void Game::resetCharacter(std::uint32_t cRef) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
 
+        const SkillDef *skillDef = getSkillDef(i);
+        if (skillDef == nullptr) continue;
+
         if (skillsMap != 0) {
-            if (testSkillFlags(i, sklVariable)) {
-                if (testSkillFlags(i, sklKOFull)) {
+            if (skillDef->testFlags(sklVariable)) {
+                if (skillDef->testFlags(sklKOFull)) {
                     c->skillCur[i] = 0;
                 } else {
                     if (mapHasValue(skillsMap, i)) {
                         c->skillCur[i] = getFromMap(skillsMap, i);
                     } else {
-                        c->skillCur[i] = getSkillDefault(i);
+                        c->skillCur[i] = skillDef->defaultValue;
                     }
-                    if (testSkillFlags(i, sklX5)) {
+                    if (skillDef->testFlags(sklX5)) {
                         c->skillCur[i] *= sklX5Multiplier;
                     }
                 }
@@ -484,11 +490,13 @@ void Game::resetCharacter(std::uint32_t cRef) {
 void Game::restoreCharacter(std::uint32_t cRef) {
     getCharacter(cRef);
     for (int i = 0; i < sklCount; ++i) {
-        if (!testSkillFlags(i, sklVariable)) continue;
-        if (testSkillFlags(i, sklKOFull)) {
+        const SkillDef *skillDef = getSkillDef(i);
+        if (skillDef == nullptr) continue;
+        if (!skillDef->testFlags(sklVariable)) continue;
+        if (skillDef->testFlags(sklKOFull)) {
             adjSkillCur(cRef, i, -getSkillMax(cRef, i));
         }
-        if (testSkillFlags(i, sklKOZero)) {
+        if (skillDef->testFlags(sklKOZero)) {
             adjSkillCur(cRef, i, getSkillMax(cRef, i));
         }
     }
@@ -534,23 +542,16 @@ int Game::doSkillCheck(std::uint32_t cRef, int skill, int modifiers, int target)
     return result;
 }
 
-bool Game::testSkillFlags(int skillNo, uint32_t flags) {
-    std::uint32_t theFlags = readByte(readWord(headerSkillTable)+sklSize*skillNo+sklFlags);
-    return (flags & theFlags) == flags;
-}
-
-std::uint32_t Game::getSkillDefault(int skillNo) {
-    return readWord(readWord(headerSkillTable) + sklSize * skillNo + sklDefault);
-}
-
 int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
+    const SkillDef *skillDef = getSkillDef(skillNo);
+    if (skillDef == nullptr) return 0;
     Character *c = getCharacter(cRef);
     if (!c) return 0;
 
     std::uint32_t skillsMap = getObjectProperty(c->def, propSkills);
     int base = 0;
     if (skillsMap == 0 || !mapHasValue(skillsMap, skillNo)) {
-        base = static_cast<int>(getSkillDefault(skillNo));
+        base = static_cast<int>(skillDef->defaultValue);
     } else {
         base = static_cast<int>(getFromMap(skillsMap, skillNo));
     }
@@ -564,7 +565,7 @@ int Game::getSkillMax(std::uint32_t cRef, int skillNo) {
 
     base += c->skillAdj[skillNo];
 
-    if (testSkillFlags(skillNo, sklX5)) {
+    if (skillDef->testFlags(sklX5)) {
         base *= sklX5Multiplier;
     }
     return base;
@@ -578,8 +579,10 @@ void Game::adjSkillMax(std::uint32_t cRef, int skillNo, int adjustment) {
 }
 
 int Game::getSkillCur(std::uint32_t cRef, int skillNo) {
+    const SkillDef *skillDef = getSkillDef(skillNo);
+    if (skillDef == nullptr) return 0;
     Character *c = getCharacter(cRef);
-    if (testSkillFlags(skillNo, sklVariable)) {
+    if (skillDef->testFlags(sklVariable)) {
         if (!c) return 0;
         return c->skillCur[skillNo];
     } else {

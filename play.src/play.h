@@ -100,8 +100,6 @@ public:
     void doRest(int forTime);
     bool isKOed(std::uint32_t cRef);
     int skillRecoveryRate(int skillNo);
-    bool testSkillFlags(int skillNo, uint32_t flags);
-    std::uint32_t getSkillDefault(int skillNo);
     int getSkillMax(std::uint32_t cRef, int skillNo);
     int getSkillCur(std::uint32_t cRef, int skillNo);
     void adjResistance(std::uint32_t cRef, int damageType, int amount);

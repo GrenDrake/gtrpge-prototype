@@ -54,7 +54,8 @@ static void drawCombatTracker(Game &game) {
     }
     unsigned skillsToShow = 0;
     for (int i = 0; i < sklCount; ++i) {
-        if (game.testSkillFlags(i, sklOnTracker)) {
+        const SkillDef *skillDef = game.getSkillDef(i);
+        if (skillDef != nullptr && skillDef->testFlags(sklOnTracker)) {
             ++skillsToShow;
         }
     }
@@ -82,7 +83,8 @@ static void drawCombatTracker(Game &game) {
     mvprintw(top, left+4, "NAME");
     unsigned shownSkills = 0;
     for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
-        if (game.testSkillFlags(sklCounter, sklOnTracker)) {
+        const SkillDef *skillDef = game.getSkillDef(sklCounter);
+        if (skillDef != nullptr && skillDef->testFlags(sklOnTracker)) {
             std::uint32_t nameAddr = game.readWord(skillTable + sklCounter*sklSize + sklName);
             mvprintw(top, left+6+maxNameLength+shownSkills*10, "%s", toTitleCase(game.getNameOf(nameAddr).substr(0,9)).c_str());
             ++shownSkills;
@@ -99,8 +101,10 @@ static void drawCombatTracker(Game &game) {
 
         unsigned shownSkills = 0;
         for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
-            if (game.testSkillFlags(sklCounter, sklOnTracker)) {
-                if (game.testSkillFlags(sklCounter, sklVariable)) {
+            const SkillDef *skillDef = game.getSkillDef(sklCounter);
+            if (skillDef == nullptr) continue;
+            if (skillDef->testFlags(sklOnTracker)) {
+                if (skillDef->testFlags(sklVariable)) {
                     mvprintw(top+whoCounter+1, left+6+maxNameLength+shownSkills*10, "%d/%d",
                             game.getSkillCur(whoIdent, sklCounter), game.getSkillMax(whoIdent, sklCounter));
                 } else {
