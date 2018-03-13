@@ -76,12 +76,6 @@ void Game::doGameSetup() {
         }
     }
 
-    for (DamageType &t : damageTypes) {
-        say(getString(t.nameAddress));
-        say("  ");
-    }
-    say("\n");
-
     location = 0;
     isRunning = true;
     say(getString(readWord(headerTitle)));
