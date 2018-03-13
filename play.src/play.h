@@ -12,6 +12,18 @@
 
 #include "playerror.h"
 
+struct SkillDef {
+    unsigned baseSkill;
+    unsigned nameAddress;
+    unsigned flags;
+    unsigned defaultValue;
+    unsigned recoveryRate;
+
+    bool testFlags(unsigned testFor) const {
+        return (flags & testFor) == testFor;
+    }
+};
+
 class Game {
 public:
     struct Character {
@@ -63,6 +75,10 @@ public:
     // Game Engine Startup                                                   //
     void loadDataFromFile(const std::string &filename);
     void setDataAs(uint8_t *data, size_t size);
+
+    // ////////////////////////////////////////////////////////////////////////
+    // Fetching game data                                                    //
+    const SkillDef* getSkillDef(unsigned skillNo) const;
 
     // ////////////////////////////////////////////////////////////////////////
     // Fetching game state                                                   //
@@ -180,6 +196,8 @@ private:
     unsigned gameTime;
     bool inCombat, startedCombat;
     std::uint32_t afterCombatNode;
+
+    std::vector<SkillDef> skillDefs;
 };
 
 std::string toTitleCase(std::string text);

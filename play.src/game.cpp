@@ -51,6 +51,21 @@ void Game::setDataAs(uint8_t *data, size_t size) {
 }
 
 void Game::doGameSetup() {
+    const int skillTable = readWord(headerSkillTable);
+    for (unsigned i = 0; i < sklCount; ++i) {
+        const int skillSrc = skillTable + i * sklSize;
+        SkillDef skillDef;
+        skillDef.nameAddress    = readWord(skillSrc + sklName);
+        if (readWord(skillSrc + sklName) == 0) {
+            continue;
+        }
+        skillDef.baseSkill      = readWord(skillSrc + sklBaseSkill);
+        skillDef.flags          = readWord(skillSrc + sklFlags);
+        skillDef.defaultValue   = readWord(skillSrc + sklDefault);
+        skillDef.recoveryRate   = readWord(skillSrc + sklRecovery);
+        skillDefs.push_back(std::move(skillDef));
+    }
+
     location = 0;
     isRunning = true;
     say(getString(readWord(headerTitle)));
@@ -61,6 +76,18 @@ void Game::doGameSetup() {
     say("\n\n");
     srand(time(nullptr));
     doScene(readWord(headerStartNode));
+}
+
+
+/* ************************************************************************* *
+ * FETCHING GAME DATA                                                        *
+ * ************************************************************************* */
+
+const SkillDef* Game::getSkillDef(unsigned skillNo) const {
+    if (skillNo >= skillDefs.size()) {
+        return nullptr;
+    }
+    return &skillDefs[skillNo];
 }
 
 /* ************************************************************************* *

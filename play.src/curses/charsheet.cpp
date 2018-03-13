@@ -59,13 +59,13 @@ void doCharacter(Game &game) {
         if (mode == modeStats) {
             int counter = 0;
             for (int i = 0; i < sklCount; ++i) {
-                std::uint32_t nameAddr = game.readWord(skillTable + i*sklSize + sklName);
-                if (!nameAddr) continue;
+                const SkillDef *skill = game.getSkillDef(i);
+                if (!skill) continue;
 
                 std::stringstream ss;
-                std::string name = game.getNameOf(nameAddr);
+                std::string name = game.getNameOf(skill->nameAddress);
                 ss << toTitleCase(name) << ": ";
-                if (game.testSkillFlags(i, sklVariable)) {
+                if (skill->testFlags(sklVariable)) {
                     ss << game.getSkillCur(curChar, i);
                     ss << '/';
                 }
