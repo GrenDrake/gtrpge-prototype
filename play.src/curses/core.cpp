@@ -53,10 +53,14 @@ static void drawCombatTracker(Game &game) {
         }
     }
     unsigned skillsToShow = 0;
-    for (int i = 0; i < sklCount; ++i) {
+    for (int i = 0; true; ++i) {
         const SkillDef *skillDef = game.getSkillDef(i);
-        if (skillDef != nullptr && skillDef->testFlags(sklOnTracker)) {
-            ++skillsToShow;
+        if (skillDef != nullptr) {
+            if (skillDef->testFlags(sklOnTracker)) {
+                ++skillsToShow;
+            }
+        } else {
+            break;
         }
     }
 
@@ -82,12 +86,16 @@ static void drawCombatTracker(Game &game) {
     attron(A_BOLD);
     mvprintw(top, left+4, "NAME");
     unsigned shownSkills = 0;
-    for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
+    for (int sklCounter = 0; true; ++sklCounter) {
         const SkillDef *skillDef = game.getSkillDef(sklCounter);
-        if (skillDef != nullptr && skillDef->testFlags(sklOnTracker)) {
-            std::uint32_t nameAddr = game.readWord(skillTable + sklCounter*sklSize + sklName);
-            mvprintw(top, left+6+maxNameLength+shownSkills*10, "%s", toTitleCase(game.getNameOf(nameAddr).substr(0,9)).c_str());
-            ++shownSkills;
+        if (skillDef != nullptr) {
+            if (skillDef->testFlags(sklOnTracker)) {
+                mvprintw(top, left+6+maxNameLength+shownSkills*10, "%s",
+                         toTitleCase(game.getNameOf(skillDef->nameAddress).substr(0,9)).c_str());
+                ++shownSkills;
+            }
+        } else {
+            break;
         }
     }
     attroff(A_BOLD);
@@ -100,9 +108,9 @@ static void drawCombatTracker(Game &game) {
         mvprintw(top+whoCounter+1, left+4, "%s", toUpperFirst(game.getNameOf(whoIdent)).c_str());
 
         unsigned shownSkills = 0;
-        for (int sklCounter = 0; sklCounter < sklCount; ++sklCounter) {
+        for (int sklCounter = 0; true; ++sklCounter) {
             const SkillDef *skillDef = game.getSkillDef(sklCounter);
-            if (skillDef == nullptr) continue;
+            if (skillDef == nullptr) break;
             if (skillDef->testFlags(sklOnTracker)) {
                 if (skillDef->testFlags(sklVariable)) {
                     mvprintw(top+whoCounter+1, left+6+maxNameLength+shownSkills*10, "%d/%d",

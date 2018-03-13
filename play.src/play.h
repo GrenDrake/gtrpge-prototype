@@ -33,9 +33,9 @@ public:
     struct Character {
         std::uint32_t def;
         std::uint32_t sex, species;
-        std::array<std::int16_t, damageTypeCount> resistAdj;
-        std::array<std::int16_t, sklCount> skillAdj;
-        std::array<std::uint16_t, sklCount> skillCur;
+        std::map<unsigned, int> resistAdj;
+        std::map<unsigned, int> skillAdj;
+        std::map<unsigned, int> skillCur;
         std::map<std::uint32_t, std::uint32_t> gear;
     };
 
@@ -82,7 +82,9 @@ public:
 
     // ////////////////////////////////////////////////////////////////////////
     // Fetching game data                                                    //
+    int getSkillCount() const;
     const SkillDef* getSkillDef(unsigned skillNo) const;
+    int getDamageTypeCount() const;
     const DamageType* getDamageType(unsigned damageTypeNo) const;
 
     // ////////////////////////////////////////////////////////////////////////

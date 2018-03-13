@@ -34,7 +34,6 @@ const int sklFlags          = 8;
 const int sklDefault        = 12;
 const int sklRecovery       = 16;
 const int sklSize           = 20;
-const int sklCount          = 20;
 const int sklX5Multiplier   = 50;
 
 // Object Property Structure
@@ -106,7 +105,6 @@ const int ocScene           = 6;
 const int ocEvent           = 7;
 
 // DamageType Count
-const int damageTypeCount   = 8;
 const int damageTypeSize    = 4;
 
 // Ability combat targets

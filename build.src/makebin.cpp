@@ -161,11 +161,11 @@ void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTab
 
     // reserve space for the skill table
     labels.insert(std::make_pair("__skill_table", pos));
-    pos += sklSize * sklCount;
+    pos += gameData.skills.size() * sklSize + 1;
 
     // reserve space for the damage types list
     labels.insert(std::make_pair("__damage_types", pos));
-    pos += damageTypeCount * 4;
+    pos += gameData.damageTypes.size() * damageTypeSize + 1;
 
     // position remaining game data
     doPositioning(labels, pos, gameData.dataItems);
@@ -201,13 +201,10 @@ void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTab
     }
 
     // write skill table
-    for (int i = 0; i < sklCount; ++i) {
-        std::shared_ptr<SkillDef> skill;
-        if (i < static_cast<int>(gameData.skills.size())) {
-            skill = gameData.skills[i];
-        } else {
-            skill = std::shared_ptr<SkillDef>(new SkillDef);
-        }
+    writeByte(out, gameData.skills.size());
+    for (unsigned i = 0; i < gameData.skills.size(); ++i) {
+        std::shared_ptr<SkillDef> skill = gameData.skills[i];
+
         writeValue(out, skill->origin, skill->statSkill);
         writeLabelValue(out, skill->displayName);
         writeFlags(out, skill->origin, skill->flags);
@@ -216,12 +213,9 @@ void make_bin(GameData &gameData, const std::string &outputFile, const SymbolTab
     }
 
     // write damage type list
-    for (unsigned i = 0; i < damageTypeCount; ++i) {
-        if (i < gameData.damageTypes.size()) {
-            writeLabelValue(out, gameData.damageTypes[i]);
-        } else {
-            writeWord(out, 0);
-        }
+    writeByte(out, gameData.damageTypes.size());
+    for (unsigned i = 0; i < gameData.damageTypes.size(); ++i) {
+        writeLabelValue(out, gameData.damageTypes[i]);
     }
 
     // write remaining game data

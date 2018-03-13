@@ -86,6 +86,8 @@ SKILL skl-void-magic    skl-knowledge   "void magic"     0;
 SKILL skl-health        0               "health"         5   250  ( skl-variable skl-ko-0 skl-x5 skl-on-tracker );
 SKILL skl-energy        0               "energy"         2   1000 ( skl-variable skl-x5 skl-on-tracker );
 SKILL skl-void          0               "void-touched"   10  -75   ( skl-variable skl-ko-full skl-on-tracker );
+SKILL skl-turnbip       skl-dexterity  "turnip"         4    ;
+SKILL skl-aturnbip      5               "vnjkld"         4    ;
 
 DAMAGE-TYPES {
     dt-blunt   "blunt"
@@ -95,7 +97,6 @@ DAMAGE-TYPES {
     dt-air "air"
     dt-earth "earth"
     dt-water "water"
-    dt-void "void"
 }
 
 /* ************************************************************************* *
@@ -163,7 +164,7 @@ ACTION debug-kill {
         *_8 $faction get-property *_7 skip-me jump-eq
 
         // a hit!
-        *_8 99999 skl-health dt-void do-damage
+        *_8 99999 skl-health dt-air do-damage
 
         // done with this target
         label skip-me

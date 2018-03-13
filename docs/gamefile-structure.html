@@ -61,7 +61,7 @@ td.table-zone-header {
 
 <h2 id='skills'>Skill Table</h2>
 
-<p>The skill table is an array of <i>sklCount</i> skill definitions; although games are not required to use all of them, they must all be defined in the gamefile. Unused skills have a name string of 0.
+<p>The skill table is an array of skill definitions. The number of definitions is stored in the byte located at the skill table position indicated in the header. The actual table begins immediately after this size byte.
 
 <table>
     <tr><th>Relative<br>Address</th>    <th>Description</th></tr>
@@ -85,7 +85,7 @@ td.table-zone-header {
 
 <h2 id='damagetypes'>Damage Types Table</h2>
 
-<p>The damage type is an array of <i>damageTypeCount</i> damage type definitions.
+<p>The damage types table starts with the damage type count at the table position specified in the header field. This is immediately followed by the table itself. Currently, each damage type consists of a single four byte value: the address of the string holding the damage type's name.
 
 <h2 id='gamedata'>Game Data</h2>
 

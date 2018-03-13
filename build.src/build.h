@@ -137,7 +137,7 @@ struct ObjectDefSpecialization;
 class Parser {
 public:
     Parser(GameData &gameData, SymbolTable &symbols)
-    : symbols(symbols), gameData(gameData), skillCounter(1)
+    : symbols(symbols), gameData(gameData), skillCounter(0)
     { }
 
     void parseTokens(std::list<Token>::iterator start, std::list<Token>::iterator end);

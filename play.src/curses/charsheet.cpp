@@ -58,9 +58,9 @@ void doCharacter(Game &game) {
 
         if (mode == modeStats) {
             int counter = 0;
-            for (int i = 0; i < sklCount; ++i) {
+            for (int i = 0; true; ++i) {
                 const SkillDef *skill = game.getSkillDef(i);
-                if (!skill) continue;
+                if (!skill) break;
 
                 std::stringstream ss;
                 std::string name = game.getNameOf(skill->nameAddress);
@@ -107,9 +107,9 @@ void doCharacter(Game &game) {
             }
 
             int dtCounter = 0;
-            for (int i = 0; i < damageTypeCount; ++i) {
+            for (int i = 0; true; ++i) {
                 const DamageType *dType = game.getDamageType(i);
-                if (dType == nullptr) continue;
+                if (dType == nullptr) break;
 
                 int resistance = game.getResistance(curChar, i);
                 mvprintw(maxY-15+dtCounter, 5, "%s: %d", game.getNameOf(dType->nameAddress).c_str(), resistance);

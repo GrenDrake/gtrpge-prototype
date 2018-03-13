@@ -52,8 +52,9 @@ void Game::setDataAs(uint8_t *data, size_t size) {
 
 void Game::doGameSetup() {
     const int skillTable = readWord(headerSkillTable);
-    for (unsigned i = 0; i < sklCount; ++i) {
-        const int skillSrc = skillTable + i * sklSize;
+    const int skillCount = readByte(skillTable);
+    for (int i = 0; i < skillCount; ++i) {
+        const int skillSrc = skillTable + i * sklSize + 1;
         SkillDef skillDef;
         skillDef.nameAddress    = readWord(skillSrc + sklName);
         if (readWord(skillSrc + sklName) == 0) {
@@ -65,10 +66,13 @@ void Game::doGameSetup() {
         skillDef.recoveryRate   = readWord(skillSrc + sklRecovery);
         skillDefs.push_back(std::move(skillDef));
     }
+    say(skillDefs.size());
+    say("\n");
 
     const int damageTypeTable = readWord(headerDamageTypes);
-    for (unsigned i = 0; i < damageTypeCount; ++i) {
-        const int typeSrc = damageTypeTable + i * damageTypeSize;
+    const int dtCount = readByte(damageTypeTable);
+    for (int i = 0; i < dtCount; ++i) {
+        const int typeSrc = damageTypeTable + 1 + i * damageTypeSize;
         DamageType dType;
         dType.nameAddress = readWord(typeSrc);
         if (dType.nameAddress) {
@@ -93,11 +97,19 @@ void Game::doGameSetup() {
  * FETCHING GAME DATA                                                        *
  * ************************************************************************* */
 
+int Game::getSkillCount() const {
+    return skillDefs.size();
+}
+
 const SkillDef* Game::getSkillDef(unsigned skillNo) const {
     if (skillNo >= skillDefs.size()) {
         return nullptr;
     }
     return &skillDefs[skillNo];
+}
+
+int Game::getDamageTypeCount() const {
+    return damageTypes.size();
 }
 
 const DamageType* Game::getDamageType(unsigned damageTypeNo) const {
@@ -371,7 +383,7 @@ void Game::doRest(int forTime) {
     if (forTime <= 0) return;
 
     for (std::uint32_t whoRef : party) {
-        for (unsigned skillNumber = 0; skillNumber < sklCount; ++skillNumber) {
+        for (int skillNumber = 0; skillNumber < getSkillCount(); ++skillNumber) {
             const SkillDef *skillDef = getSkillDef(skillNumber);
             if (skillDef == nullptr || !skillDef->testFlags(sklVariable) || skillDef->recoveryRate) {
                 continue;
@@ -404,7 +416,7 @@ void Game::doRest(int forTime) {
 }
 
 bool Game::isKOed(std::uint32_t cRef) {
-    for (unsigned i = 0; i < sklCount; ++i) {
+    for (int i = 0; i < getSkillCount(); ++i) {
         const SkillDef *skillDef = getSkillDef(i);
         if (skillDef == nullptr) continue;
         if (!skillDef->testFlags(sklVariable)) {
@@ -438,10 +450,10 @@ void Game::resetCharacter(std::uint32_t cRef) {
     characters.insert(std::make_pair(cRef, c));
 
     std::uint32_t skillsMap = getObjectProperty(c->def, propSkills);
-    for (int i = 0; i < damageTypeCount; ++i) {
+    for (int i = 0; i < getDamageTypeCount(); ++i) {
         c->resistAdj[i] = 0;
     }
-    for (int i = 0; i < sklCount; ++i) {
+    for (int i = 0; i < getSkillCount(); ++i) {
         c->skillAdj[i] = 0;
         c->skillCur[i] = 0;
 
@@ -483,7 +495,7 @@ void Game::resetCharacter(std::uint32_t cRef) {
 
 void Game::restoreCharacter(std::uint32_t cRef) {
     getCharacter(cRef);
-    for (int i = 0; i < sklCount; ++i) {
+    for (int i = 0; i < getSkillCount(); ++i) {
         const SkillDef *skillDef = getSkillDef(i);
         if (skillDef == nullptr) continue;
         if (!skillDef->testFlags(sklVariable)) continue;
