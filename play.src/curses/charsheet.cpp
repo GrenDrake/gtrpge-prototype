@@ -130,8 +130,8 @@ void doCharacter(Game &game) {
                 int cost = game.getObjectProperty(actions[i], propCostAmount);
                 if (cost != 0) {
                     std::uint32_t sklIndex = game.getObjectProperty(actions[i], propCostSkill);
-                    std::uint32_t nameAddr = game.readWord(skillTable + sklIndex*sklSize + sklName);
-                    mvprintw(y, 35, "%d %s", cost, toUpperFirst(game.getNameOf(nameAddr)).c_str());
+                    const SkillDef *skl = game.getSkillDef(sklIndex);
+                    mvprintw(y, 35, "%d %s", cost, toUpperFirst(game.getNameOf(skl->nameAddress)).c_str());
                 }
 
                 int node = game.getObjectProperty(actions[i], propCombatNode);
