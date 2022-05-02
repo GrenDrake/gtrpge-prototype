@@ -1,5 +1,7 @@
 # Gren's Text RPG Engine (GTRPGE)
 
+This project has been depreciated in favour of my newer [RatVM project](https://github.com/GrenDrake/ratvm).
+
 GTRPGE is an engine for RPG games using a choice-based (or gamebook like) design. Games can include a variety of different stats and damage types, all of which can be customized for each individual game.
 
 As GTRPGE is still incomplete, no actual releases are available. The assembler (build) should compile under most C++ compilers. The interpreter (play) is slightly less portable as it also requires ncurses.
